@@ -6,7 +6,7 @@
     "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
     "start-frontend": "cd frontend && npm start",
     "start-backend": "cd backend && node server.js",
-    "heroku-postbuild": "npm install", 
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client", 
     "serve": "serve -s build"
   },
   "keywords": [],

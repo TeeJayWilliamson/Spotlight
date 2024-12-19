@@ -43,7 +43,6 @@ mongoose.connect(dbURI, {}).then(() => {
   console.error('MongoDB connection error:', err);
 });
 
-
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 
@@ -132,6 +131,7 @@ app.post('/send-emblem', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
@@ -140,16 +140,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
-
-mongoose.connect(dbURI, {})
-  .then(() => {
-    console.log('MongoDB connected');
-  })
-  .catch(err => {
-    console.error('MongoDB connection error:', err);
-  });
-
