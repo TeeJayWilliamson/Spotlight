@@ -132,14 +132,13 @@ app.post('/send-emblem', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
 // Handle all GET requests by sending back the React app's index.html file
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
 });
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
