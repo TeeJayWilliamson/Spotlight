@@ -31,6 +31,14 @@ app.use(
   }),
 );
 
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; connect-src 'self' http://localhost:5000; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;"
+  );
+  next();
+});
+
 // Middleware
 app.use(bodyParser.json());
 
