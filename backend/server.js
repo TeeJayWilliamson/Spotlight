@@ -15,6 +15,19 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
+const helmet = require('helmet');
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],  // Allow Google Fonts
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],  // Allow font loading from Google Fonts
+    },
+  },
+}));
+
+
 // Middleware
 app.use(bodyParser.json());
 
