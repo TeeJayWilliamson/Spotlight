@@ -2,13 +2,14 @@
   "name": "spotlightttc",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"npm run start-mongo\" \"npm run start-backend\" \"npm run start-frontend\"",
-    "start-mongo": "mongod --dbpath ./data/db",
-    "start-backend": "wait-on tcp:27017 && cd backend && npm start",
-    "start-frontend": "cd frontend && npm start"
-  },
+"scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "npm run start-backend",
+  "start-mongo": "mongod --dbpath ./data/db",
+  "start-backend": "wait-on tcp:27017 && cd backend && npm start",
+  "start-frontend": "cd frontend && npm start"
+}
+,
   "keywords": [],
   "author": "",
   "license": "ISC",
