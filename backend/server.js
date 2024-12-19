@@ -135,17 +135,12 @@ app.post('/send-emblem', async (req, res) => {
   }
 });
 
-// Serve static files from the React app (after it's built)
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+// Serve static files from the React build directory
+app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
-  // For any other routes, serve the React app's index.html
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
-  });
-}
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+// Handle all other routes by serving index.html from the React build directory
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
 });
+
+app.listen(port, () => console.log(`Server running on port ${port}`));
