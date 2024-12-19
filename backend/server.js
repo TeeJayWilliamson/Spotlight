@@ -28,6 +28,11 @@ app.use(
   },
 ));
 
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com;");
+  next();
+});
+
 // Middleware
 app.use(bodyParser.json());
 
