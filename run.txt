@@ -1,0 +1,10 @@
+CMD
+node server.js
+mongod
+
+ cd desktop\spotlightTTC\backend
+
+POWERSHELL
+npm start
+
+ cd desktop\spotlightTTC\frontend

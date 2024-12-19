@@ -1,0 +1,14 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# MongoDB data directory
+data/db/
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
