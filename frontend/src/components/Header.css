@@ -1,0 +1,58 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically center the content */
+    padding: 15px 20px;
+    background-color: #e74c3c;
+    color: white;
+    height: 60px; /* Set a fixed height for the navbar if needed */
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center; /* Ensure the content is vertically centered */
+}
+
+.navbar-nav {
+    display: flex;
+    list-style: none;
+    align-items: center; /* Ensure items in the navbar are vertically centered */
+}
+
+.navbar-item {
+    margin: 0 10px; /* Space between navbar items */
+}
+
+.navbar-link {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center; /* Aligns children vertically */
+    justify-content: flex-end; /* If you want to align the username to the right */
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center; /* Vertically center the right section */
+    margin-left: auto; /* Push the right section to the far right */
+}
+
+.navbar-right .navbar-item {
+    margin: 0 10px; /* Space between profile and logout */
+}
+
+.logout-button {
+    background-color: white;
+    color: red;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logout-button:hover {
+    background-color: #ccc;
+}

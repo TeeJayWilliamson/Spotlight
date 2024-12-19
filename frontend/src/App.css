@@ -1,0 +1,546 @@
+/* Global reset for margins and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  font-family: Arial, sans-serif;
+  height: 100%;
+  overflow: hidden; /* Prevent scrollbar */
+}
+
+/* App Styling */
+.App {
+  text-align: center;
+}
+
+/* Header Styling */
+header {
+  display: flex;
+  justify-content: flex-start;
+  padding: 15px 20px;
+  background-color: #e74c3c;
+  color: white;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-left h1,
+.header-left .users-container {
+  margin-right: 15px;
+}
+
+.separator {
+  color: white;
+  margin: 0 10px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.username-link,
+.logout-button {
+  color: white;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.username-link:hover,
+.logout-button:hover {
+  color: #f0f0f0;
+}
+
+header .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+header .user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px; /* Adds space between spotlight and users */
+}
+
+header .username-link,
+header .login-link {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+header .username-link:hover {
+  text-decoration: underline;
+}
+
+header .users-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+
+header .users-link .user-icon {
+  width: 20px;
+  margin-right: 5px;
+}
+
+header .users-link span {
+  font-size: 14px;
+}
+
+/* Login Container Styling */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 150px;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.login-container h2 {
+  font-size: 36px;
+  color: #e74c3c;
+  margin-bottom: 20px;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 320px;
+}
+
+.login-container .input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.login-container .input-container label {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.login-container input:focus {
+  border-color: #e74c3c;
+  outline: none;
+}
+
+.login-container button {
+  padding: 10px 20px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.login-container button:hover {
+  background-color: #c0392b;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+/* Home Page Layout */
+.home-container {
+  display: flex;
+  padding: 20px;
+}
+
+/* Left Pane */
+.left-pane {
+  flex: 0.3; /* Adjust width to 30% */
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+/* Center Pane */
+.center-pane {
+  flex: 1.4; /* Adjust to take up more space (140%) */
+  padding: 20px;
+}
+
+/* Right Pane */
+.right-pane {
+  flex: 0.3; /* Adjust width to 30% */
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-info h3 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #c0392b;
+}
+
+.balance-info,
+.recognize-info {
+  margin-top: 20px;
+}
+
+.balance-info .label,
+.recognize-info .label {
+  font-size: 16px;
+  color: #c0392b;
+}
+
+.large-number {
+  font-size: 48px;
+  font-weight: bold;
+  color: #c0392b;
+}
+
+.request-budget-btn {
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  padding: 10px 60px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.request-budget-btn:hover {
+  background-color: #e74c3c;
+}
+
+.newsfeed {
+  background-color: #ecf0f1;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.top-recognized {
+  background-color: #e74c3c;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.top-recognized h4 {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.separator {
+  height: 1px;
+  background-color: #fff;
+  margin: 10px 0;
+}
+
+.this-month p {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.rank-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.rank-number {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.rank-label,
+.recognition-stats p {
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  
+}
+
+.top-10-list {
+  margin-top: 10px;
+}
+
+.top-10-list h5 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.top-10-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.top-10-list li {
+  font-size: 14px;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.bottom-section {
+  background-color: white;
+  color: #e74c3c;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-section h5 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.bottom-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.bottom-section li {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.spotlight-link {
+  text-decoration: none;
+  color: white;
+}
+
+.navbar {
+  background-color: #e74c3c; /* Your background color */
+  padding: 10px 20px;
+  color: white;
+}
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-header {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand {
+  color: white;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+.navbar-nav {
+  display: flex;
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 20px; /* This will move the "Users" link away from "Spotlight" */
+}
+
+.navbar-item {
+  margin-right: 15px;
+}
+
+.navbar-link {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.navbar-link-profile {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  display: flex;
+  margin-top: 40%;
+}
+
+.navbar-link:hover {
+  color: #f0f0f0;
+}
+
+.navbar-right {
+  margin-left: auto;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.logout-button:hover {
+  color: #f0f0f0;
+}
+
+.users-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.navbar-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.lightbulb-icon, .user-icon, .badge-icon, .gift-icon {
+  font-size: 24px;
+  margin-right: 5px;
+}
+
+.home-container {
+  display: flex;
+}
+
+.left-pane {
+  width: 250px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-right: 1px solid #ddd;
+}
+
+.user-info,
+.balance-info,
+.recognize-info {
+  padding: 30px 0;
+  align-items: center;
+  color: #c0392b;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+  margin: 10px 0;
+}
+
+.center-pane {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.right-pane {
+  width: 250px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-left: 1px solid #ddd;
+}
+
+.separator {
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+  margin: 10px 0;
+}
+
+.left-pane h3,
+.left-pane .label,
+.right-pane h4,
+.right-pane p,
+.right-pane .rank-number,
+.right-pane .rank-label,
+.right-pane h5,
+.right-pane ul {
+  margin: 0;
+}
+
+.left-pane p,
+.right-pane p,
+.right-pane ul {
+  margin: 5px 0 0;
+}
+
+/* Home Page Layout */
+.home-container {
+  display: flex;
+  padding: 20px;
+  height: calc(100vh - 100px); /* Adjust for header or any other fixed elements */
+}
+
+/* Left Pane */
+.left-pane {
+  width: 250px; /* Keep fixed width */
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-right: 1px solid #ddd;
+}
+
+/* Center Pane (Newsfeed area) */
+.center-pane {
+  flex-grow: 1; /* Allow the center pane to grow and take up available space */
+  padding: 20px;
+  background-color: #ecf0f1;
+}
+
+/* Right Pane */
+.right-pane {
+  width: 250px; /* Keep fixed width */
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-left: 1px solid #ddd;
+}
+
+/* Newsfeed Styling */
+.newsfeed {
+  background-color: #ecf0f1;
+  padding: 15px;
+  border-radius: 5px;
+  height: 100%; /* Ensure it takes full space in the center pane */
+  overflow-y: auto; /* Make sure content scrolls within the newsfeed */
+}
+
+/* Other existing styles for left, right, and center panes */
+.left-pane .user-info, .right-pane .top-recognized {
+  margin-bottom: 20px; /* Optional, just to give space between sections */
+}
+
+

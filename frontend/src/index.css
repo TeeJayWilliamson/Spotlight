@@ -1,0 +1,29 @@
+/* Global reset for margins and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure the body takes up full height */
+body {
+  height: 100%;
+  font-family: Arial, sans-serif; /* Adjust for font */
+}
+
+/* Remove extra space around the login form */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f7f7f7;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #e74c3c; /* Your brand color */
+}

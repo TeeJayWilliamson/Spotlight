@@ -1,0 +1,245 @@
+/* Profile.css */
+.profile-container, .badges-container, .rewards-container {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-header h2 {
+  font-size: 2rem;
+  color: #d32f2f; /* Classic red */
+}
+
+.profile-header h3 {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: normal;
+}
+
+.profile-details {
+  margin-bottom: 20px;
+}
+
+.profile-details p {
+  font-size: 1.1rem;
+  color: #555;
+  margin: 8px 0;
+}
+
+.profile-details strong {
+  color: #d32f2f; /* Classic red for labels */
+}
+
+.badges {
+  margin-top: 20px;
+}
+
+.badges ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.badges li {
+  margin: 5px 0;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.badges li::before {
+  content: "🏅"; /* Adds a badge icon before the badge name */
+  margin-right: 10px;
+  color: #d32f2f;
+}
+
+.divider {
+  height: 2px;
+  background-color: #d32f2f; /* Red divider */
+  margin: 10px 0;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-container input {
+  padding: 8px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.user-suggestions {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ddd;
+  max-width: 400px;
+  border-radius: 4px;
+}
+
+.user-suggestions ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-suggestions li {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.user-suggestions li:hover {
+  background-color: #eee;
+}
+
+/* Optional - Style the Profile Edit Button (if any) */
+.profile-edit-btn {
+  background-color: #d32f2f;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 20px;
+}
+
+.profile-edit-btn:hover {
+  background-color: #c62828; /* Darker red on hover */
+}
+
+.badges-container {
+  padding: 20px;
+}
+
+h2, h3 {
+  color: #333;
+}
+
+.divider {
+  margin: 10px 0;
+  height: 1px;
+  background-color: #ccc;
+}
+
+.user-search input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+}
+
+.recipient-info {
+  margin-top: 10px;
+}
+
+.badge-selection {
+  margin-top: 20px;
+}
+
+.badge-placeholder {
+  width: 100%;
+  height: 150px;
+  border: 2px dashed #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.badge-options {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.badge-option {
+  width: 80px;
+  margin: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.badge-option img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+}
+
+.message-box {
+  margin-top: 20px;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.send-spotlight-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #c62828;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.send-spotlight-btn:hover {
+  background-color: #991212;
+}
+
+/* Add these styles to your Profile.css file */
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+.user-suggestions {
+  position: absolute;
+  top: 100%; /* Position it right below the search input */
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add some shadow to make it stand out */
+  z-index: 10; /* Ensure suggestions are on top of other elements */
+}
+
+.user-suggestions ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-suggestions li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.user-suggestions li:hover {
+  background-color: #f0f0f0; /* Highlight on hover */
+}
+
+
