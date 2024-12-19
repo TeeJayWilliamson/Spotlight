@@ -23,21 +23,13 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+      connectSrc: ["'self'", "http://localhost:5000"],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       scriptSrc: ["'self'", "'unsafe-inline'"], // Add other domains as needed
-      // You can customize this further based on your app's needs
     },
-  }),
+  })
 );
-
-app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    "default-src 'self'; connect-src 'self' http://localhost:5000; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;"
-  );
-  next();
-});
 
 // Middleware
 app.use(bodyParser.json());
