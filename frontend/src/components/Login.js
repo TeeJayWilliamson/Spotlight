@@ -1,4 +1,3 @@
-// src/components/Login.js
 import React, { useState } from 'react';
 import './Login.css';
 import axios from 'axios';
@@ -10,15 +9,18 @@ function Login({ setAuth, setUsername }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Set the API URL to use Heroku in production or localhost in development
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const response = await axios.post('http://localhost:5000/login', {
+      const response = await axios.post(`${apiUrl}/login`, {
         username,
         password,
       });
-  
+
       // Store the received token, username, and full name in localStorage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', username);
@@ -26,13 +28,12 @@ function Login({ setAuth, setUsername }) {
     
       setAuth(true);
       setUsername(username);
-  
+
       navigate('/home');
     } catch (err) {
       setError('Invalid username or password');
     }
   };
-  
 
   return (
     <div className="login-container">
