@@ -37,14 +37,12 @@ app.use(bodyParser.json());
 // Connect to MongoDB
 const dbURI = process.env.MONGO_URI;  // Always use MONGO_URI from the .env file
 
-mongoose.connect(dbURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
+mongoose.connect(dbURI, {}).then(() => {
   console.log('MongoDB connected');
 }).catch(err => {
   console.error('MongoDB connection error:', err);
 });
+
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -135,12 +133,20 @@ app.post('/send-emblem', async (req, res) => {
   }
 });
 
-// Serve static files from the React build directory
-app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
-// Handle all other routes by serving index.html from the React build directory
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+// Put all API endpoints under '/api'
+app.get('/api/hello', (req, res) => {
+  res.send({ message: 'Hello from the backend!' });
 });
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
