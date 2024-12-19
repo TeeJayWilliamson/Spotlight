@@ -134,17 +134,14 @@ app.post('/send-emblem', async (req, res) => {
 });
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
+app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
-// Put all API endpoints under '/api'
-app.get('/api/hello', (req, res) => {
-  res.send({ message: 'Hello from the backend!' });
-});
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
+// Handle all GET requests by sending back the React app's index.html file
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
 });
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
