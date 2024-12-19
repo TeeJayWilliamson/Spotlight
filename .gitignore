@@ -16,13 +16,11 @@ data/db/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
 /.pnp
 .pnp.js
 
 # testing
 /coverage
-
 
 # misc
 .DS_Store
@@ -34,6 +32,3 @@ data/db/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# .gitignore
-node_modules/
