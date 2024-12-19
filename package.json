@@ -2,12 +2,11 @@
   "name": "spotlightttc",
   "version": "1.0.0",
   "main": "index.js",
-"scripts": {
-  "start": "npm run start-backend",
-  "start-backend": "cd backend && npm start",
-  "start-frontend": "cd frontend && npm start"
-}
-,
+  "scripts": {
+    "start": "npm run start-backend",
+    "start-backend": "cd backend && npm start",
+    "start-frontend": "cd frontend && npm start"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

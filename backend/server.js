@@ -17,16 +17,16 @@ app.use(express.json());
 app.use(cors());
 
 const helmet = require('helmet');
-
-app.use(helmet({
-  contentSecurityPolicy: {
+app.use(
+  helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],  // Allow Google Fonts
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],  // Allow font loading from Google Fonts
+      styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      scriptSrc: ["'self'", "'unsafe-inline'"], // Add other domains as needed
     },
   },
-}));
+));
 
 // Middleware
 app.use(bodyParser.json());
