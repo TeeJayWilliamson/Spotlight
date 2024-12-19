@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path'); // Add path module to serve static files
 
 const User = require('./models/user'); // Ensure this path matches your directory structure
 const authRoutes = require('./routes/auth'); // Correct path for auth.js
@@ -26,7 +27,6 @@ app.use(helmet({
     },
   },
 }));
-
 
 // Middleware
 app.use(bodyParser.json());
@@ -131,6 +131,16 @@ app.post('/send-emblem', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+// Serve static files from the React app (after it's built)
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+
+  // For any other routes, serve the React app's index.html
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+  });
+}
 
 // Start the server
 app.listen(port, () => {
