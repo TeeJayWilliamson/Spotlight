@@ -17,6 +17,8 @@ app.use(express.json());
 app.use(cors());
 
 const helmet = require('helmet');
+
+// Use helmet for CSP
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -24,14 +26,10 @@ app.use(
       styleSrc: ["'self'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       scriptSrc: ["'self'", "'unsafe-inline'"], // Add other domains as needed
+      // You can customize this further based on your app's needs
     },
-  },
-));
-
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com;");
-  next();
-});
+  }),
+);
 
 // Middleware
 app.use(bodyParser.json());
