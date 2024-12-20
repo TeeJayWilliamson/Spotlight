@@ -34,7 +34,7 @@ function Header({ handleLogout }) {
       setName('');
       setIsAuthenticated(false);
     }
-  }, [apiUrl]); // This effect will rerun if the apiUrl changes, but not based on username changes
+  }, [apiUrl, location.pathname]); // This effect will rerun if the apiUrl or pathname changes
 
   const handleLogoutClick = () => {
     handleLogout();
