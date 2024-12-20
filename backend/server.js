@@ -18,18 +18,20 @@ app.use(cors());
 
 const helmet = require('helmet');
 
-// Use helmet for CSP
+const allowedApiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", "http://localhost:5000"],
+      connectSrc: ["'self'", allowedApiUrl],  // Dynamically allow your API URL
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-      scriptSrc: ["'self'", "'unsafe-inline'"], // Add other domains as needed
+      scriptSrc: ["'self'", "'unsafe-inline'"],
     },
   })
 );
+
 
 // Middleware
 app.use(bodyParser.json());
