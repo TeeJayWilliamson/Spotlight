@@ -85,29 +85,35 @@ function Badges() {
         </div>
       )}
 
-      {/* Badge Selection */}
-      <div className="badge-selection">
-        <h4>Choose a Badge</h4>
-        <div className="badge-placeholder" onClick={() => handleBadgeSelect(null)}>
-          {selectedBadge ? (
-            <img src={selectedBadge.image} alt={selectedBadge.name} />
-          ) : (
-            <p>Select a badge image</p>
-          )}
+{/* Badge Selection */}
+<div className="badge-selection">
+  <h4>Choose a Badge</h4>
+  <div className="badge-placeholder" onClick={() => handleBadgeSelect(null)}>
+    {selectedBadge ? (
+      <img src={selectedBadge.image} alt={selectedBadge.name} />
+    ) : (
+      <p>Select a badge image</p>
+    )}
+  </div>
+  <div className="badge-options">
+    {/* Check if badges is an array and map */}
+    {Array.isArray(badges) && badges.length > 0 ? (
+      badges.map((badge) => (
+        <div
+          key={badge.id}
+          className="badge-option"
+          onClick={() => handleBadgeSelect(badge)}
+        >
+          <img src={badge.image} alt={badge.name} />
+          <p>{badge.name}</p>
         </div>
-        <div className="badge-options">
-          {badges.map((badge) => (
-            <div
-              key={badge.id}
-              className="badge-option"
-              onClick={() => handleBadgeSelect(badge)}
-            >
-              <img src={badge.image} alt={badge.name} />
-              <p>{badge.name}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+      ))
+    ) : (
+      <p>No badges available</p> // Fallback message when no badges are available
+    )}
+  </div>
+</div>
+
 
       {/* Personalized Message */}
       <div className="message-box">
