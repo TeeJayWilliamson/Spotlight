@@ -10,7 +10,7 @@ function Header({ handleLogout }) {
   const [name, setName] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation(); // Import useLocation to get the current route
-  const isLoginPage = location.pathname === "/login"; // Check if we're on the login page
+  const isLoginPage = location.pathname === '/login'; // Check if we're on the login page
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
