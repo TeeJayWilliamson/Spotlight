@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Profile.css';
-import './badges.css';
+import './Badges.css';
 
 function Badges() {
   const [badges, setBadges] = useState([]);
