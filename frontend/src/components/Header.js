@@ -9,6 +9,8 @@ function Header({ isAuthenticated, name, handleLogout }) {
   const location = useLocation(); // Import useLocation to get the current route
   const isLoginPage = location.pathname === "/login"; // Check if we're on the login page
 
+  console.log('Header Component: name =', name); // Debugging log
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -43,7 +45,7 @@ function Header({ isAuthenticated, name, handleLogout }) {
               </li>
               <li className="navbar-item">
                 <Link to="/scorecard" className="navbar-link">
-                <i class='bx bxs-report bx-sm'></i>
+                  <i className='bx bxs-report bx-sm'></i>
                   <span>Scorecard</span>
                 </Link>
               </li>
