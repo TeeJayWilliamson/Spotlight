@@ -83,11 +83,11 @@ function Home() {
 
   useEffect(() => {
     const username = localStorage.getItem('username'); // Retrieve username from localStorage
-
+  
     if (username) {
       // Make an API call to fetch user info from the backend
       axios
-        .get(`http://localhost:5000/user/${username}`) // Use the API route to get user data
+        .get(`${apiUrl}user/${username}`) // Use the apiUrl for the API route
         .then((response) => {
           setName(response.data.name); // Set the full name in the state
         })
