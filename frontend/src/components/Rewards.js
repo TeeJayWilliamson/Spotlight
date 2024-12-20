@@ -37,7 +37,7 @@ function Rewards() {
             </li>
           ))
         ) : (
-          <li>No rewards available</li> // Fallback message when no rewards are available
+          <li></li> // Fallback message when no rewards are available
         )}
       </ul>
     </div>
