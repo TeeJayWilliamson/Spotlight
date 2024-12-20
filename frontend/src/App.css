@@ -413,7 +413,7 @@ header .users-link span {
   color: white;
   cursor: pointer;
   font-size: 18px;
-  margin-bottom: 5%;
+  margin-bottom: 15%;
 }
 
 .logout-button:hover {
