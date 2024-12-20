@@ -1,15 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 import 'boxicons/css/boxicons.min.css';
 import '../App.css';
 
-function Header({ isAuthenticated, name, handleLogout }) {
+function Header({ handleLogout }) {
+  const [name, setName] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation(); // Import useLocation to get the current route
   const isLoginPage = location.pathname === "/login"; // Check if we're on the login page
 
-  console.log('Header Component: name =', name); // Debugging log
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
+
+  useEffect(() => {
+    const username = localStorage.getItem('username'); // Retrieve username from localStorage
+
+    if (username) {
+      // Make an API call to fetch user info from the backend
+      axios
+        .get(`${apiUrl}user/${username}`) // Use the apiUrl for the API route
+        .then((response) => {
+          setName(response.data.name); // Set the full name in the state
+          setIsAuthenticated(true); // Assume user is authenticated if API call is successful
+        })
+        .catch((error) => {
+          console.error('Error fetching user info:', error);
+        });
+    }
+  }, [apiUrl]);
 
   return (
     <nav className="navbar">
@@ -52,12 +72,12 @@ function Header({ isAuthenticated, name, handleLogout }) {
             </>
           )}
         </ul>
-        
+
         {/* Show profile and logout only if the user is authenticated */}
         {isAuthenticated && (
           <ul className="navbar-nav navbar-right">
             <li className="navbar-item">
-              <Link to="/profile" className="navbar-link-profile">{name}</Link>
+              <Link to="/profile" className="navbar-link-profile">{name.split(' ')[0]}</Link>
             </li>
             <li className="navbar-item">
               <button onClick={handleLogout} className="logout-button">Logout</button>
