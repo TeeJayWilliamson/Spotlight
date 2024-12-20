@@ -1,151 +1,136 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../App.css';
 import './Profile.css';
 import './Badges.css';
 
 function Badges() {
-  const [badges, setBadges] = useState([]);
-  const [users, setUsers] = useState([]); // To hold user data for search
-  const [selectedUser, setSelectedUser] = useState(null); // The user selected for spotlight
-  const [selectedBadge, setSelectedBadge] = useState(null); // The selected badge
-  const [message, setMessage] = useState(''); // Message to go with the spotlight
+  const [badgeType, setBadgeType] = useState('');
+  const [message, setMessage] = useState('');
+  const [recipient, setRecipient] = useState('');
+  const [pointBalance, setPointBalance] = useState(1000);
+  const [recognizeNow, setRecognizeNow] = useState(5000);
+  const [users, setUsers] = useState([]);
+  const [name, setName] = useState('');
 
-  // Set the API URL to use Heroku in production
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
   useEffect(() => {
-    // Fetch badges
-    axios
-      .get(`${apiUrl.replace(/\/$/, '')}/badges`) // Use the live API or fallback URL
-      .then((response) => {
-        // Ensure the response data is an array
-        if (Array.isArray(response.data)) {
-          setBadges(response.data);
-        } else {
-          console.error("Unexpected data format:", response.data);
-        }
+    axios.get(`${apiUrl}users`)
+      .then(response => {
+        setUsers(response.data);
       })
-      .catch((error) => {
-        console.error("Error fetching badges:", error);
+      .catch(error => {
+        console.error('Error fetching users:', error);
       });
 
-    // Fetch users for the search dropdown
-    axios
-      .get(`${apiUrl}/users`) // Use the live API or fallback URL
-      .then((response) => {
-        // Ensure the response data is an array
-        if (Array.isArray(response.data)) {
-          setUsers(response.data);
-        } else {
-          console.error("Unexpected data format:", response.data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching users:", error);
+    const username = localStorage.getItem('username');
+    if (username) {
+      axios
+        .get(`${apiUrl}user/${username}`)
+        .then((response) => {
+          setName(response.data.name);
+        })
+        .catch((error) => {
+          console.error('Error fetching user info:', error);
+        });
+    }
+  }, []);
+
+  const handleBadgeTypeChange = (event) => {
+    setBadgeType(event.target.value);
+  };
+
+  const handleMessageChange = (event) => {
+    setMessage(event.target.value);
+  };
+
+  const handleRecipientChange = (event) => {
+    setRecipient(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (badgeType && message && recipient) {
+      console.log('Badge Type:', badgeType);
+      console.log('Message:', message);
+      console.log('Recipient:', recipient);
+
+      axios.post(`${apiUrl}send-badge`, {
+        badgeType,
+        message,
+        recipient,
+      }).then((response) => {
+        console.log('Badge sent successfully:', response.data);
+      }).catch((error) => {
+        console.error('Error sending badge:', error);
       });
-  }, [apiUrl]);
-
-  // Handle user selection from the dropdown
-  const handleUserSelect = (e) => {
-    const selected = users.find(user => user.username === e.target.value);
-    setSelectedUser(selected);
-  };
-
-  // Handle badge selection
-  const handleBadgeSelect = (badge) => {
-    setSelectedBadge(badge);
-  };
-
-  // Handle message input change
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
+    } else {
+      console.log('Please fill in all fields.');
+    }
   };
 
   return (
-    <div className="badges-container">
-      <h2>Emblems</h2>
-      <div className="divider"></div>
-
-      <div className="badge-recipient-container">
-        {/* Left column: Badge Selection */}
-        <div className="badge-selection">
-          <h4>Choose an Emblem</h4>
-          <div className="badge-placeholder" onClick={() => handleBadgeSelect(null)}>
-            {selectedBadge ? (
-              <img src={selectedBadge.image} alt={selectedBadge.name} />
-            ) : (
-              <p>Select an emblem image</p>
-            )}
-          </div>
-          <div className="badge-options">
-            {Array.isArray(badges) && badges.length > 0 ? (
-              badges.map((badge) => (
-                <div
-                  key={badge.id}
-                  className="badge-option"
-                  onClick={() => handleBadgeSelect(badge)}
-                >
-                  <img src={badge.image} alt={badge.name} />
-                  <p>{badge.name}</p>
-                </div>
-              ))
-            ) : (
-              <p>No badges available</p> // Fallback message when no badges are available
-            )}
-          </div>
+    <div className="home-container">
+      <div className="left-pane">
+        <div className="user-info">
+          <h3>{name.split(' ')[0]}'s Account</h3>
         </div>
+        <div className="divider"></div>
+        <div className="badge-selection">
+          <label htmlFor="badgeType">Choose an Emblem:</label>
+          <select id="badgeType" value={badgeType} onChange={handleBadgeTypeChange}>
+            <option value="">Select Badge Type</option>
+            <option value="Teamwork">Teamwork</option>
+            <option value="Leadership">Leadership</option>
+            <option value="Creativity">Creativity</option>
+            <option value="Dedication">Dedication</option>
+          </select>
+        </div>
+        <div className="divider"></div>
+        <div className="balance-info">
+          <p className="label">Point Balance:</p>
+          <p className="large-number">{pointBalance}</p>
+        </div>
+      </div>
 
-        {/* Right column: Recipient and Message */}
-        <div className="recipient-message">
-          <h3>Who do you want to shine the Spotlight on?</h3>
-
-          {/* User Search Dropdown */}
-          <div className="user-search">
-            <label htmlFor="user-select">Search for a Recipient: </label>
-            <input
-              type="text"
-              id="user-select"
-              list="user-options"
-              onChange={handleUserSelect}
-              placeholder="Start typing a username..."
-            />
-            <datalist id="user-options">
-              {Array.isArray(users) && users.length > 0 ? (
-                users.map((user) => (
-                  <option key={user.username} value={user.username}>
-                    {user.name} ({user.username})
-                  </option>
-                ))
-              ) : (
-                <p>No users found</p> // Message when no users are available
-              )}
-            </datalist>
+      <div className="center-pane">
+        <h2>Who do you want to shine a spotlight on?</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="recipient">Recipient:</label>
+            <select id="recipient" value={recipient} onChange={handleRecipientChange}>
+              <option value="">Select Recipient</option>
+              {users.map((user, index) => (
+                <option key={index} value={user.username}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
           </div>
-
-          {/* Recipients Display */}
-          {selectedUser && (
-            <div className="recipient-info">
-              <p><strong>Recipients: </strong>{selectedUser.name}</p>
-            </div>
-          )}
-
-          {/* Personalized Message */}
-          <div className="message-box">
-            <label htmlFor="message">Write a Personalized Message:</label>
+          <div>
+            <label htmlFor="message">Personalized Message:</label>
             <textarea
               id="message"
               value={message}
               onChange={handleMessageChange}
-              placeholder="Write a message to accompany the Spotlight..."
+              placeholder="Enter your message"
             />
           </div>
-        </div>
+          <button type="submit">Send Emblem</button>
+        </form>
       </div>
 
-      {/* Button to Send Spotlight */}
-      <button className="send-spotlight-btn">
-        Send Spotlight Recognition
-      </button>
+      <div className="right-pane">
+        <div className="recognize-info">
+          <p className="label">Recognize Now:</p>
+          <p className="large-number">{recognizeNow}</p>
+        </div>
+        <div className="divider"></div>
+        <div className="request-budget">
+          <button className="request-budget-btn">Request More Budget</button>
+        </div>
+      </div>
     </div>
   );
 }

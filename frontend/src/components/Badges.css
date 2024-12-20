@@ -1,4 +1,105 @@
-/* badges.css */
+/* App.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .home-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .left-pane,
+  .center-pane,
+  .right-pane {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .left-pane,
+  .right-pane {
+    flex: 1;
+    margin: 0 10px;
+  }
+  
+  .center-pane {
+    flex: 2;
+    margin: 0 10px;
+  }
+  
+  .divider {
+    height: 2px;
+    background-color: #ddd;
+    margin: 10px 0;
+  }
+  
+  .label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .large-number {
+    font-size: 2em;
+    font-weight: bold;
+  }
+  
+  .badge-selection,
+  .balance-info,
+  .recognize-info,
+  .request-budget {
+    margin-top: 20px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form > div {
+    margin-bottom: 20px;
+  }
+  
+  button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  button.request-budget-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button.request-budget-btn:hover {
+    background-color: #218838;
+  }
+  
+
+  /* badges.css */
 
 /* General styling */
 h2, h3, h4 {
