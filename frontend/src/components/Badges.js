@@ -10,7 +10,7 @@ function Badges() {
   const [message, setMessage] = useState(''); // Message to go with the spotlight
 
   // API URL from the environment variable
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';  // Fallback URL for local dev
+  const API_URL = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';  // Fallback URL for local dev
 
   // Fetch badges and users
   useEffect(() => {

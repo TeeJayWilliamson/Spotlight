@@ -10,7 +10,7 @@ function Login({ setAuth, setUsername }) {
   const navigate = useNavigate();
 
   // Set the API URL to use Heroku in production or localhost in development
-  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';  // Default to localhost for development
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';  // Default to localhost for development
 
   const handleSubmit = async (e) => {
     e.preventDefault();
