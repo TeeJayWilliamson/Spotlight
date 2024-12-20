@@ -16,7 +16,7 @@ function Badges() {
   useEffect(() => {
     // Fetch badges
     axios
-      .get(`${API_URL}/badges`) // Use the live API or fallback URL
+      .get(`${API_URL.replace(/\/$/, '')}/badges`) // Use the live API or fallback URL
       .then((response) => {
         setBadges(response.data);
       })

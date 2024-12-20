@@ -4,6 +4,9 @@ import '../App.css';
 
 function Home() {
   const [name, setName] = useState('');
+
+    // Set the API URL to use Heroku in production or localhost in development
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';  // Default to localhost for development
   
   const newsFeed = [
     {
