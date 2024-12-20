@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Badges.css';
 import './Profile.css';
 
 function Badges() {
