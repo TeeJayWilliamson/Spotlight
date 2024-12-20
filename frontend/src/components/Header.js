@@ -28,8 +28,19 @@ function Header({ handleLogout }) {
         .catch((error) => {
           console.error('Error fetching user info:', error);
         });
+    } else {
+      // Clear state if no username is found in localStorage
+      setName('');
+      setIsAuthenticated(false);
     }
   }, [apiUrl]);
+
+  const handleLogoutClick = () => {
+    handleLogout();
+    setName(''); // Clear the name state
+    setIsAuthenticated(false); // Clear the authentication state
+    localStorage.removeItem('username'); // Optionally remove username from localStorage
+  };
 
   return (
     <nav className="navbar">
@@ -80,7 +91,7 @@ function Header({ handleLogout }) {
               <Link to="/profile" className="navbar-link-profile">{name.split(' ')[0]}</Link>
             </li>
             <li className="navbar-item">
-              <button onClick={handleLogout} className="logout-button">Logout</button>
+              <button onClick={handleLogoutClick} className="logout-button">Logout</button>
             </li>
           </ul>
         )}
