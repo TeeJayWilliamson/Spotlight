@@ -7,9 +7,12 @@ function Users() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
 
+  // Set the API URL to use Heroku in production
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
+
   useEffect(() => {
     axios
-      .get('http://localhost:5000/users')
+      .get(`${apiUrl}users`)  // Use apiUrl here
       .then((response) => {
         setUsers(response.data);
       })
