@@ -41,7 +41,7 @@ header {
 }
 
 .navbar-right .navbar-item {
-    margin: 0 10px; /* Space between profile and logout */
+    margin: 0 5px; /* Space between profile and logout */
 }
 
 .logout-button {
