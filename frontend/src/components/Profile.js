@@ -6,12 +6,15 @@ import './Profile.css';
 function Profile() {
   const [userInfo, setUserInfo] = useState(null);
 
+  // Set the API URL to use Heroku in production
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
+
   useEffect(() => {
     const username = localStorage.getItem('username');
 
     if (username) {
       axios
-        .get(`http://localhost:5000/user/${username}`)
+        .get(`${apiUrl}user/${username}`) // Use apiUrl here
         .then((response) => {
           setUserInfo(response.data);
         })
