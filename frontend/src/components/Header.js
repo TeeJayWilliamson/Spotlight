@@ -5,7 +5,7 @@ import { faUser, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import 'boxicons/css/boxicons.min.css';
 import '../App.css';
 
-function Header({ isAuthenticated, username, handleLogout }) {
+function Header({ isAuthenticated, name, handleLogout }) {
   const location = useLocation(); // Import useLocation to get the current route
   const isLoginPage = location.pathname === "/login"; // Check if we're on the login page
 
@@ -55,7 +55,7 @@ function Header({ isAuthenticated, username, handleLogout }) {
         {isAuthenticated && (
           <ul className="navbar-nav navbar-right">
             <li className="navbar-item">
-              <Link to="/profile" className="navbar-link-profile">{username}</Link>
+              <Link to="/profile" className="navbar-link-profile">{name}</Link>
             </li>
             <li className="navbar-item">
               <button onClick={handleLogout} className="logout-button">Logout</button>
