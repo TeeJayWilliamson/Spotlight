@@ -16,10 +16,11 @@ function Login({ setAuth, setUsername }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${apiUrl}/login`, {
+      const response = await axios.post(`${apiUrl.replace(/\/$/, '')}/login`, {
         username,
         password,
       });
+      
 
       // Store the received token, username, and full name in localStorage
       localStorage.setItem('token', response.data.token);
