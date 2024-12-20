@@ -20,30 +20,14 @@ h2, h3, h4 {
     margin: 20px 0;
   }
   
-  .user-search {
-    margin-bottom: 20px;
-  }
-  
-  .user-search label {
-    font-weight: bold;
-    margin-right: 10px;
-  }
-  
-  .user-search input {
-    width: 100%;
-    max-width: 300px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .recipient-info {
-    margin: 20px 0;
-    font-size: 16px;
+  .badge-recipient-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
   }
   
   .badge-selection {
-    margin-bottom: 20px;
+    flex: 1;
   }
   
   .badge-placeholder {
@@ -97,6 +81,32 @@ h2, h3, h4 {
     margin-top: 5px;
   }
   
+  .recipient-message {
+    flex: 1;
+  }
+  
+  .user-search {
+    margin-bottom: 20px;
+  }
+  
+  .user-search label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .user-search input {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .recipient-info {
+    margin: 20px 0;
+    font-size: 16px;
+  }
+  
   .message-box {
     margin-bottom: 20px;
   }
@@ -133,6 +143,10 @@ h2, h3, h4 {
   @media (max-width: 600px) {
     .badges-container {
       padding: 10px;
+    }
+  
+    .badge-recipient-container {
+      flex-direction: column;
     }
   
     .user-search input {

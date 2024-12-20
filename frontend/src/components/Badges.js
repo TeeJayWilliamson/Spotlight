@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Badges.css';
 import './Profile.css';
+import './badges.css';
 
 function Badges() {
   const [badges, setBadges] = useState([]);
@@ -66,76 +66,80 @@ function Badges() {
       <h2>Emblems</h2>
       <div className="divider"></div>
 
-      {/* Header */}
-      <h3>Who do you want to shine the Spotlight on?</h3><br></br>
-
-      {/* User Search Dropdown */}
-      <div className="user-search">
-        <label htmlFor="user-select">Search for a Recipient: </label>
-        <input
-          type="text"
-          id="user-select"
-          list="user-options"
-          onChange={handleUserSelect}
-          placeholder="Start typing a username..."
-        />
-        <datalist id="user-options">
-          {Array.isArray(users) && users.length > 0 ? (
-            users.map((user) => (
-              <option key={user.username} value={user.username}>
-                {user.name} ({user.username})
-              </option>
-            ))
-          ) : (
-            <p>No users found</p> // Message when no users are available
-          )}
-        </datalist>
-      </div>
-
-      {/* Recipients Display */}
-      {selectedUser && (
-        <div className="recipient-info">
-          <p><strong>Recipients: </strong>{selectedUser.name}</p>
+      <div className="badge-recipient-container">
+        {/* Left column: Badge Selection */}
+        <div className="badge-selection">
+          <h4>Choose an Emblem</h4>
+          <div className="badge-placeholder" onClick={() => handleBadgeSelect(null)}>
+            {selectedBadge ? (
+              <img src={selectedBadge.image} alt={selectedBadge.name} />
+            ) : (
+              <p>Select an emblem image</p>
+            )}
+          </div>
+          <div className="badge-options">
+            {Array.isArray(badges) && badges.length > 0 ? (
+              badges.map((badge) => (
+                <div
+                  key={badge.id}
+                  className="badge-option"
+                  onClick={() => handleBadgeSelect(badge)}
+                >
+                  <img src={badge.image} alt={badge.name} />
+                  <p>{badge.name}</p>
+                </div>
+              ))
+            ) : (
+              <p>No badges available</p> // Fallback message when no badges are available
+            )}
+          </div>
         </div>
-      )}
 
-      {/* Badge Selection */}
-      <div className="badge-selection">
-        <h4>Choose an Emblem</h4>
-        <div className="badge-placeholder" onClick={() => handleBadgeSelect(null)}>
-          {selectedBadge ? (
-            <img src={selectedBadge.image} alt={selectedBadge.name} />
-          ) : (
-            <p>Select an emblem image</p>
-          )}
-        </div>
-        <div className="badge-options">
-          {Array.isArray(badges) && badges.length > 0 ? (
-            badges.map((badge) => (
-              <div
-                key={badge.id}
-                className="badge-option"
-                onClick={() => handleBadgeSelect(badge)}
-              >
-                <img src={badge.image} alt={badge.name} />
-                <p>{badge.name}</p>
-              </div>
-            ))
-          ) : (
-            <p>No badges available</p> // Fallback message when no badges are available
-          )}
-        </div>
-      </div>
+        {/* Right column: Recipient and Message */}
+        <div className="recipient-message">
+          <h3>Who do you want to shine the Spotlight on?</h3>
 
-      {/* Personalized Message */}
-      <div className="message-box">
-        <label htmlFor="message">Write a Personalized Message:</label>
-        <textarea
-          id="message"
-          value={message}
-          onChange={handleMessageChange}
-          placeholder="Write a message to accompany the Spotlight..."
-        />
+          {/* User Search Dropdown */}
+          <div className="user-search">
+            <label htmlFor="user-select">Search for a Recipient: </label>
+            <input
+              type="text"
+              id="user-select"
+              list="user-options"
+              onChange={handleUserSelect}
+              placeholder="Start typing a username..."
+            />
+            <datalist id="user-options">
+              {Array.isArray(users) && users.length > 0 ? (
+                users.map((user) => (
+                  <option key={user.username} value={user.username}>
+                    {user.name} ({user.username})
+                  </option>
+                ))
+              ) : (
+                <p>No users found</p> // Message when no users are available
+              )}
+            </datalist>
+          </div>
+
+          {/* Recipients Display */}
+          {selectedUser && (
+            <div className="recipient-info">
+              <p><strong>Recipients: </strong>{selectedUser.name}</p>
+            </div>
+          )}
+
+          {/* Personalized Message */}
+          <div className="message-box">
+            <label htmlFor="message">Write a Personalized Message:</label>
+            <textarea
+              id="message"
+              value={message}
+              onChange={handleMessageChange}
+              placeholder="Write a message to accompany the Spotlight..."
+            />
+          </div>
+        </div>
       </div>
 
       {/* Button to Send Spotlight */}
