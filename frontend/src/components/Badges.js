@@ -62,7 +62,7 @@ function Badges() {
 
   return (
     <div className="badges-container">
-      <h2>Badges</h2>
+      <h2>Emblems</h2>
       <div className="divider"></div>
 
       {/* Header */}
@@ -100,12 +100,12 @@ function Badges() {
 
       {/* Badge Selection */}
       <div className="badge-selection">
-        <h4>Choose a Badge</h4>
+        <h4>Choose an Emblem</h4>
         <div className="badge-placeholder" onClick={() => handleBadgeSelect(null)}>
           {selectedBadge ? (
             <img src={selectedBadge.image} alt={selectedBadge.name} />
           ) : (
-            <p>Select a badge image</p>
+            <p>Select an emblem image</p>
           )}
         </div>
         <div className="badge-options">
