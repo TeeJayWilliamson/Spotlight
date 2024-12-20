@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Profile.css';
 import './Badges.css';
+import '../App.css';
 
 function Badges() {
   const [badgeType, setBadgeType] = useState('');
