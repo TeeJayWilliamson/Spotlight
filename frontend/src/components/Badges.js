@@ -12,13 +12,17 @@ function Badges() {
   // Set the API URL to use Heroku in production
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
-  // Fetch badges and users
   useEffect(() => {
     // Fetch badges
     axios
       .get(`${apiUrl.replace(/\/$/, '')}/badges`) // Use the live API or fallback URL
       .then((response) => {
-        setBadges(response.data);
+        // Ensure the response data is an array
+        if (Array.isArray(response.data)) {
+          setBadges(response.data);
+        } else {
+          console.error("Unexpected data format:", response.data);
+        }
       })
       .catch((error) => {
         console.error("Error fetching badges:", error);
@@ -28,12 +32,17 @@ function Badges() {
     axios
       .get(`${apiUrl}/users`) // Use the live API or fallback URL
       .then((response) => {
-        setUsers(response.data);
+        // Ensure the response data is an array
+        if (Array.isArray(response.data)) {
+          setUsers(response.data);
+        } else {
+          console.error("Unexpected data format:", response.data);
+        }
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
-  }, []);
+  }, [apiUrl]);
 
   // Handle user selection from the dropdown
   const handleUserSelect = (e) => {
@@ -70,15 +79,16 @@ function Badges() {
           placeholder="Start typing a username..."
         />
         <datalist id="user-options">
-          {Array.isArray(users) && users.length > 0 && users.map((user) => (
-            <option key={user.username} value={user.username}>
-              {user.name} ({user.username})
-            </option>
-          ))}
+          {Array.isArray(users) && users.length > 0 ? (
+            users.map((user) => (
+              <option key={user.username} value={user.username}>
+                {user.name} ({user.username})
+              </option>
+            ))
+          ) : (
+            <p>No users found</p> // Message when no users are available
+          )}
         </datalist>
-        {Array.isArray(users) && users.length === 0 && (
-          <p>No users found</p> // Message when no users are available
-        )}
       </div>
 
       {/* Recipients Display */}
@@ -99,7 +109,6 @@ function Badges() {
           )}
         </div>
         <div className="badge-options">
-          {/* Check if badges is an array and map */}
           {Array.isArray(badges) && badges.length > 0 ? (
             badges.map((badge) => (
               <div
