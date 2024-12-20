@@ -27,13 +27,14 @@ function Header({ handleLogout }) {
         })
         .catch((error) => {
           console.error('Error fetching user info:', error);
+          setIsAuthenticated(false); // In case of error, assume not authenticated
         });
     } else {
       // Clear state if no username is found in localStorage
       setName('');
       setIsAuthenticated(false);
     }
-  }, [apiUrl]);
+  }, [apiUrl]); // This effect will rerun if the apiUrl changes, but not based on username changes
 
   const handleLogoutClick = () => {
     handleLogout();
