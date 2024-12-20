@@ -9,10 +9,14 @@ function Badges() {
   const [selectedBadge, setSelectedBadge] = useState(null); // The selected badge
   const [message, setMessage] = useState(''); // Message to go with the spotlight
 
+  // API URL from the environment variable
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';  // Fallback URL for local dev
+
   // Fetch badges and users
   useEffect(() => {
+    // Fetch badges
     axios
-      .get('http://localhost:5000/badges') // Adjust URL if needed
+      .get(`${API_URL}/badges`) // Use the live API or fallback URL
       .then((response) => {
         setBadges(response.data);
       })
@@ -22,14 +26,14 @@ function Badges() {
 
     // Fetch users for the search dropdown
     axios
-      .get('http://localhost:5000/users') // Adjust URL for your user endpoint
+      .get(`${API_URL}/users`) // Use the live API or fallback URL
       .then((response) => {
         setUsers(response.data);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
-  }, []);
+  }, [API_URL]);
 
   // Handle user selection from the dropdown
   const handleUserSelect = (e) => {
@@ -46,7 +50,7 @@ function Badges() {
   const handleMessageChange = (e) => {
     setMessage(e.target.value);
   };
-  
+
   return (
     <div className="badges-container">
       <h2>Badges</h2>
