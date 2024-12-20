@@ -9,14 +9,14 @@ function Badges() {
   const [selectedBadge, setSelectedBadge] = useState(null); // The selected badge
   const [message, setMessage] = useState(''); // Message to go with the spotlight
 
-  // API URL from the environment variable
-  const API_URL = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';  // Fallback URL for local dev
+    // Set the API URL to use Heroku in production
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
   // Fetch badges and users
   useEffect(() => {
     // Fetch badges
     axios
-      .get(`${API_URL.replace(/\/$/, '')}/badges`) // Use the live API or fallback URL
+      .get(`${apiUrl.replace(/\/$/, '')}/badges`) // Use the live API or fallback URL
       .then((response) => {
         setBadges(response.data);
       })
@@ -26,14 +26,14 @@ function Badges() {
 
     // Fetch users for the search dropdown
     axios
-      .get(`${API_URL}/users`) // Use the live API or fallback URL
+      .get(`${apiUrl}/users`) // Use the live API or fallback URL
       .then((response) => {
         setUsers(response.data);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
-  }, [API_URL]);
+  }, []);
 
   // Handle user selection from the dropdown
   const handleUserSelect = (e) => {
