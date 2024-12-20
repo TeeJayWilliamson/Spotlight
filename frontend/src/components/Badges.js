@@ -4,17 +4,19 @@ import './Profile.css';
 
 function Badges() {
   const [badges, setBadges] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedBadge, setSelectedBadge] = useState(null);
-  const [message, setMessage] = useState('');
+  const [users, setUsers] = useState([]); // To hold user data for search
+  const [selectedUser, setSelectedUser] = useState(null); // The user selected for spotlight
+  const [selectedBadge, setSelectedBadge] = useState(null); // The selected badge
+  const [message, setMessage] = useState(''); // Message to go with the spotlight
 
+  // Set the API URL to use Heroku in production
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
+  // Fetch badges and users
   useEffect(() => {
+    // Fetch badges
     axios
-      .get(`${apiUrl.replace(/\/$/, '')}/badges`)
+      .get(`${apiUrl.replace(/\/$/, '')}/badges`) // Use the live API or fallback URL
       .then((response) => {
         setBadges(response.data);
       })
@@ -22,34 +24,29 @@ function Badges() {
         console.error("Error fetching badges:", error);
       });
 
+    // Fetch users for the search dropdown
     axios
-      .get(`${apiUrl}/users`)
+      .get(`${apiUrl}/users`) // Use the live API or fallback URL
       .then((response) => {
         setUsers(response.data);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
-  }, [apiUrl]);
+  }, []);
 
-  const filteredUsers = users.filter((user) => {
-    const username = user.username ? user.username.toLowerCase() : '';
-    const name = user.name ? user.name.toLowerCase() : '';
-    return (
-      username.includes(searchQuery.toLowerCase()) ||
-      name.includes(searchQuery.toLowerCase())
-    );
-  });
-
-  const handleUserClick = (user) => {
-    setSelectedUser(user);
-    setSearchQuery('');
+  // Handle user selection from the dropdown
+  const handleUserSelect = (e) => {
+    const selected = users.find(user => user.username === e.target.value);
+    setSelectedUser(selected);
   };
 
+  // Handle badge selection
   const handleBadgeSelect = (badge) => {
     setSelectedBadge(badge);
   };
 
+  // Handle message input change
   const handleMessageChange = (e) => {
     setMessage(e.target.value);
   };
@@ -59,39 +56,39 @@ function Badges() {
       <h2>Badges</h2>
       <div className="divider"></div>
 
+      {/* Header */}
       <h3>Who do you want to shine the Spotlight on?</h3><br></br>
 
-      <div className="search-container">
+      {/* User Search Dropdown */}
+      <div className="user-search">
+        <label htmlFor="user-select">Search for a Recipient: </label>
         <input
           type="text"
-          placeholder="Search for a user..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          id="user-select"
+          list="user-options"
+          onChange={handleUserSelect}
+          placeholder="Start typing a username..."
         />
-        
-        {searchQuery && (
-          <div className="user-suggestions">
-            <ul>
-              {filteredUsers.length > 0 ? (
-                filteredUsers.map((user) => (
-                  <li key={user.username} onClick={() => handleUserClick(user)}>
-                    <span>{user.username}</span> - <span>{user.name}</span>
-                  </li>
-                ))
-              ) : (
-                <li>No users found</li>
-              )}
-            </ul>
-          </div>
+        <datalist id="user-options">
+          {Array.isArray(users) && users.length > 0 && users.map((user) => (
+            <option key={user.username} value={user.username}>
+              {user.name} ({user.username})
+            </option>
+          ))}
+        </datalist>
+        {Array.isArray(users) && users.length === 0 && (
+          <p>No users found</p> // Message when no users are available
         )}
       </div>
 
+      {/* Recipients Display */}
       {selectedUser && (
         <div className="recipient-info">
           <p><strong>Recipients: </strong>{selectedUser.name}</p>
         </div>
       )}
 
+      {/* Badge Selection */}
       <div className="badge-selection">
         <h4>Choose a Badge</h4>
         <div className="badge-placeholder" onClick={() => handleBadgeSelect(null)}>
@@ -102,6 +99,7 @@ function Badges() {
           )}
         </div>
         <div className="badge-options">
+          {/* Check if badges is an array and map */}
           {Array.isArray(badges) && badges.length > 0 ? (
             badges.map((badge) => (
               <div
@@ -114,11 +112,12 @@ function Badges() {
               </div>
             ))
           ) : (
-            <p>No badges available</p>
+            <p>No badges available</p> // Fallback message when no badges are available
           )}
         </div>
       </div>
 
+      {/* Personalized Message */}
       <div className="message-box">
         <label htmlFor="message">Write a Personalized Message:</label>
         <textarea
@@ -129,6 +128,7 @@ function Badges() {
         />
       </div>
 
+      {/* Button to Send Spotlight */}
       <button className="send-spotlight-btn">
         Send Spotlight Recognition
       </button>
