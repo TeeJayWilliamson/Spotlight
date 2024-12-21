@@ -14,7 +14,7 @@ function Badges() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
-  
+
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
   useEffect(() => {
@@ -57,6 +57,17 @@ function Badges() {
 
       {/* Middle Pane - Search Bar and User Selection */}
       <div className="search-container">
+        <h3>Recipients:</h3>
+        {selectedUsers.length > 0 && (
+          <div className="selected-users">
+            {selectedUsers.map(user => (
+              <div key={user.username} className="user-box">
+                {user.name}
+              </div>
+            ))}
+          </div>
+        )}
+
         <input
           type="text"
           placeholder="Search for a user..."
@@ -78,19 +89,13 @@ function Badges() {
             </ul>
           </div>
         )}
-        {selectedUsers.length > 0 && (
-          <div className="selected-users">
-            <h3>Recipients:</h3>
-            {selectedUsers.map(user => (
-              <div key={user.username}>{user.name}</div>
-            ))}
-          </div>
-        )}
+        
         <div className="message-container">
           <h3>Personalized Message:</h3>
-          <textarea 
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+          <div 
+            className="message-box"
+            contentEditable
+            onInput={(e) => setMessage(e.target.innerText)}
             placeholder="Write your message here..."
           />
           <button onClick={handleSend}>Send</button>
@@ -109,6 +114,7 @@ function Badges() {
           />
           Private
         </label>
+        <div className="divider" />
         <div className="tips-section">
           <h3>Tips:</h3>
           <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
