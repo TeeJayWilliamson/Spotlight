@@ -12,7 +12,7 @@ const emblems = [
     {
       id: 'leadership',
       title: 'Leadership',
-      image: 'path/to/emblem2.png', // Replace with actual image path
+      image: './img/leadership.png', // Replace with actual image path
       description: 'For taking charge when needed and leading by example. You inspire others with your vision and actions.'
     },
     {
