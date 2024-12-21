@@ -308,6 +308,7 @@ textarea {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    margin-left: 25%;
 }
 
 .circle-button:hover {
