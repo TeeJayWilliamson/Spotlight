@@ -66,8 +66,13 @@ function Badges() {
           <div className="selected-users">
             {selectedUsers.map(user => (
               <div key={user.username} className="user-box">
-                {user.name}
-                <button onClick={() => handleRemoveUser(user.username)} className="remove-user">x</button>
+                <span>{user.name}</span>
+                <span 
+                  className="remove-user" 
+                  onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
+                >
+                  &times;
+                </span>
               </div>
             ))}
           </div>
@@ -79,6 +84,8 @@ function Badges() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)} 
         />
+        
+        {/* Suggestions Dropdown */}
         {searchQuery && (
           <div className="user-suggestions">
             <ul>
@@ -94,7 +101,7 @@ function Badges() {
             </ul>
           </div>
         )}
-        
+
         <div className="message-container">
           <h3>Personalized Message:</h3>
           <p>Max 1000 characters</p>

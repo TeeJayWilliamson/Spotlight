@@ -386,3 +386,65 @@ textarea {
     text-decoration: underline;
 }
 
+.selected-users {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .selected-users .user-box {
+    padding: 8px 12px;
+    background-color: #e0f7fa;
+    border-radius: 4px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .selected-users .remove-user {
+    cursor: pointer;
+    font-size: 18px;
+    color: #d32f2f; /* Red color for the "X" */
+    transition: color 0.3s ease;
+  }
+  
+  .selected-users .remove-user:hover {
+    color: #c62828;
+  }
+  
+  .search-container {
+    position: relative; /* Set this to position the dropdown relative to the input */
+    width: 100%; /* Make sure the container takes full width if needed */
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .search-suggestions {
+    position: absolute;
+    top: 100%; /* Position the dropdown right below the input box */
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px; /* Limit the height */
+    overflow-y: auto; /* Add scrolling if needed */
+    z-index: 10; /* Ensure it's above other content */
+  }
+  
+  .suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .suggestion-item:hover {
+    background-color: #f1f1f1;
+  }
+  
