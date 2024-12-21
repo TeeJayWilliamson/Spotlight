@@ -221,6 +221,7 @@ header .users-link span {
 .balance-info,
 .recognize-info {
   margin-top: 20px;
+  margin-left: 15px;
 }
 
 .balance-info .label,
@@ -455,7 +456,7 @@ header .users-link span {
 .recognize-info {
   padding: 30px 0;
   align-items: center;
-  color: #c0392b;
+  color: #721099;
 }
 
 .divider {
