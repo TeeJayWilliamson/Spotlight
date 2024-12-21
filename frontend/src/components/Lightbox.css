@@ -24,12 +24,13 @@
 
 .close-button {
   position: absolute;
+  max-width: fit-content;
   top: 20px;
   right: 20px;
-  color: #8f18be; /* Use the specific purple color of your site */
+  color: white; /* Use the specific purple color of your site */
   font-size: 24px;
   cursor: pointer;
-  background: white;
+  background: #8f18be;
   border: none;
 }
 
