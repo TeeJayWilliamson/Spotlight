@@ -60,18 +60,18 @@ function Badges() {
   };
 
   return (
-    <div className="badges-container">
-      {/* Left Pane - Emblem Selector */}
-      <div className="emblem-selector">
-        <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
-        <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
-          {selectedEmblem ? (
-            <img src={selectedEmblem.image} alt={selectedEmblem.title} />
-          ) : (
-            <img src={require('../img/emblem.png')} alt="Add Emblem" />
-          )}
-        </div>
-      </div>
+<div className="badges-container">
+  {/* Left Pane - Emblem Selector */}
+  <div className="emblem-selector">
+    <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
+    <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
+      <img
+        src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
+        alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
+      />
+    </div>
+  </div>
+
 
       {/* Lightbox Component */}
       <Lightbox

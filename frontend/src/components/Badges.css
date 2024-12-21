@@ -298,19 +298,22 @@ textarea {
 }
 
 .circle-button {
-    width: 200px;  /* Increase width */
-    height: 200px; /* Increase height */
-    font-size: 75px; /* Increase font size */
-    border-radius: 50%; /* Ensure it's circular */
-    background-color: #8f18be;
-    color: white;
+    width: 200px;  /* Ensure the button has the correct width */
+    height: 200px; /* Ensure the button has the correct height */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     margin-left: 20%;
-    margin-top: 5%;
-}
+    margin-top: 10px; /* Add margin to space it below the text */
+  }
+  
+  .circle-button img {
+    width: 100%;   /* Ensure the image fills the button */
+    height: 100%;  /* Ensure the image maintains the correct aspect ratio */
+    object-fit: contain; /* Ensure the image is contained within the circle */
+    border-radius: 50%; /* Keep the circular shape */
+  }
 
 .circle-button:hover {
     background-color: #721099; /* Change color on hover (optional) */
