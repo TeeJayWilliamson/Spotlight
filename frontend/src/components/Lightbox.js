@@ -30,7 +30,7 @@ const emblems = [
     {
       id: 'respect-and-dignity',
       title: 'Respect and Dignity',
-      image: 'path/to/emblem5.png', // Replace with actual image path
+      image: require('../img/respect.png'), // Replace with actual image path
       description: 'For treating everyone with kindness and empathy, fostering an environment of respect and dignity.'
     },
     {
@@ -42,7 +42,7 @@ const emblems = [
     {
       id: 'innovation',
       title: 'Innovation',
-      image: 'path/to/emblem7.png', // Replace with actual image path
+      image: require('../img/teamwork.png'), // Replace with actual image path
       description: 'For coming up with creative solutions that have had a positive impact on the team or the company.'
     }
   ];
