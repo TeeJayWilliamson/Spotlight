@@ -25,7 +25,7 @@ function Badges() {
       .catch(error => {
         console.error('Error fetching users:', error);
       });
-  }, [apiUrl]);
+  }, []);
 
   const filteredUsers = users.filter((user) => {
     const username = user.username ? user.username.toLowerCase() : '';
@@ -101,7 +101,7 @@ function Badges() {
               <span>{user.name}</span>
               <span 
                 className="remove-user" 
-                onClick={() => handleRemoveUser(user.username)}
+                onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
               >
                 &times;
               </span>
@@ -129,12 +129,12 @@ function Badges() {
       {/* Right Pane - Points, Private Checkbox, and Tips */}
       <div className="right-pane">
         <h3>Remaining Points this Month</h3>
-        <br />
+        <br></br>
         <p>{pointBalance}</p>
 
-        <br />
+        <br></br>
         <div className="divider" />
-        <br />
+        <br></br>
         <label>
           <input
             type="checkbox"
@@ -143,9 +143,9 @@ function Badges() {
           />
           Private
         </label>
-        <br />
+        <br></br>
         <div className="divider" />
-        <br />
+        <br></br>
         <div className="tips-section">
           <h3>Tips:</h3>
           <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
