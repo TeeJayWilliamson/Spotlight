@@ -262,5 +262,229 @@ h2, h3, h4 {
       width: 100px;
       height: 100px;
     }
+
+    .badges-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.emblem-selector {
+  width: 30%;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ccc;
+}
+
+.emblem-selector h3 {
+  margin-bottom: 10px;
+}
+
+.circle-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.search-container {
+  width: 40%;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ccc;
+}
+
+.search-container input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.user-suggestions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.user-suggestions li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+}
+
+.user-suggestions li:hover {
+  background-color: #f1f1f1;
+}
+
+.selected-user {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #e9e9e9;
+  border: 1px solid #ccc;
+}
+
+.right-pane {
+  width: 30%;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.right-pane h3 {
+  margin-bottom: 10px;
+}
+
+.right-pane p {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.right-pane label {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.tips-section h3 {
+  margin-bottom: 10px;
+}
+
+.tips-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tips-section li {
+  padding: 5px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.tips-section li:last-child {
+  border-bottom: none;
+}
+
   }
+
+  .badges-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .emblem-selector {
+    width: 30%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-right: 1px solid #ccc;
+  }
+  
+  .emblem-selector h3 {
+    margin-bottom: 10px;
+  }
+  
+  .circle-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .search-container {
+    width: 40%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-right: 1px solid #ccc;
+  }
+  
+  .search-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .user-suggestions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .user-suggestions li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .user-suggestions li:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .selected-user {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #e9e9e9;
+    border: 1px solid #ccc;
+  }
+  
+  .right-pane {
+    width: 30%;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .right-pane h3 {
+    margin-bottom: 10px;
+  }
+  
+  .right-pane p {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .right-pane label {
+    display: block;
+    margin-bottom: 20px;
+  }
+  
+  .tips-section h3 {
+    margin-bottom: 10px;
+  }
+  
+  .tips-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .tips-section li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .tips-section li:last-child {
+    border-bottom: none;
+  }
+  
   
