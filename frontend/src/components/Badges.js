@@ -62,30 +62,34 @@ function Badges() {
       {/* Middle Pane - Search Bar and User Selection */}
       <div className="search-container">
         <h3>Recipients:</h3>
-        {/* Search Input Box */}
-        <input
-          type="text"
-          placeholder="Search for a user..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} 
-        />
         
-        {/* User Suggestions Dropdown */}
-        {searchQuery && (
-          <div className="user-suggestions-emblem">
-            <ul>
-              {filteredUsers.length > 0 ? (
-                filteredUsers.map((user) => (
-                  <li key={user.username} onClick={() => handleUserClick(user)}>
-                    <span>{user.username}</span> - <span>{user.name}</span>
-                  </li>
-                ))
-              ) : (
-                <li>No users found</li>
-              )}
-            </ul>
-          </div>
-        )}
+        {/* Input and Suggestions Dropdown Container */}
+        <div className="input-dropdown-container">
+          {/* Search Input Box */}
+          <input
+            type="text"
+            placeholder="Search for a user..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} 
+          />
+          
+          {/* User Suggestions Dropdown */}
+          {searchQuery && (
+            <div className="user-suggestions-emblem">
+              <ul>
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map((user) => (
+                    <li key={user.username} onClick={() => handleUserClick(user)}>
+                      <span>{user.username}</span> - <span>{user.name}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li>No users found</li>
+                )}
+              </ul>
+            </div>
+          )}
+        </div>
 
         {/* Added Recipients Below the Input */}
         {selectedUsers.length > 0 && (
