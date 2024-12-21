@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Lightbox from './Lightbox'; // Import the lightbox component
 import './Profile.css';
 import './Badges.css';
 import '../App.css';
@@ -14,6 +15,7 @@ function Badges() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false); // State for managing lightbox visibility
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
@@ -51,13 +53,25 @@ function Badges() {
     // Handle send functionality here
   };
 
+  const handleEmblemSelect = (emblem) => {
+    setBadgeType(emblem);
+    setIsLightboxOpen(false);
+  };
+
   return (
     <div className="badges-container">
       {/* Left Pane - Emblem Selector */}
       <div className="emblem-selector">
         <h3>Choose an Emblem</h3>
-        <button className="circle-button" onClick={() => { /* Add popup logic here */ }}>+</button>
+        <button className="circle-button" onClick={() => setIsLightboxOpen(true)}>+</button>
       </div>
+
+      {/* Lightbox Component */}
+      <Lightbox
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        onSelect={handleEmblemSelect}
+      />
 
       {/* Middle Pane - Search Bar and User Selection */}
       <div className="search-container">
