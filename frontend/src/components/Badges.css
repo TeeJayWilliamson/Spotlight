@@ -163,7 +163,7 @@ textarea {
 }
 
 .empty-placeholder {
-    height: 50px;  /* Same as min-height for consistency */
+    height: 40px;  /* Same as min-height for consistency */
     visibility: hidden;  /* Placeholder is invisible but still takes space */
 }
 
