@@ -3,9 +3,12 @@ import './Lightbox.css';
 
 function Lightbox({ isOpen, onClose, onSelect }) {
   const emblems = [
-    'Emblem 1',
-    'Emblem 2',
-    'Emblem 3',
+    'Diversity',
+    'Leadership',
+    'Safety',
+    'Teamwork',
+    'Initiative',
+    'Respect and Dignity'
     // Add more emblems as needed
   ];
 
@@ -15,7 +18,7 @@ function Lightbox({ isOpen, onClose, onSelect }) {
     <div className="lightbox-overlay">
       <div className="lightbox">
         <button className="close-button" onClick={onClose}>&times;</button>
-        <h2>Select an Emblem</h2>
+        <h2>All Emblems</h2>
         <ul className="emblem-list">
           {emblems.map((emblem, index) => (
             <li key={index} onClick={() => onSelect(emblem)}>

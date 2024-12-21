@@ -158,6 +158,7 @@ function Badges() {
           Private
         </label>
         <br></br>
+        <br></br>
         <div className="divider" />
         <br></br>
         <div className="tips-section">
