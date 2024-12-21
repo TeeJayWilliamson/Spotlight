@@ -5,7 +5,7 @@ header {
     padding: 15px 20px;
     background-color: #8f18be;
     color: white;
-    height: 60px; /* Set a fixed height for the navbar if needed */
+    height: 45px; /* Set a fixed height for the navbar if needed */
 }
 
 .navbar-container {

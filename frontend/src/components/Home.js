@@ -109,10 +109,7 @@ function Home() {
           <p className="large-number">1000</p>
         </div>
         <div className="divider"></div>
-        <div className="recognize-info">
-          <p className="label">Recognize Now:</p>
-          <p className="large-number">5000</p>
-        </div>
+
         <div className="divider"></div>
         <button className="request-budget-btn">Request More Budget</button>
       </div>
