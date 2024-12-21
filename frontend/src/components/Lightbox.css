@@ -22,14 +22,14 @@
   position: relative;
 }
 
-.lightbox-close {
+.close-button {
   position: absolute;
   top: 20px;
   right: 20px;
   color: #8f18be; /* Use the specific purple color of your site */
   font-size: 24px;
   cursor: pointer;
-  background: none;
+  background: white;
   border: none;
 }
 
