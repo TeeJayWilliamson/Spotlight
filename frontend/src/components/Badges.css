@@ -488,4 +488,100 @@ textarea {
   .user-suggestions li:hover {
     background-color: #f1f1f1;
   }
+
+  .search-container {
+    position: relative; /* For positioning the dropdown below the input */
+    width: 100%; /* Full width to accommodate everything */
+    padding-bottom: 20px; /* Space for better visual structure */
+  }
+  
+  .search-container input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px; /* Space below the input box */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .user-suggestions {
+    position: absolute;
+    top: 100%; /* Position the suggestions directly below the input box */
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  
+  .user-suggestions ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  .user-suggestions li {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .user-suggestions li:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Selected Users Below the Input */
+  .selected-users {
+    margin-top: 10px;
+  }
+  
+  .selected-users .user-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .selected-users .remove-user {
+    cursor: pointer;
+    font-size: 18px;
+    color: red;
+  }
+  
+  .divider {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .message-container {
+    margin-top: 20px;
+  }
+  
+  .message-container textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
+  .message-container button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ff4747;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .message-container button:hover {
+    background-color: #ff2a2a;
+  }
+  
   

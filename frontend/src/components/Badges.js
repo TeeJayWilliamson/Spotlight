@@ -62,22 +62,7 @@ function Badges() {
       {/* Middle Pane - Search Bar and User Selection */}
       <div className="search-container">
         <h3>Recipients:</h3>
-        {selectedUsers.length > 0 && (
-          <div className="selected-users">
-            {selectedUsers.map(user => (
-              <div key={user.username} className="user-box">
-                <span>{user.name}</span>
-                <span 
-                  className="remove-user" 
-                  onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
-                >
-                  &times;
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-
+        {/* Search Input Box */}
         <input
           type="text"
           placeholder="Search for a user..."
@@ -85,7 +70,7 @@ function Badges() {
           onChange={(e) => setSearchQuery(e.target.value)} 
         />
         
-        {/* Suggestions Dropdown */}
+        {/* User Suggestions Dropdown */}
         {searchQuery && (
           <div className="user-suggestions">
             <ul>
@@ -102,6 +87,26 @@ function Badges() {
           </div>
         )}
 
+        {/* Added Recipients Below the Input */}
+        {selectedUsers.length > 0 && (
+          <div className="selected-users">
+            {selectedUsers.map(user => (
+              <div key={user.username} className="user-box">
+                <span>{user.name}</span>
+                <span 
+                  className="remove-user" 
+                  onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
+                >
+                  &times;
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="divider" />
+
+        {/* Personalized Message Section */}
         <div className="message-container">
           <h3>Personalized Message:</h3>
           <p>Max 1000 characters</p>
