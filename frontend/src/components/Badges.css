@@ -294,8 +294,8 @@ textarea {
 }
 
 .circle-button {
-    width: 100px;  /* Increase width */
-    height: 100px; /* Increase height */
+    width: 300px;  /* Increase width */
+    height: 300px; /* Increase height */
     font-size: 48px; /* Increase font size */
     border-radius: 50%; /* Ensure it's circular */
     background-color: #8f18be;

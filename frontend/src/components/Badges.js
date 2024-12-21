@@ -144,6 +144,7 @@ function Badges() {
           Private
         </label>
         <div className="divider" />
+        <br></br>
         <div className="tips-section">
           <h3>Tips:</h3>
           <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
