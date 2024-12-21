@@ -27,6 +27,7 @@ function Badges() {
       });
   }, []);
 
+  // Filter users based on the search query
   const filteredUsers = users.filter((user) => {
     const username = user.username ? user.username.toLowerCase() : '';
     const name = user.name ? user.name.toLowerCase() : '';
@@ -36,19 +37,23 @@ function Badges() {
     );
   });
 
+  // Handle user selection from suggestions list
   const handleUserClick = (user) => {
-    if (!selectedUsers.includes(user)) {
+    if (!selectedUsers.some(u => u.username === user.username)) {
       setSelectedUsers([...selectedUsers, user]);
     }
-    setSearchQuery('');
+    setSearchQuery(''); // Clear the search input once user is selected
   };
 
+  // Handle removal of selected user
   const handleRemoveUser = (username) => {
     setSelectedUsers(selectedUsers.filter(user => user.username !== username));
   };
 
+  // Handle sending the badge
   const handleSend = () => {
     // Handle send functionality here
+    console.log("Sending badge to:", selectedUsers);
   };
 
   return (
@@ -87,57 +92,44 @@ function Badges() {
           </div>
         )}
 
-        {/* Added Recipients Below the Input */}
+        {/* Display selected users */}
         {selectedUsers.length > 0 && (
           <div className="selected-users">
-            {selectedUsers.map(user => (
-              <div key={user.username} className="user-box">
-                <span>{user.name}</span>
-                <span 
-                  className="remove-user" 
-                  onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
-                >
-                  &times;
-                </span>
-              </div>
-            ))}
+            <h4>Selected Users:</h4>
+            <ul>
+              {selectedUsers.map((user) => (
+                <li key={user.username}>
+                  <span>{user.username} - {user.name}</span>
+                  <button onClick={() => handleRemoveUser(user.username)}>Remove</button>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
-
-        <div className="divider" />
-
-        {/* Personalized Message Section */}
-        <div className="message-container">
-          <h3>Personalized Message:</h3>
-          <p>Max 1000 characters</p>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            maxLength="1000"
-            placeholder="Write your message here..."
-            rows="6"
-          />
-          <button onClick={handleSend}>Send</button>
-        </div>
       </div>
 
-      {/* Right Pane - Points, Private Checkbox, and Tips */}
-      <div className="right-pane">
-        <h3>Remaining Points this Month</h3>
-        <p>{pointBalance}</p>
-        <label>
+      {/* Badge sending area */}
+      <div className="badge-action">
+        <h4>Send Badge</h4>
+        {/* Badge Type and Message (Example) */}
+        <div>
+          <label>Badge Type:</label>
           <input
-            type="checkbox"
-            checked={isPrivate}
-            onChange={() => setIsPrivate(!isPrivate)}
+            type="text"
+            value={badgeType}
+            onChange={(e) => setBadgeType(e.target.value)} 
           />
-          Private
-        </label>
-        <div className="divider" />
-        <div className="tips-section">
-          <h3>Tips:</h3>
-          <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
         </div>
+        <div>
+          <label>Message:</label>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)} 
+          />
+        </div>
+        
+        {/* Send Button */}
+        <button onClick={handleSend}>Send Badge</button>
       </div>
     </div>
   );
