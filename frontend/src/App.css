@@ -22,7 +22,7 @@ header {
   display: flex;
   justify-content: flex-start;
   padding: 15px 20px;
-  background-color: #e74c3c;
+  background-color: #8f18be;
   color: white;
   align-items: center;
 }
@@ -266,6 +266,7 @@ header .users-link span {
 }
 
 .top-recognized h4 {
+  color: white;
   margin-bottom: 10px;
   font-size: 24px;
 }
