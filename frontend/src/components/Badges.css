@@ -315,10 +315,6 @@ textarea {
     border-radius: 50%; /* Keep the circular shape */
   }
 
-.circle-button:hover {
-    background-color: #721099; /* Change color on hover (optional) */
-  }
-
 /* Remove User Button */
 .remove-user {
     background: none;
