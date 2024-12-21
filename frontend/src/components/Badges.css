@@ -5,17 +5,17 @@ body {
     margin: 0;
     padding: 0;
 }
-  
+
 h2, h3, h4 {
     color: #444;
 }
-  
+
 .divider {
     height: 2px;
     background-color: #ddd;
     margin: 20px 0;
 }
-  
+
 button {
     padding: 10px;
     border: none;
@@ -23,11 +23,11 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-  
+
 button:hover {
     opacity: 0.9;
 }
-  
+
 textarea {
     width: 100%;
     height: 100px;
@@ -38,14 +38,14 @@ textarea {
     font-size: 14px;
     line-height: 1.5;
 }
-  
+
 /* Layout Containers */
 .home-container, .badges-container {
     display: flex;
     justify-content: space-between;
     padding: 20px;
 }
-  
+
 .home-container .left-pane, 
 .home-container .center-pane, 
 .home-container .right-pane,
@@ -57,7 +57,7 @@ textarea {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-  
+
 .home-container .left-pane,
 .home-container .right-pane,
 .badges-container .emblem-selector,
@@ -65,114 +65,32 @@ textarea {
     flex: 1;
     margin: 0 10px;
 }
-  
+
 .home-container .center-pane,
 .badges-container .search-container {
     flex: 2;
     margin: 0 10px;
 }
-  
+
 @media (max-width: 600px) {
     .badges-container {
         flex-direction: column;
     }
-  
+
     .badge-recipient-container {
         flex-direction: column;
     }
-  
-    .user-search input {
-        max-width: 100%;
-    }
-  
+
     .badge-options {
         justify-content: center;
     }
-  
+
     .badge-placeholder, .badge-option img {
         width: 100px;
         height: 100px;
     }
 }
-  
-/* Left Pane */
-.left-pane {
-    /* Specific styling for left pane if needed */
-}
-  
-.badge-recipient-container {
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-  
-.badge-selection, 
-.balance-info, 
-.recognize-info, 
-.request-budget {
-    margin-top: 20px;
-}
-  
-/* Center Pane */
-.center-pane {
-    /* Specific styling for center pane if needed */
-}
-  
-.large-number {
-    font-size: 2em;
-    font-weight: bold;
-}
-  
-.form-container {
-    display: flex;
-    flex-direction: column;
-}
-  
-.form-container > div {
-    margin-bottom: 20px;
-}
-  
-.form-container button[type="submit"] {
-    background-color: #007bff;
-    color: white;
-}
-  
-.form-container button.request-budget-btn {
-    background-color: #28a745;
-    color: white;
-}
-  
-/* Right Pane */
-.right-pane h3, .tips-section h3 {
-    margin-bottom: 10px;
-}
-  
-.right-pane p {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-  
-.right-pane label {
-    display: block;
-    margin-bottom: 20px;
-}
-  
-.tips-section ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-  
-.tips-section li {
-    padding: 5px 0;
-    border-bottom: 1px solid #ccc;
-}
-  
-.tips-section li:last-child {
-    border-bottom: none;
-}
-  
+
 /* Badge Container */
 .badge-placeholder {
     width: 100%;
@@ -186,27 +104,27 @@ textarea {
     cursor: pointer;
     transition: border-color 0.3s ease;
 }
-  
+
 .badge-placeholder img {
     max-width: 100%;
     max-height: 100%;
 }
-  
+
 .badge-placeholder:hover {
     border-color: #aaa;
 }
-  
+
 .badge-options {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
-  
+
 .badge-option {
     cursor: pointer;
     transition: transform 0.2s ease;
 }
-  
+
 .badge-option img {
     width: 80px;
     height: 80px;
@@ -215,160 +133,51 @@ textarea {
     border: 2px solid transparent;
     transition: border-color 0.3s ease;
 }
-  
+
 .badge-option:hover img {
     border-color: #444;
 }
-  
+
 .badge-option p {
     text-align: center;
     margin-top: 5px;
 }
-  
-.recipient-message {
-    flex: 1;
-}
-  
-.user-search {
-    margin-bottom: 20px;
-}
-  
-.user-search label {
-    font-weight: bold;
-    margin-right: 10px;
-}
-  
-.user-search input {
-    width: 100%;
-    max-width: 300px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-  
-.user-suggestions ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border: 1px solid #ccc;
-    max-height: 200px;
-    overflow-y: auto;
-}
-  
-.user-suggestions li {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #ccc;
-}
-  
-.user-suggestions li:hover {
-    background-color: #f1f1f1;
-}
-  
-.selected-user {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #e9e9e9;
-    border: 1px solid #ccc;
-    display: inline-block;
-    margin-right: 10px;
-}
-  
-.selected-user span {
-    font-weight: bold;
-}
-  
-.send-spotlight-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-  
-.send-spotlight-btn:hover {
-    background-color: #218838;
-}
-  
-.circle-button {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #007bff;
-    color: white;
+
+/* Badge Selection Layout */
+.badge-recipient-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    cursor: pointer;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-/* New Styles for Better Layout */
-.badges-container .search-container {
+.selected-users {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
 }
 
-.selected-users h3 {
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.selected-users div {
-    padding: 8px 12px;
-    background-color: #e0f7fa;
-    border-radius: 4px;
-    font-size: 14px;
-    margin-top: 5px;
-    display: inline-block;
-    margin-right: 10px;
-}
-
-/* Style for Private Checkbox and Remaining Points */
-.right-pane label input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-/* Textarea Styling */
-textarea {
-    width: 100%;
-    height: 200px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    resize: vertical;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-/* Remove User Button */
-.remove-user {
-    background: none;
-    border: none;
-    color: red;
-    font-size: 16px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-.remove-user:hover {
-    text-decoration: underline;
-}
-
-/* Styling for Selected Users */
 .selected-users .user-box {
     padding: 8px 12px;
     background-color: #e0f7fa;
     border-radius: 4px;
     font-size: 14px;
-    margin-top: 5px;
-    display: inline-block;
-    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     position: relative;
+}
+
+.selected-users .remove-user {
+    cursor: pointer;
+    font-size: 18px;
+    color: #d32f2f;
+    transition: color 0.3s ease;
+}
+
+.selected-users .remove-user:hover {
+    color: #c62828;
 }
 
 .selected-users .user-box button {
@@ -386,126 +195,25 @@ textarea {
     text-decoration: underline;
 }
 
-.selected-users {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .selected-users .user-box {
-    padding: 8px 12px;
-    background-color: #e0f7fa;
-    border-radius: 4px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .selected-users .remove-user {
-    cursor: pointer;
-    font-size: 18px;
-    color: #d32f2f; /* Red color for the "X" */
-    transition: color 0.3s ease;
-  }
-  
-  .selected-users .remove-user:hover {
-    color: #c62828;
-  }
-  
-  .search-container {
-    position: relative; /* Set this to position the dropdown relative to the input */
-    width: 100%; /* Make sure the container takes full width if needed */
-  }
-  
-  .search-input {
+/* Search and Suggestions */
+.search-container {
+    position: relative;
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-  
-  .search-suggestions {
-    position: absolute;
-    top: 100%; /* Position the dropdown right below the input box */
-    left: 0;
-    width: 100%;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    max-height: 200px; /* Limit the height */
-    overflow-y: auto; /* Add scrolling if needed */
-    z-index: 10; /* Ensure it's above other content */
-  }
-  
-  .suggestion-item {
-    padding: 8px;
-    cursor: pointer;
-  }
-  
-  .suggestion-item:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .search-container {
-    position: relative; /* Set this to position the dropdown relative to the input */
-    width: 100%; /* Make sure the container takes full width if needed */
-  }
-  
-  .search-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-  
-  .user-suggestions {
-    position: absolute;
-    top: 100%; /* Position the dropdown right below the input box */
-    left: 0;
-    width: 100%;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    max-height: 200px; /* Limit the height */
-    overflow-y: auto; /* Add scrolling if needed */
-    z-index: 10; /* Ensure it's above other content */
-  }
-  
-  .user-suggestions ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-  }
-  
-  .user-suggestions li {
-    padding: 8px;
-    cursor: pointer;
-  }
-  
-  .user-suggestions li:hover {
-    background-color: #f1f1f1;
-  }
+    padding-bottom: 20px;
+}
 
-  .search-container {
-    position: relative; /* For positioning the dropdown below the input */
-    width: 100%; /* Full width to accommodate everything */
-    padding-bottom: 20px; /* Space for better visual structure */
-  }
-  
-  .search-container input {
+.search-input {
     width: 100%;
     padding: 8px;
-    margin-bottom: 10px; /* Space below the input box */
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
-  
-  .user-suggestions {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.user-suggestions {
     position: absolute;
-    top: 100%; /* Position the suggestions directly below the input box */
+    top: 100%;
     left: 0;
     width: 100%;
     background-color: #fff;
@@ -514,74 +222,74 @@ textarea {
     max-height: 200px;
     overflow-y: auto;
     z-index: 10;
-  }
-  
-  .user-suggestions ul {
+}
+
+.user-suggestions ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
-  }
-  
-  .user-suggestions li {
+}
+
+.user-suggestions li {
     padding: 8px;
     cursor: pointer;
-  }
-  
-  .user-suggestions li:hover {
+}
+
+.user-suggestions li:hover {
     background-color: #f1f1f1;
-  }
-  
-  /* Selected Users Below the Input */
-  .selected-users {
-    margin-top: 10px;
-  }
-  
-  .selected-users .user-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px;
-    margin-bottom: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .selected-users .remove-user {
-    cursor: pointer;
-    font-size: 18px;
-    color: red;
-  }
-  
-  .divider {
+}
+
+.selected-user {
     margin-top: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .message-container {
-    margin-top: 20px;
-  }
-  
-  .message-container textarea {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
+    padding: 10px;
+    background-color: #e9e9e9;
     border: 1px solid #ccc;
-    font-size: 14px;
-  }
-  
-  .message-container button {
-    margin-top: 10px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.selected-user span {
+    font-weight: bold;
+}
+
+/* Buttons */
+.send-spotlight-btn {
+    display: inline-block;
     padding: 10px 20px;
-    background-color: #ff4747;
-    color: white;
+    background-color: #28a745;
+    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
-  
-  .message-container button:hover {
-    background-color: #ff2a2a;
-  }
-  
-  
+}
+
+.send-spotlight-btn:hover {
+    background-color: #218838;
+}
+
+.circle-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Remove User Button */
+.remove-user {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.remove-user:hover {
+    text-decoration: underline;
+}
