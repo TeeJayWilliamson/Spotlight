@@ -6,7 +6,7 @@ const emblems = [
     {
       id: 'diversity',
       title: 'Diversity',
-      image: 'path/to/emblem1.png', // Replace with actual image path
+      image: require('../img/diversity.png'), // Replace with actual image path
       description: 'For helping others see what is possible. You have gone above and beyond and deserve special thanks from your team.'
     },
     {
@@ -18,13 +18,13 @@ const emblems = [
     {
       id: 'safety',
       title: 'Safety',
-      image: 'path/to/emblem3.png', // Replace with actual image path
+      image: require('../img/safety.png'), // Replace with actual image path
       description: 'For prioritizing the safety of the team and ensuring a secure environment for everyone.'
     },
     {
       id: 'initiative',
       title: 'Initiative',
-      image: 'path/to/emblem4.png', // Replace with actual image path
+      image: require('../img/initiative.png'), // Replace with actual image path
       description: 'For going above and beyond in solving problems and taking proactive steps to improve the workplace.'
     },
     {
@@ -36,7 +36,7 @@ const emblems = [
     {
       id: 'teamwork',
       title: 'Teamwork',
-      image: 'path/to/emblem6.png', // Replace with actual image path
+      image: require('../img/teamwork.png'), // Replace with actual image path
       description: 'For collaborating effectively with others and contributing to the success of the team.'
     },
     {
