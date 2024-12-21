@@ -6,8 +6,10 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path'); // Add path module to serve static files
+const helmet = require('helmet');
 
 const User = require('./models/user'); // Ensure this path matches your directory structure
+const Recognition = require('./models/recognition'); // Import the Recognition model
 const authRoutes = require('./routes/auth'); // Correct path for auth.js
 
 const app = express();
@@ -15,8 +17,6 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors());
-
-const helmet = require('helmet');
 
 const allowedApiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
@@ -32,7 +32,6 @@ app.use(
   })
 );
 
-
 // Middleware
 app.use(bodyParser.json());
 
@@ -46,7 +45,7 @@ mongoose.connect(dbURI, {}).then(() => {
 });
 
 // Routes
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', authRoutes);
 
 // Hardcoded test credentials for testing
 const TEST_USERNAME = 'testUser';
@@ -130,6 +129,31 @@ app.post('/send-emblem', async (req, res) => {
 
     res.status(200).json({ message: 'Emblem sent successfully' });
   } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// New endpoint to create a recognition
+app.post('/recognitions', async (req, res) => {
+  const { fromUsername, toUsername, reason } = req.body;
+
+  try {
+    const recognition = new Recognition({ fromUsername, toUsername, reason });
+    await recognition.save();
+    res.status(201).json(recognition);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// New endpoint to fetch recognitions for the news feed
+app.get('/recognitions', async (req, res) => {
+  try {
+    const recognitions = await Recognition.find().sort({ date: -1 }).limit(10);
+    res.json(recognitions);
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });

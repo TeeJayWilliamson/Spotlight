@@ -51,7 +51,34 @@ function Badges() {
   };
 
   const handleSend = () => {
-    // Handle send functionality here
+    if (selectedUsers.length === 0 || !selectedEmblem || !message) {
+      alert('Please select at least one recipient, an emblem, and write a message.');
+      return;
+    }
+
+    const newRecognition = {
+      name: localStorage.getItem('username'), // Assuming the username is stored in localStorage
+      action: 'sent a Spotlight recognition to',
+      recipient: selectedUsers.map(user => user.name).join(', '),
+      reason: message,
+      time: new Date().toLocaleString()
+    };
+
+    axios.post(`${apiUrl}recognitions`, newRecognition)
+      .then(response => {
+        // Handle success response
+        console.log('Recognition sent:', response.data);
+        // Optionally clear the form
+        setSelectedUsers([]);
+        setMessage('');
+        setSelectedEmblem(null);
+        setIsPrivate(false);
+        // Send a signal to update the news feed
+        window.dispatchEvent(new Event('newRecognition'));
+      })
+      .catch(error => {
+        console.error('Error sending recognition:', error);
+      });
   };
 
   const handleEmblemSelect = (emblem) => {
@@ -60,18 +87,17 @@ function Badges() {
   };
 
   return (
-<div className="badges-container">
-  {/* Left Pane - Emblem Selector */}
-  <div className="emblem-selector">
-    <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
-    <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
-      <img
-        src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
-        alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
-      />
-    </div>
-  </div>
-
+    <div className="badges-container">
+      {/* Left Pane - Emblem Selector */}
+      <div className="emblem-selector">
+        <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
+        <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
+          <img
+            src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
+            alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
+          />
+        </div>
+      </div>
 
       {/* Lightbox Component */}
       <Lightbox
@@ -136,6 +162,7 @@ function Badges() {
         <div className="message-container">
           <h3>Personalized Message:</h3>
           <p>Max 1000 characters</p>
+          <br></br>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
