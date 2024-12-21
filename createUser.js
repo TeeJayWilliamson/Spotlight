@@ -15,10 +15,10 @@ mongoose.connect('mongodb+srv://trevorjwilliamson:DPKiDCeTtjikih65@ttccluster.u6
     });
 
     const createUser = async () => {
-      const username = '12345';
+      const username = '68503';
       const password = 'password'; // Plaintext password
-      const name = 'Test User';
-      const email = 'test.user@ttc.ca';
+      const name = 'Joseph Sturino';
+      const email = 'joseph.sturino@ttc.ca';
 
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
