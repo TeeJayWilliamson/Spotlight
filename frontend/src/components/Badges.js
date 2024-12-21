@@ -72,7 +72,7 @@ function Badges() {
         
         {/* User Suggestions Dropdown */}
         {searchQuery && (
-          <div className="user-suggestions">
+          <div className="user-suggestions-emblem">
             <ul>
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
