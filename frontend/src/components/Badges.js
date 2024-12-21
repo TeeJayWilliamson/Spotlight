@@ -108,7 +108,7 @@ function Badges() {
           </div>
         )}
 
-        <div className="divider" />
+        <div className="divider-emblem" />
 
         {/* Personalized Message Section */}
         <div className="message-container">

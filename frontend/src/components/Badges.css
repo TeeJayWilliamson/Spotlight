@@ -10,7 +10,8 @@ h2, h3, h4 {
     color: #444;
 }
 
-.divider {
+.divider-emblem {
+    margin-top: 50px;
     height: 2px;
     background-color: #ddd;
     margin: 20px 0;
