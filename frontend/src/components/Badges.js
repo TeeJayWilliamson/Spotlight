@@ -16,6 +16,7 @@ function Badges() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false); // State for managing lightbox visibility
+  const [selectedEmblem, setSelectedEmblem] = useState(null); // State for selected emblem
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
@@ -54,7 +55,7 @@ function Badges() {
   };
 
   const handleEmblemSelect = (emblem) => {
-    setBadgeType(emblem);
+    setSelectedEmblem(emblem);
     setIsLightboxOpen(false);
   };
 
@@ -62,8 +63,10 @@ function Badges() {
     <div className="badges-container">
       {/* Left Pane - Emblem Selector */}
       <div className="emblem-selector">
-        <h3>Choose an Emblem</h3>
-        <button className="circle-button" onClick={() => setIsLightboxOpen(true)}>+</button>
+        <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
+        <button className="circle-button" onClick={() => setIsLightboxOpen(true)}>
+          {selectedEmblem ? <img src={selectedEmblem.image} alt={selectedEmblem.title} /> : '+'}
+        </button>
       </div>
 
       {/* Lightbox Component */}
@@ -155,7 +158,7 @@ function Badges() {
             checked={isPrivate}
             onChange={() => setIsPrivate(!isPrivate)}
           />
-          Private
+           Private
         </label>
         <br></br>
         <br></br>
