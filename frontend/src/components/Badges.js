@@ -129,7 +129,12 @@ function Badges() {
       {/* Right Pane - Points, Private Checkbox, and Tips */}
       <div className="right-pane">
         <h3>Remaining Points this Month</h3>
+        <br></br>
         <p>{pointBalance}</p>
+
+        <br></br>
+        <div className="divider" />
+        <br></br>
         <label>
           <input
             type="checkbox"
