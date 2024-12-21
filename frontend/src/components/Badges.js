@@ -7,12 +7,12 @@ import '../App.css';
 function Badges() {
   const [badgeType, setBadgeType] = useState('');
   const [message, setMessage] = useState('');
-  const [recipient, setRecipient] = useState('');
+  const [recipient, setRecipient] = useState([]);
   const [pointBalance, setPointBalance] = useState(1000);
   const [recognizeNow, setRecognizeNow] = useState(5000);
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
   
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
@@ -37,8 +37,14 @@ function Badges() {
   });
 
   const handleUserClick = (user) => {
-    setSelectedUser(user);
+    if (!selectedUsers.includes(user)) {
+      setSelectedUsers([...selectedUsers, user]);
+    }
     setSearchQuery('');
+  };
+
+  const handleSend = () => {
+    // Handle send functionality here
   };
 
   return (
@@ -46,8 +52,7 @@ function Badges() {
       {/* Left Pane - Emblem Selector */}
       <div className="emblem-selector">
         <h3>Choose an Emblem</h3>
-        <button className="circle-button">+</button>
-        {/* Add your emblem selection logic here */}
+        <button className="circle-button" onClick={() => { /* Add popup logic here */ }}>+</button>
       </div>
 
       {/* Middle Pane - Search Bar and User Selection */}
@@ -73,11 +78,23 @@ function Badges() {
             </ul>
           </div>
         )}
-        {selectedUser && (
-          <div className="selected-user">
-            <h3>Selected User: {selectedUser.name}</h3>
+        {selectedUsers.length > 0 && (
+          <div className="selected-users">
+            <h3>Recipients:</h3>
+            {selectedUsers.map(user => (
+              <div key={user.username}>{user.name}</div>
+            ))}
           </div>
         )}
+        <div className="message-container">
+          <h3>Personalized Message:</h3>
+          <textarea 
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Write your message here..."
+          />
+          <button onClick={handleSend}>Send</button>
+        </div>
       </div>
 
       {/* Right Pane - Points, Private Checkbox, and Tips */}
@@ -94,13 +111,7 @@ function Badges() {
         </label>
         <div className="tips-section">
           <h3>Tips:</h3>
-          <ul>
-            <li>Be specific</li>
-            <li>Be genuine</li>
-            <li>Be concise</li>
-            <li>Be personal</li>
-            <li>Be timely</li>
-          </ul>
+          <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
         </div>
       </div>
     </div>
