@@ -22,16 +22,14 @@
   position: relative;
 }
 
-.close-button {
-  position: absolute;
-  max-width: fit-content;
-  top: 20px;
-  right: 20px;
-  color: white; /* Use the specific purple color of your site */
-  font-size: 24px;
-  cursor: pointer;
-  background: #8f18be;
+.close-button-lb {
+  background-color: white;
   border: none;
+  border-radius: 5px;
+  color: #8f18be;
+  cursor: pointer;
+  margin-top: 0px;
+  padding: 10px 20px;
 }
 
 .emblem-list {

@@ -53,7 +53,7 @@ function Lightbox({ isOpen, onClose, onSelect }) {
   return (
     <div className="lightbox-overlay">
       <div className="lightbox">
-        <button className="close-button" onClick={onClose}>&times;</button>
+        <button className="close-button-lb" onClick={onClose}>&times;</button>
         <h2>All Emblems</h2>
         <ul className="emblem-list">
           {emblems.map((emblem) => (
