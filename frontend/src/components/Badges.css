@@ -211,33 +211,6 @@ textarea {
     margin-bottom: 10px;
 }
 
-.user-suggestions {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 10;
-}
-
-.user-suggestions ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-
-.user-suggestions li {
-    padding: 8px;
-    cursor: pointer;
-}
-
-.user-suggestions li:hover {
-    background-color: #f1f1f1;
-}
 
 .selected-user {
     margin-top: 20px;
