@@ -42,7 +42,7 @@ const emblems = [
     {
       id: 'innovation',
       title: 'Innovation',
-      image: require('../img/teamwork.png'), // Replace with actual image path
+      image: require('../img/innovation.png'), // Replace with actual image path
       description: 'For coming up with creative solutions that have had a positive impact on the team or the company.'
     }
   ];
