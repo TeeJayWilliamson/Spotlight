@@ -195,12 +195,12 @@ textarea {
 .selected-users .remove-user {
     cursor: pointer;
     font-size: 18px;
-    color: #d32f2f;
+    color: #8f18be;
     transition: color 0.3s ease;
 }
 
 .selected-users .remove-user:hover {
-    color: #c62828;
+    color: #721099;
 }
 
 .selected-users .user-box button {
@@ -210,7 +210,7 @@ textarea {
     font-size: 16px;
     background: none;
     border: none;
-    color: red;
+    color: #8f18be;
     cursor: pointer;
 }
 
@@ -286,7 +286,7 @@ textarea {
 .send-spotlight-btn {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #28a745;
+    background-color: #8f18be;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -294,7 +294,7 @@ textarea {
 }
 
 .send-spotlight-btn:hover {
-    background-color: #218838;
+    background-color: #8f18be;
 }
 
 .circle-button {

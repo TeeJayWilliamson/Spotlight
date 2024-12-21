@@ -3,7 +3,7 @@ header {
     justify-content: space-between;
     align-items: center; /* Vertically center the content */
     padding: 15px 20px;
-    background-color: #e74c3c;
+    background-color: #8f18be;
     color: white;
     height: 60px; /* Set a fixed height for the navbar if needed */
 }
@@ -46,7 +46,7 @@ header {
 
 .logout-button {
     background-color: white;
-    color: red;
+    color: #8f18be;
     padding: 5px 10px;
     border: none;
     cursor: pointer;
