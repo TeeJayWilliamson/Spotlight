@@ -159,7 +159,12 @@ textarea {
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 10px;
-    position: relative; /* To position the pseudo-element correctly */
+    position: relative; /* Optional, to align if needed */
+}
+
+.empty-placeholder {
+    height: 50px;  /* Same as min-height for consistency */
+    visibility: hidden;  /* Placeholder is invisible but still takes space */
 }
 
 .selected-users::before {

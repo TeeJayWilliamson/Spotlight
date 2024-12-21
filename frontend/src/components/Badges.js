@@ -92,21 +92,22 @@ function Badges() {
         </div>
 
         {/* Added Recipients Below the Input */}
-        {selectedUsers.length > 0 && (
-          <div className="selected-users">
-            {selectedUsers.map(user => (
-              <div key={user.username} className="user-box">
-                <span>{user.name}</span>
-                <span 
-                  className="remove-user" 
-                  onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
-                >
-                  &times;
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="selected-users">
+          {/* Placeholder for empty state */}
+          {!selectedUsers.length && <div className="empty-placeholder"></div>}
+
+          {selectedUsers.map(user => (
+            <div key={user.username} className="user-box">
+              <span>{user.name}</span>
+              <span 
+                className="remove-user" 
+                onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
+              >
+                &times;
+              </span>
+            </div>
+          ))}
+        </div>
 
         <div className="divider-emblem" />
 
