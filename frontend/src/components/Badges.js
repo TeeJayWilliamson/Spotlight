@@ -43,6 +43,10 @@ function Badges() {
     setSearchQuery('');
   };
 
+  const handleRemoveUser = (username) => {
+    setSelectedUsers(selectedUsers.filter(user => user.username !== username));
+  };
+
   const handleSend = () => {
     // Handle send functionality here
   };
@@ -63,6 +67,7 @@ function Badges() {
             {selectedUsers.map(user => (
               <div key={user.username} className="user-box">
                 {user.name}
+                <button onClick={() => handleRemoveUser(user.username)} className="remove-user">x</button>
               </div>
             ))}
           </div>
@@ -92,11 +97,13 @@ function Badges() {
         
         <div className="message-container">
           <h3>Personalized Message:</h3>
-          <div 
-            className="message-box"
-            contentEditable
-            onInput={(e) => setMessage(e.target.innerText)}
+          <p>Max 1000 characters</p>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            maxLength="1000"
             placeholder="Write your message here..."
+            rows="6"
           />
           <button onClick={handleSend}>Send</button>
         </div>
