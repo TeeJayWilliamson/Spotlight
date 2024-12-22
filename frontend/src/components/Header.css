@@ -5,7 +5,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px; /* Reduce padding */
-    background-color: #8f18be;
+    background-color: red;
     color: white;
     height: 50px; /* Set a fixed height for the navbar */
 }
@@ -48,7 +48,7 @@ header {
 
 .logout-button {
     background-color: white;
-    color: #8f18be;
+    color:red;
     padding: 5px 10px;
     border: none;
     cursor: pointer;

@@ -67,7 +67,7 @@ function Header({ handleLogout }) {
               <li className="navbar-item">
                 <Link to="/badges" className="navbar-link">
                   <i className="bx bxs-badge-check badge-icon"></i>
-                  <span>Emblem</span>
+                  <span>Recognize</span>
                 </Link>
               </li>
               <li className="navbar-item">
