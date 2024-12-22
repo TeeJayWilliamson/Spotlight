@@ -355,7 +355,7 @@ header .users-link span {
 }
 
 .navbar {
-  background-color: #8f18be; /* Your background color */
+  background-color: red; /* Your background color */
   padding: 10px 20px;
   color: white;
 }
