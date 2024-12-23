@@ -355,10 +355,11 @@ header .users-link span {
 }
 
 .navbar {
-  background-color: red; /* Your background color */
+  background: linear-gradient(to bottom, red, #8b0000); /* Gradient from red to dark red */
   padding: 10px 20px;
   color: white;
 }
+
 .navbar-container {
   display: flex;
   justify-content: space-between;
