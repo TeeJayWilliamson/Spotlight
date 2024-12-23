@@ -10,8 +10,7 @@ function Login({ setAuth, setUsername }) {
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  // Set the API URL to use Heroku in production or localhost in development
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';  // Default to localhost for development
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,11 +21,14 @@ function Login({ setAuth, setUsername }) {
         password,
       });
 
-      // Store the received token, username, and full name in localStorage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', username);
-      localStorage.setItem('name', response.data.name); // Storing the full name
-    
+      localStorage.setItem('name', response.data.name);
+
+      if (keepLoggedIn) {
+        localStorage.setItem('keepLoggedIn', 'true');
+      }
+
       setAuth(true);
       setUsername(username);
 
@@ -37,7 +39,7 @@ function Login({ setAuth, setUsername }) {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-page">
       <div className="login-box">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
@@ -56,7 +58,7 @@ function Login({ setAuth, setUsername }) {
           {error && <p className="error">{error}</p>}
           <div className="additional-options">
             <a href="#" className="forgot-details">Forgot your details?</a>
-            <label className="keep-logged-in">
+            <label>
               <input
                 type="checkbox"
                 checked={keepLoggedIn}
@@ -69,7 +71,8 @@ function Login({ setAuth, setUsername }) {
         </form>
       </div>
       <div className="login-image">
-        <img src="your-image-url.jpg" alt="Login visual" />
+        {/* Add your image or logo here */}
+        <img src={require('../img/ttc.png')} alt="Logo or background" />
       </div>
     </div>
   );
