@@ -114,3 +114,13 @@ body {
     object-fit: contain;
   }
   
+  .keep-logged-in {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+  
+  .keep-logged-in input {
+    margin-right: 5px;
+    white-space: nowrap; /* Prevents breaking text into two lines */
+  }

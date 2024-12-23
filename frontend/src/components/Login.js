@@ -59,7 +59,7 @@ function Login({ setAuth, setUsername }) {
           <div className="additional-options">
             <a href="#" className="forgot-details">Forgot your details?</a>
             <label>
-              <input
+              <input classname="keep-logged-in"
                 type="checkbox"
                 checked={keepLoggedIn}
                 onChange={(e) => setKeepLoggedIn(e.target.checked)}
