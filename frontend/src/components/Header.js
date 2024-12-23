@@ -47,7 +47,7 @@ function Header({ handleLogout }) {
           <nav className="navbar-purple">
         <div className="navbar-container">
           <ul className="navbar-nav">
-            {/* Additional navbar items can be added here */}
+            {<span>Spotlight</span>}
           </ul>
         </div>
       </nav>

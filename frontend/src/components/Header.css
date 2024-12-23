@@ -1,8 +1,8 @@
 /* Purple navbar (Spotlight navbar) */
 .navbar-purple {
-    background: purple;
+    background: white;
     padding: 10px 20px;
-    color: white;
+    color: purple;
     height: 60px; /* Increased height for the purple navbar */
     display: flex;
     justify-content: space-between;
@@ -18,7 +18,7 @@
     color: white;
     width: 100%;
     z-index: 9; 
-    height: 50px; /* Increased height for navbar items */
+    height: 60px; /* Increased height for navbar items */
     margin-top: 0px; /* Removed gap between navbars */
 }
 
