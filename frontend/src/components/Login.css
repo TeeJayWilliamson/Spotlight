@@ -134,6 +134,7 @@ body {
     font-size: 14px;
     white-space: nowrap; /* Prevents breaking text into two lines */
     margin-left: 5px;
+    margin-top: 15px;
   }
 
   .additional-options label {
