@@ -164,7 +164,7 @@ function Home() {
               <li>Michael Del Sole - 10 emblems</li>
               <li>Paul Cho - 8 emblems</li>
               <li>Sarva Gopalapillai - 7 emblems</li>
-              <li>Gurinder Bhatti - 5 bages</li>
+              <li>Gurinder Bhatti - 5 emblems</li>
               <li>Joseph Sturino - 4 emblems</li>
               <li>Trevor Williamson - 3 emblems</li>
               <li>Benny Singh - 2 emblems</li>
