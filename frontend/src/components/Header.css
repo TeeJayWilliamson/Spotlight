@@ -1,13 +1,29 @@
 /* Header.css */
 
-/* Overall navbar container styles */
+/* Purple navbar (Spotlight navbar) */
 .navbar {
+    background: purple; /* Purple background */
+    padding: 10px 20px;
+    color: white;
+    height: 50px; /* Height for the purple navbar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    z-index: 10; /* Keep it above other navbars if needed */
+  }
+  
+  /* Red navbar (secondary navbar) */
+  .navbar-red {
     background: linear-gradient(to bottom, red, #8b0000); /* Gradient from red to dark red */
     padding: 10px 20px;
     color: white;
-    height: 50px; /* Optional: Fixed height for navbar */
+    width: 100%;
+    z-index: 9; /* Below the purple navbar */
+    margin-top: 5px; /* Add a little space between the two navbars */
   }
   
+  /* Container for navbar items */
   .navbar-container {
     display: flex;
     justify-content: space-between;

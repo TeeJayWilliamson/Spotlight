@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import 'boxicons/css/boxicons.min.css';
-import './Header.css';
+import './Header.css'; // Only import Header.css now
 
 function Header({ handleLogout }) {
   const [name, setName] = useState('');
@@ -44,12 +44,8 @@ function Header({ handleLogout }) {
   };
 
   return (
-    <header>
-      <div className="top-bar">
-        <div className="top-bar-content">
-          Spotlight
-        </div>
-      </div>
+    <>
+      {/* Purple Navbar (Spotlight Navbar) */}
       <nav className="navbar">
         <div className="navbar-container">
           <ul className="navbar-nav">
@@ -83,7 +79,7 @@ function Header({ handleLogout }) {
                 </li>
                 <li className="navbar-item">
                   <Link to="/scorecard" className="navbar-link">
-                    <i className='bx bxs-report bx-sm'></i>
+                    <i className="bx bxs-report bx-sm"></i>
                     <span>Scorecard</span>
                   </Link>
                 </li>
@@ -104,7 +100,17 @@ function Header({ handleLogout }) {
           )}
         </div>
       </nav>
-    </header>
+
+      {/* Red Navbar (Secondary Navbar) */}
+      <nav className="navbar-red">
+        <div className="navbar-container">
+          {/* You can add additional links here if needed */}
+          <ul className="navbar-nav">
+            {/* Additional navbar items */}
+          </ul>
+        </div>
+      </nav>
+    </>
   );
 }
 
