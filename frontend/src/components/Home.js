@@ -109,11 +109,11 @@ function Home() {
           <p className="large-number">1000</p>
         </div>
         <div className="divider"></div>
-
+{/*}
         <div className="divider"></div>
         <button className="request-budget-btn">Request More Budget</button>
       </div>
-
+*/}
       <div className="center-pane">
         <div className="newsfeed">
           <h2>Newsfeed</h2>
