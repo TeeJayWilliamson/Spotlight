@@ -45,60 +45,67 @@ function Header({ handleLogout }) {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <ul className="navbar-nav">
-          <li className="navbar-item">
-            <Link to="/" className="navbar-link">
-              <FontAwesomeIcon icon={faLightbulb} className="lightbulb-icon" />
-              <span>Spotlight</span>
-            </Link>
-          </li>
-
-          {/* Conditionally render these items only if not on the login page */}
-          {!isLoginPage && (
-            <>
-              <li className="navbar-item">
-                <Link to="/users" className="navbar-link">
-                  <FontAwesomeIcon icon={faUser} className="user-icon" />
-                  <span>Users</span>
-                </Link>
-              </li>
-              <li className="navbar-item">
-                <Link to="/badges" className="navbar-link">
-                  <i className="bx bxs-badge-check badge-icon"></i>
-                  <span>Recognize</span>
-                </Link>
-              </li>
-              <li className="navbar-item">
-                <Link to="/rewards" className="navbar-link">
-                  <i className="bx bxs-gift gift-icon"></i>
-                  <span>Rewards</span>
-                </Link>
-              </li>
-              <li className="navbar-item">
-                <Link to="/scorecard" className="navbar-link">
-                  <i className='bx bxs-report bx-sm'></i>
-                  <span>Scorecard</span>
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-
-        {/* Show profile and logout only if the user is authenticated */}
-        {isAuthenticated && (
-          <ul className="navbar-nav navbar-right">
-            <li className="navbar-item">
-              <Link to="/profile" className="navbar-link-profile">{name.split(' ')[0]}</Link>
-            </li>
-            <li className="navbar-item">
-              <button onClick={handleLogoutClick} className="logout-button">Logout</button>
-            </li>
-          </ul>
-        )}
+    <header>
+      <div className="top-bar">
+        <div className="top-bar-content">
+          Spotlight
+        </div>
       </div>
-    </nav>
+      <nav className="navbar">
+        <div className="navbar-container">
+          <ul className="navbar-nav">
+            <li className="navbar-item">
+              <Link to="/" className="navbar-link">
+                <FontAwesomeIcon icon={faLightbulb} className="lightbulb-icon" />
+                <span>Spotlight</span>
+              </Link>
+            </li>
+
+            {/* Conditionally render these items only if not on the login page */}
+            {!isLoginPage && (
+              <>
+                <li className="navbar-item">
+                  <Link to="/users" className="navbar-link">
+                    <FontAwesomeIcon icon={faUser} className="user-icon" />
+                    <span>Users</span>
+                  </Link>
+                </li>
+                <li className="navbar-item">
+                  <Link to="/badges" className="navbar-link">
+                    <i className="bx bxs-badge-check badge-icon"></i>
+                    <span>Recognize</span>
+                  </Link>
+                </li>
+                <li className="navbar-item">
+                  <Link to="/rewards" className="navbar-link">
+                    <i className="bx bxs-gift gift-icon"></i>
+                    <span>Rewards</span>
+                  </Link>
+                </li>
+                <li className="navbar-item">
+                  <Link to="/scorecard" className="navbar-link">
+                    <i className='bx bxs-report bx-sm'></i>
+                    <span>Scorecard</span>
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+
+          {/* Show profile and logout only if the user is authenticated */}
+          {isAuthenticated && (
+            <ul className="navbar-nav navbar-right">
+              <li className="navbar-item">
+                <Link to="/profile" className="navbar-link-profile">{name.split(' ')[0]}</Link>
+              </li>
+              <li className="navbar-item">
+                <button onClick={handleLogoutClick} className="logout-button">Logout</button>
+              </li>
+            </ul>
+          )}
+        </div>
+      </nav>
+    </header>
   );
 }
 
