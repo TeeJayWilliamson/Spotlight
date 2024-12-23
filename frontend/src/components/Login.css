@@ -3,49 +3,45 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    background-color: #f4f4f4;
+    overflow: hidden; /* Prevent scrollbar */
+    background-color: #f4f4f4; /* Light background for the login page */
   }
   
-  .login-page {
+  .login-container {
     display: flex;
-    height: 100vh;
+    height: 100vh; /* Full viewport height */
   }
   
   .login-box {
     flex: 1;
-    max-width: 650px;
+    max-width: 650px; /* Adjust this value to make the login box bigger */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: white;
-    padding: 30px;
+    padding: 25px; /* Adjust this value for more/less padding inside the box */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin: auto;
   }
   
   .login-box h2 {
-    width: 100%;
-    background-color: #8f18be;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    margin: 0 0 20px;
-    border-radius: 5px 5px 0 0;
+    font-size: 24px;
+    color: #8f18be; /* Purple color for the header */
+    margin-bottom: 20px;
   }
   
   .login-box form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 100%; /* Adjust width of form */
   }
   
   .login-box input {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
+    margin: 10px 0;
     border: 2px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
@@ -56,44 +52,23 @@ body {
     outline: none;
   }
   
-  .additional-options {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 15px;
-  }
-  
-  .additional-options label {
-    display: flex;
-    align-items: center;
-  }
-  
-  .additional-options .forgot-details {
-    color: #8f18be;
-    text-decoration: none;
-  }
-  
-  .additional-options .forgot-details:hover {
-    text-decoration: underline;
-  }
-  
-  button {
-    width: fit-content;
+  .login-box button {
     padding: 10px 20px;
     background-color: #8f18be;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 100%; /* Make button full width */
     font-size: 16px;
-    margin-left: auto;
+    margin-top: 10px;
   }
   
-  button:hover {
+  .login-box button:hover {
     background-color: #721099;
   }
   
-  .error {
+  .login-box .error {
     color: red;
     font-size: 14px;
     margin-top: 10px;
@@ -104,13 +79,34 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f4f4f4;
-    max-width: 50%;
+    max-width: 50%; /* Make sure image does not exceed half of the screen */
   }
   
   .login-image img {
     max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    height: auto;
+  }
+  
+  .additional-options {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .forgot-details {
+    color: #8f18be;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .keep-logged-in {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+  
+  .keep-logged-in input {
+    margin-right: 5px;
   }
   
