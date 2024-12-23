@@ -64,7 +64,7 @@ function Login({ setAuth, setUsername }) {
                 checked={keepLoggedIn}
                 onChange={(e) => setKeepLoggedIn(e.target.checked)}
               />
-              Keep me logged in
+              <span>Keep me logged in</span>
             </label>
           </div>
           <button type="submit">Login</button>
