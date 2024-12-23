@@ -18,7 +18,7 @@ function Home() {
     },
     {
       name: 'Gurinder Bhatti',
-      action: 'awarded a badge to',
+      action: 'awarded a emblem to',
       recipient: 'Sarva Gopalapillai',
       reason: 'for exceptional problem-solving skills.',
       time: '3 hours ago',
@@ -39,7 +39,7 @@ function Home() {
     },
     {
       name: 'Ryan Watson',
-      action: 'awarded a badge to',
+      action: 'awarded a emblem to',
       recipient: 'Raminder Rai',
       reason: 'for demonstrating excellent leadership skills.',
       time: '8 hours ago',
@@ -60,7 +60,7 @@ function Home() {
     },
     {
       name: 'Benny Singh',
-      action: 'awarded a badge to',
+      action: 'awarded a emblem to',
       recipient: 'Michael Del Sole',
       reason: 'for keeping the team on track.',
       time: '2 days ago',
@@ -74,7 +74,7 @@ function Home() {
     },
     {
       name: 'Ryan Watson',
-      action: 'awarded a badge to',
+      action: 'awarded a emblem to',
       recipient: 'Joseph Hurtubise',
       reason: 'for handling a difficult situation with professionalism.',
       time: '3 days ago',
@@ -152,7 +152,7 @@ function Home() {
               <p className="rank-label">Place</p>
             </div>
             <div className="recognition-stats">
-              <p>03 badges given</p>
+              <p>03 emblems given</p>
               <p>In the spotlight since</p>
               <p>Dec 02, 2024</p>
             </div>
@@ -161,16 +161,16 @@ function Home() {
           <div className="bottom-section">
             <h5>Top 10 Recognizers</h5>
             <ul>
-              <li>Michael Del Sole - 10 badges</li>
-              <li>Paul Cho - 8 badges</li>
-              <li>Sarva Gopalapillai - 7 badges</li>
+              <li>Michael Del Sole - 10 emblems</li>
+              <li>Paul Cho - 8 emblems</li>
+              <li>Sarva Gopalapillai - 7 emblems</li>
               <li>Gurinder Bhatti - 5 bages</li>
-              <li>Joseph Sturino - 4 badges</li>
-              <li>Trevor Williamson - 3 badges</li>
-              <li>Benny Singh - 2 badges</li>
-              <li>Ryan Watson - 1 badge</li>
-              <li>Talwinder Hayear - 1 badge</li>
-              <li>Raminder Rai - 1 badge</li>
+              <li>Joseph Sturino - 4 emblems</li>
+              <li>Trevor Williamson - 3 emblems</li>
+              <li>Benny Singh - 2 emblems</li>
+              <li>Ryan Watson - 1 emblem</li>
+              <li>Talwinder Hayear - 1 emblem</li>
+              <li>Raminder Rai - 1 emblem</li>
             </ul>
           </div>
         </div>

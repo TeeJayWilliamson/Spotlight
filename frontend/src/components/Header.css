@@ -15,7 +15,7 @@
 
 /* Add specific style to make "Spotlight" bigger and bolder */
 .navbar-spotlight {
-    font-size: 32px; /* Increase font size */
+    font-size: 50px; /* Increase font size */
     font-weight: bold; /* Make the text bold */
     color: purple; /* Ensure it matches the navbar text color */
 }
