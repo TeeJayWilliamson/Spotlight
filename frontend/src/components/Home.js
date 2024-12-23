@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import '../App.css';
-import { NewsFeedContext } from './NewsFeedContext.js';
+import { NewsFeedContext } from './NewsFeedContext';
 
 function Home() {
   const { newsFeed } = useContext(NewsFeedContext);
