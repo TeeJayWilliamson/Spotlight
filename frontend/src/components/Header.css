@@ -2,6 +2,7 @@
 .navbar-purple {
     background: white;
     font-size: large;
+    font-weight: bold;
     padding: 10px 20px;
     color: purple;
     height: 60px; /* Increased height for the purple navbar */
@@ -12,10 +13,11 @@
     z-index: 10;
 }
 
-.spotlight-logo {
-    font-size: x-large;
-    color: purple;
-    font-weight: bold;
+/* Add specific style to make "Spotlight" bigger and bolder */
+.navbar-spotlight {
+    font-size: 32px; /* Increase font size */
+    font-weight: bold; /* Make the text bold */
+    color: purple; /* Ensure it matches the navbar text color */
 }
 
 /* Red navbar (secondary navbar) */

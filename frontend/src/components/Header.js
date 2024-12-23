@@ -43,14 +43,14 @@ function Header({ handleLogout }) {
 
   return (
     <>
-          {/* Red Navbar (Secondary Navbar) */}
-          <nav className="navbar-purple">
-        <div className="navbar-container">
-          <ul className="navbar-nav">
-            {<span classname="spotlight-logo">Spotlight</span>}
-          </ul>
-        </div>
-      </nav>
+<nav className="navbar-purple">
+  <div className="navbar-container">
+    <ul className="navbar-nav">
+      <span className="navbar-spotlight">Spotlight</span>
+    </ul>
+  </div>
+</nav>
+
 
 
       <nav className="navbar-red">
