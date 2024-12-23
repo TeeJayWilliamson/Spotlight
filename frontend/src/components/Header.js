@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import 'boxicons/css/boxicons.min.css';
-import '../App.css';
 import './Header.css';
 
 function Header({ handleLogout }) {
