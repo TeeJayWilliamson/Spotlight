@@ -1,6 +1,7 @@
 /* Purple navbar (Spotlight navbar) */
 .navbar-purple {
     background: white;
+    font-size: large;
     padding: 10px 20px;
     color: purple;
     height: 60px; /* Increased height for the purple navbar */
@@ -9,6 +10,12 @@
     align-items: center;
     width: 100%;
     z-index: 10;
+}
+
+.spotlight-logo {
+    font-size: x-large;
+    color: purple;
+    font-weight: bold;
 }
 
 /* Red navbar (secondary navbar) */

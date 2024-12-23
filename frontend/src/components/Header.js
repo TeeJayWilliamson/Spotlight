@@ -47,7 +47,7 @@ function Header({ handleLogout }) {
           <nav className="navbar-purple">
         <div className="navbar-container">
           <ul className="navbar-nav">
-            {<span>Spotlight</span>}
+            {<span classname="spotlight-logo">Spotlight</span>}
           </ul>
         </div>
       </nav>
@@ -56,15 +56,16 @@ function Header({ handleLogout }) {
       <nav className="navbar-red">
         <div className="navbar-container">
           <ul className="navbar-nav">
-            <li className="navbar-item">
-              <Link to="/" className="navbar-link">
-                <FontAwesomeIcon icon={faLightbulb} className="lightbulb-icon" />
-                <span>Spotlight</span>
-              </Link>
-            </li>
+
 
             {!isLoginPage && (
               <>
+                <li className="navbar-item">
+                  <Link to="/" className="navbar-link">
+                    <FontAwesomeIcon icon={faLightbulb} className="lightbulb-icon" />
+                    <span>Newsfeed</span>
+                  </Link>
+                </li>
                 <li className="navbar-item">
                   <Link to="/users" className="navbar-link">
                     <FontAwesomeIcon icon={faUser} className="user-icon" />
