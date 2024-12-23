@@ -97,7 +97,7 @@ body {
   
   .login-image {
     flex: 1;
-    background-image: url('your-image-url.jpg'); /* Replace with your image URL */
+    background-image: url('../img/ttc.png'); /* Replace with your image URL */
     background-size: cover;
     background-position: center;
   }
