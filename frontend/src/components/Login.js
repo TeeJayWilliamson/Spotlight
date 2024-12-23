@@ -55,7 +55,9 @@ function Login({ setAuth, setUsername }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {error && <p className="error">{error}</p>}
           <div className="additional-options">
+            <a href="#" className="forgot-details">Forgot your details?</a>
             <label>
               <input
                 type="checkbox"
@@ -64,14 +66,13 @@ function Login({ setAuth, setUsername }) {
               />
               Keep me logged in
             </label>
-            <a href="#" className="forgot-details">Forgot your details?</a>
           </div>
-          {error && <p className="error">{error}</p>}
           <button type="submit">Login</button>
         </form>
       </div>
       <div className="login-image">
         {/* Add your image or logo here */}
+        <img src={require('../img/ttc.png')} alt="Logo or background" />
       </div>
     </div>
   );
