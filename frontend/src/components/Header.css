@@ -2,100 +2,100 @@
 
 /* Purple navbar (Spotlight navbar) */
 .navbar {
-    background: purple; /* Purple background */
+    background: purple;
     padding: 10px 20px;
     color: white;
-    height: 50px; /* Height for the purple navbar */
+    height: 60px; /* Increased height for the purple navbar */
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    z-index: 10; /* Keep it above other navbars if needed */
-  }
-  
-  /* Red navbar (secondary navbar) */
-  .navbar-red {
-    background: linear-gradient(to bottom, red, #8b0000); /* Gradient from red to dark red */
+    z-index: 10;
+}
+
+/* Red navbar (secondary navbar) */
+.navbar-red {
+    background: linear-gradient(to bottom, red, #8b0000); 
     padding: 10px 20px;
     color: white;
     width: 100%;
-    z-index: 9; /* Below the purple navbar */
-    margin-top: 5px; /* Add a little space between the two navbars */
-  }
-  
-  /* Container for navbar items */
-  .navbar-container {
+    z-index: 9; 
+    margin-top: 5px; /* Adjust space between navbars */
+    height: 40px; /* Define height for the red navbar */
+}
+
+/* Container for navbar items */
+.navbar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-  }
-  
-  .navbar-nav {
+}
+
+.navbar-nav {
     display: flex;
     list-style: none;
     align-items: center;
     padding-left: 0;
     margin: 0;
-  }
-  
-  .navbar-item {
-    margin-right: 15px; /* Space between navbar items */
-  }
-  
-  .navbar-link,
-  .navbar-link-profile {
+}
+
+.navbar-item {
+    margin-right: 15px;
+}
+
+.navbar-link,
+.navbar-link-profile {
     color: white;
     text-decoration: none;
     font-size: 18px;
     display: flex;
     align-items: center;
     text-align: center;
-  }
-  
-  .navbar-link:hover,
-  .logout-button:hover {
-    color: #f0f0f0; /* Change color on hover */
-  }
-  
-  .navbar-right {
+}
+
+.navbar-link:hover,
+.logout-button:hover {
+    color: #f0f0f0;
+}
+
+.navbar-right {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Push profile/logout to the right */
-  }
-  
-  .logout-button {
+    margin-left: auto;
+}
+
+.logout-button {
     background: none;
     border: none;
     color: white;
     cursor: pointer;
     font-size: 18px;
     margin-left: 15px;
-  }
-  
-  .logout-button:hover {
-    color: #f0f0f0; /* Change color on hover */
-  }
-  
-  .lightbulb-icon,
-  .user-icon,
-  .badge-icon,
-  .gift-icon {
-    margin-right: 5px; /* Space between icon and text */
-  }
-  
-  /* Optional: Add responsive design for smaller screens */
-  @media (max-width: 768px) {
+}
+
+.logout-button:hover {
+    color: #f0f0f0;
+}
+
+.lightbulb-icon,
+.user-icon,
+.badge-icon,
+.gift-icon {
+    margin-right: 5px;
+}
+
+/* Optional: Add responsive design for smaller screens */
+@media (max-width: 768px) {
     .navbar-container {
-      flex-direction: column; /* Stack items vertically on smaller screens */
+        flex-direction: column;
     }
-  
+
     .navbar-nav {
-      flex-direction: column; /* Stack navbar items vertically */
+        flex-direction: column;
     }
-  
+
     .navbar-item {
-      margin: 5px 0; /* Adjust spacing between navbar items */
+        margin: 5px 0;
     }
-  }
-  
+}

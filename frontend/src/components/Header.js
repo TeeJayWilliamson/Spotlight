@@ -4,48 +4,45 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import 'boxicons/css/boxicons.min.css';
-import './Header.css'; // Only import Header.css now
+import './Header.css';
 
 function Header({ handleLogout }) {
   const [name, setName] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const location = useLocation(); // Import useLocation to get the current route
-  const isLoginPage = location.pathname === '/login'; // Check if we're on the login page
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
   useEffect(() => {
-    const username = localStorage.getItem('username'); // Retrieve username from localStorage
+    const username = localStorage.getItem('username');
 
     if (username) {
-      // Make an API call to fetch user info from the backend
       axios
-        .get(`${apiUrl}user/${username}`) // Use the apiUrl for the API route
+        .get(`${apiUrl}user/${username}`)
         .then((response) => {
-          setName(response.data.name); // Set the full name in the state
-          setIsAuthenticated(true); // Assume user is authenticated if API call is successful
+          setName(response.data.name);
+          setIsAuthenticated(true);
         })
         .catch((error) => {
           console.error('Error fetching user info:', error);
-          setIsAuthenticated(false); // In case of error, assume not authenticated
+          setIsAuthenticated(false);
         });
     } else {
-      // Clear state if no username is found in localStorage
       setName('');
       setIsAuthenticated(false);
     }
-  }, [apiUrl, location.pathname]); // This effect will rerun if the apiUrl or pathname changes
+  }, [apiUrl, location.pathname]);
 
   const handleLogoutClick = () => {
     handleLogout();
-    setName(''); // Clear the name state
-    setIsAuthenticated(false); // Clear the authentication state
-    localStorage.removeItem('username'); // Optionally remove username from localStorage
+    setName('');
+    setIsAuthenticated(false);
+    localStorage.removeItem('username');
   };
 
   return (
     <>
-      {/* Purple Navbar (Spotlight Navbar) */}
       <nav className="navbar">
         <div className="navbar-container">
           <ul className="navbar-nav">
@@ -56,7 +53,6 @@ function Header({ handleLogout }) {
               </Link>
             </li>
 
-            {/* Conditionally render these items only if not on the login page */}
             {!isLoginPage && (
               <>
                 <li className="navbar-item">
@@ -87,7 +83,6 @@ function Header({ handleLogout }) {
             )}
           </ul>
 
-          {/* Show profile and logout only if the user is authenticated */}
           {isAuthenticated && (
             <ul className="navbar-nav navbar-right">
               <li className="navbar-item">
@@ -104,9 +99,8 @@ function Header({ handleLogout }) {
       {/* Red Navbar (Secondary Navbar) */}
       <nav className="navbar-red">
         <div className="navbar-container">
-          {/* You can add additional links here if needed */}
           <ul className="navbar-nav">
-            {/* Additional navbar items */}
+            {/* Additional navbar items can be added here */}
           </ul>
         </div>
       </nav>
