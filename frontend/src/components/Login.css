@@ -9,7 +9,7 @@ body {
   
   .login-page {
     display: flex;
-    height: 100vh;
+    height: 75vh;
   }
   
   .login-box {
