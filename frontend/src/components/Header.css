@@ -93,6 +93,12 @@
     margin-right: 5px;
 }
 
+.navbar-spotlight-logo {
+    height: 200px;
+    width: auto;
+  }
+  
+
 /* Optional: Add responsive design for smaller screens */
 @media (max-width: 768px) {
     .navbar-container {

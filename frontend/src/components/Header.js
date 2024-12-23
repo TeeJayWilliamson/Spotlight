@@ -43,13 +43,13 @@ function Header({ handleLogout }) {
 
   return (
     <>
-<nav className="navbar-purple">
-  <div className="navbar-container">
-    <ul className="navbar-nav">
-      <span className="navbar-spotlight">Spotlight</span>
-    </ul>
-  </div>
-</nav>
+    <nav className="navbar-purple">
+      <div className="navbar-container">
+        <ul className="navbar-nav">
+          <img src="./img/spotlightlogo" alt="Spotlight Logo" className="navbar-spotlight-logo" />
+        </ul>
+      </div>
+    </nav>
 
 
 
