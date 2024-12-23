@@ -117,7 +117,8 @@ body {
   .keep-logged-in {
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: 14px;    
+    white-space: nowrap; /* Prevents breaking text into two lines */
   }
   
   .keep-logged-in input {
