@@ -24,7 +24,7 @@ function Home() {
           console.error('Error fetching user info:', error);
         });
     }
-  }, []);
+  }, [apiUrl]);
 
   return (
     <div className="home-container">
@@ -38,9 +38,8 @@ function Home() {
           <p className="large-number">1000</p>
         </div>
         <div className="divider"></div>
-
-        {/*<div className="divider"></div>
-        <button className="request-budget-btn">Request More Budget</button>*/}
+        {/* <div className="divider"></div>
+        <button className="request-budget-btn">Request More Budget</button> */}
       </div>
 
       <div className="center-pane">
@@ -59,8 +58,7 @@ function Home() {
               }}
             >
               <p>
-                <strong>{item.name}</strong> {item.action} <strong>{item.recipient}</strong><br></br> {item.reason}{' '}
-                <em>({item.time})</em>
+                <strong>{item.name}</strong> {item.action} <strong>{item.recipient}</strong><br /> {item.reason} <em>({item.time})</em>
               </p>
             </div>
           ))}
