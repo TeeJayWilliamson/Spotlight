@@ -133,5 +133,6 @@ body {
     align-items: center;
     font-size: 14px;
     white-space: nowrap; /* Prevents breaking text into two lines */
+    margin-left: 5px;
   }
   
