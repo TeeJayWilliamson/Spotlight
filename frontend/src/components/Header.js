@@ -46,7 +46,7 @@ function Header({ handleLogout }) {
     <nav className="navbar-purple">
       <div className="navbar-container">
         <ul className="navbar-nav">
-          <img src="./img/spotlightlogo" alt="Spotlight Logo" className="navbar-spotlight-logo" />
+          <img src="../img/spotlightlogo.png" alt="Spotlight Logo" className="navbar-spotlight-logo" />
         </ul>
       </div>
     </nav>
