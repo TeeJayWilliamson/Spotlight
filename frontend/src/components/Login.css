@@ -135,4 +135,12 @@ body {
     white-space: nowrap; /* Prevents breaking text into two lines */
     margin-left: 5px;
   }
+
+  .additional-options label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  /* Ensures proper alignment and spacing */
+    gap: 10px;  /* Adds some space between checkbox and the label text */
+  }
+  
   
