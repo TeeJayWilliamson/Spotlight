@@ -43,7 +43,17 @@ function Header({ handleLogout }) {
 
   return (
     <>
-      <nav className="navbar">
+          {/* Red Navbar (Secondary Navbar) */}
+          <nav className="navbar-purple">
+        <div className="navbar-container">
+          <ul className="navbar-nav">
+            {/* Additional navbar items can be added here */}
+          </ul>
+        </div>
+      </nav>
+
+
+      <nav className="navbar-red">
         <div className="navbar-container">
           <ul className="navbar-nav">
             <li className="navbar-item">
@@ -96,14 +106,7 @@ function Header({ handleLogout }) {
         </div>
       </nav>
 
-      {/* Red Navbar (Secondary Navbar) */}
-      <nav className="navbar-red">
-        <div className="navbar-container">
-          <ul className="navbar-nav">
-            {/* Additional navbar items can be added here */}
-          </ul>
-        </div>
-      </nav>
+
     </>
   );
 }
