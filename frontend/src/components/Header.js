@@ -5,6 +5,7 @@ import { faUser, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import 'boxicons/css/boxicons.min.css';
 import './Header.css';
+import spotlightLogo from '../img/spotlightlogo.png';
 
 function Header({ handleLogout }) {
   const [name, setName] = useState('');
@@ -46,7 +47,7 @@ function Header({ handleLogout }) {
     <nav className="navbar-purple">
       <div className="navbar-container">
         <ul className="navbar-nav">
-          <img src="../img/spotlightlogo.png" alt="Spotlight Logo" className="navbar-spotlight-logo" />
+        <img src={spotlightLogo} alt="Spotlight Logo" className="navbar-spotlight-logo" />
         </ul>
       </div>
     </nav>
