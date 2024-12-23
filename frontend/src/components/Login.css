@@ -114,13 +114,24 @@ body {
     object-fit: contain;
   }
   
+/* Add white-space: nowrap; to prevent wrapping */
+.additional-options {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+    white-space: nowrap; /* Prevent wrapping in the whole container */
+  }
+  
+  .additional-options label {
+    display: flex;
+    align-items: center;
+  }
+  
   .keep-logged-in {
     display: flex;
     align-items: center;
-    font-size: 14px;    
+    font-size: 14px;
     white-space: nowrap; /* Prevents breaking text into two lines */
   }
   
-  .keep-logged-in input {
-    white-space: nowrap; /* Prevents breaking text into two lines */
-  }
