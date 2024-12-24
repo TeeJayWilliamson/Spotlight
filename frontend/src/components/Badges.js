@@ -60,18 +60,17 @@ function Badges() {
   };
 
   return (
-<div className="badges-container">
-  {/* Left Pane - Emblem Selector */}
-  <div className="emblem-selector">
-    <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
-    <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
-      <img
-        src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
-        alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
-      />
-    </div>
-  </div>
-
+    <div className="badges-container">
+      {/* Left Pane - Emblem Selector */}
+      <div className="emblem-selector">
+        <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
+        <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
+          <img
+            src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
+            alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
+          />
+        </div>
+      </div>
 
       {/* Lightbox Component */}
       <Lightbox
@@ -114,7 +113,6 @@ function Badges() {
 
         {/* Added Recipients Below the Input */}
         <div className="selected-users">
-          {/* Placeholder for empty state */}
           {!selectedUsers.length && <div className="empty-placeholder"></div>}
 
           {selectedUsers.map(user => (
@@ -136,7 +134,6 @@ function Badges() {
         <div className="message-container">
           <h3>Personalized Message:</h3>
           <p>Max 1000 characters</p>
-          <br></br>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -151,24 +148,21 @@ function Badges() {
       {/* Right Pane - Points, Private Checkbox, and Tips */}
       <div className="right-pane">
         <h3>Remaining Points this Month</h3>
-        <br></br>
         <p>{pointBalance}</p>
 
-        <br></br>
         <div className="divider" />
-        <br></br>
+        
         <label>
           <input
             type="checkbox"
             checked={isPrivate}
             onChange={() => setIsPrivate(!isPrivate)}
           />
-           Private
+          Private
         </label>
-        <br></br>
-        <br></br>
+        
         <div className="divider" />
-        <br></br>
+        
         <div className="tips-section">
           <h3>Tips:</h3>
           <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
