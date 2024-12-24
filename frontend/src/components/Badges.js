@@ -5,7 +5,7 @@ import './Profile.css';
 import './Badges.css';
 import '../App.css';
 
-function Badges({ setNewsFeed }) {  // Added setNewsFeed as a prop
+function Badges({ setNewsFeed }) {
   const [badgeType, setBadgeType] = useState('');
   const [message, setMessage] = useState('');
   const [recipient, setRecipient] = useState([]);

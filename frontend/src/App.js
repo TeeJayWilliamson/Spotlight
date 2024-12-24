@@ -44,17 +44,13 @@ function App() {
     <Router>
       <Header isAuthenticated={isAuthenticated} username={username} handleLogout={handleLogout} />
       <Routes>
-        <Route path="/login" element={<Login setAuth={setIsAuthenticated} setUsername={setUsername} />} />
+        <Route path="/" element={isAuthenticated ? <Home newsFeed={newsFeed} setNewsFeed={setNewsFeed} /> : <Navigate to="/login" />} />
         <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
-        <Route
-          path="/home"
-          element={isAuthenticated ? <Home newsFeed={newsFeed} setNewsFeed={setNewsFeed} /> : <Navigate to="/login" />}
-        />
         <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/login" />} />
-        <Route path="/badges" element={isAuthenticated ? <Badges /> : <Navigate to="/login" />} />
+        <Route path="/badges" element={isAuthenticated ? <Badges setNewsFeed={setNewsFeed} /> : <Navigate to="/login" />} />
         <Route path="/rewards" element={isAuthenticated ? <Rewards /> : <Navigate to="/login" />} />
         <Route path="/scorecard" element={isAuthenticated ? <Scorecard /> : <Navigate to="/login" />} />
-        <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+        <Route path="/login" element={!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated} setUsername={setUsername} /> : <Navigate to="/" />} />
       </Routes>
     </Router>
   );
