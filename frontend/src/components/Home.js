@@ -1,4 +1,3 @@
-// Home.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../App.css';
@@ -18,24 +17,21 @@ function Home() {
           setName(userResponse.data.name);
         }
 
-        // Fetch posts from the backend
         const postsResponse = await axios.get(`${apiUrl}posts`);
-        setPosts(postsResponse.data);
+        setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setPosts([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-    
-    // Fetch new posts every minute
     const interval = setInterval(fetchData, 60000);
     return () => clearInterval(interval);
   }, [apiUrl]);
 
-  // Format the timestamp to "X time ago"
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
     const postTime = new Date(timestamp);
@@ -65,7 +61,7 @@ function Home() {
           <h2>Newsfeed</h2>
           {loading ? (
             <div>Loading...</div>
-          ) : posts.length === 0 ? (
+          ) : !Array.isArray(posts) || posts.length === 0 ? (
             <div>No recognitions yet</div>
           ) : (
             posts.map((post) => (
@@ -82,7 +78,6 @@ function Home() {
                   alignItems: 'center'
                 }}
               >
-                {/* Emblem Image */}
                 <div style={{ marginRight: '15px', minWidth: '50px' }}>
                   <img 
                     src={post.emblem.image} 
@@ -91,7 +86,6 @@ function Home() {
                   />
                 </div>
 
-                {/* Content */}
                 <div>
                   <p>
                     <strong>{post.name}</strong> is Spotlighting{' '}
@@ -108,6 +102,7 @@ function Home() {
       </div>
 
       <div className="right-pane">
+        {/* Rest of your right pane code remains the same */}
         <div className="top-recognized">
           <h4>Top Recognized</h4>
           <div className="separator"></div>
