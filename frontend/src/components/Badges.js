@@ -1,41 +1,26 @@
-// Badges.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Lightbox from './Lightbox';
+import Lightbox from './Lightbox'; // Import the lightbox component
 import './Profile.css';
 import './Badges.css';
 import '../App.css';
 
 function Badges() {
-  const [currentUser, setCurrentUser] = useState('');
   const [badgeType, setBadgeType] = useState('');
   const [message, setMessage] = useState('');
+  const [recipient, setRecipient] = useState([]);
   const [pointBalance, setPointBalance] = useState(1000);
   const [recognizeNow, setRecognizeNow] = useState(5000);
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [selectedEmblem, setSelectedEmblem] = useState(null);
-  const [sending, setSending] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false); // State for managing lightbox visibility
+  const [selectedEmblem, setSelectedEmblem] = useState(null); // State for selected emblem
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
   useEffect(() => {
-    // Fetch current user
-    const username = localStorage.getItem('username');
-    if (username) {
-      axios.get(`${apiUrl}user/${username}`)
-        .then(response => {
-          setCurrentUser(response.data.name);
-        })
-        .catch(error => {
-          console.error('Error fetching current user:', error);
-        });
-    }
-
-    // Fetch all users
     axios.get(`${apiUrl}users`)
       .then(response => {
         setUsers(response.data);
@@ -43,7 +28,7 @@ function Badges() {
       .catch(error => {
         console.error('Error fetching users:', error);
       });
-  }, [apiUrl]);
+  }, []);
 
   const filteredUsers = users.filter((user) => {
     const username = user.username ? user.username.toLowerCase() : '';
@@ -61,41 +46,12 @@ function Badges() {
     setSearchQuery('');
   };
 
-  const handleSend = async () => {
-    if (!selectedEmblem || selectedUsers.length === 0 || !message) {
-      alert('Please select an emblem, recipients, and write a message');
-      return;
-    }
+  const handleRemoveUser = (username) => {
+    setSelectedUsers(selectedUsers.filter(user => user.username !== username));
+  };
 
-    setSending(true);
-
-    try {
-      const newPost = {
-        name: currentUser,
-        emblem: {
-          title: selectedEmblem.title,
-          image: selectedEmblem.image
-        },
-        recipients: selectedUsers.map(user => user.name),
-        message: message,
-        isPrivate: isPrivate
-      };
-
-      await axios.post(`${apiUrl}posts`, newPost);
-
-      // Clear form
-      setSelectedEmblem(null);
-      setSelectedUsers([]);
-      setMessage('');
-      setIsPrivate(false);
-
-      alert('Recognition sent successfully!');
-    } catch (error) {
-      console.error('Error sending recognition:', error);
-      alert('Failed to send recognition. Please try again.');
-    } finally {
-      setSending(false);
-    }
+  const handleSend = () => {
+    // Handle send functionality here
   };
 
   const handleEmblemSelect = (emblem) => {
@@ -103,20 +59,21 @@ function Badges() {
     setIsLightboxOpen(false);
   };
 
-  // Rest of your JSX remains the same until the send button
   return (
-    <div className="badges-container">
-      {/* Left Pane - Emblem Selector */}
-      <div className="emblem-selector">
-        <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
-        <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
-          <img
-            src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
-            alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
-          />
-        </div>
-      </div>
+<div className="badges-container">
+  {/* Left Pane - Emblem Selector */}
+  <div className="emblem-selector">
+    <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
+    <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
+      <img
+        src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
+        alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
+      />
+    </div>
+  </div>
 
+
+      {/* Lightbox Component */}
       <Lightbox
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}
@@ -127,7 +84,9 @@ function Badges() {
       <div className="search-container">
         <h3>Recipients:</h3>
         
+        {/* Input and Suggestions Dropdown Container */}
         <div className="input-dropdown-container">
+          {/* Search Input Box */}
           <input
             type="text"
             placeholder="Search for a user..."
@@ -135,6 +94,7 @@ function Badges() {
             onChange={(e) => setSearchQuery(e.target.value)} 
           />
           
+          {/* User Suggestions Dropdown */}
           {searchQuery && (
             <div className="user-suggestions-emblem">
               <ul>
@@ -152,7 +112,9 @@ function Badges() {
           )}
         </div>
 
+        {/* Added Recipients Below the Input */}
         <div className="selected-users">
+          {/* Placeholder for empty state */}
           {!selectedUsers.length && <div className="empty-placeholder"></div>}
 
           {selectedUsers.map(user => (
@@ -170,6 +132,7 @@ function Badges() {
 
         <div className="divider-emblem" />
 
+        {/* Personalized Message Section */}
         <div className="message-container">
           <h3>Personalized Message:</h3>
           <p>Max 1000 characters</p>
@@ -181,16 +144,11 @@ function Badges() {
             placeholder="Write your message here..."
             rows="6"
           />
-          <button 
-            onClick={handleSend} 
-            disabled={sending}
-          >
-            {sending ? 'Sending...' : 'Send'}
-          </button>
+          <button onClick={handleSend}>Send</button>
         </div>
       </div>
 
-      {/* Right Pane */}
+      {/* Right Pane - Points, Private Checkbox, and Tips */}
       <div className="right-pane">
         <h3>Remaining Points this Month</h3>
         <br></br>
