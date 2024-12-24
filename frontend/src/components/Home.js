@@ -14,10 +14,12 @@ function Home() {
         const username = localStorage.getItem('username');
         if (username) {
           const userResponse = await axios.get(`${apiUrl}user/${username}`);
+          console.log('User response:', userResponse.data);
           setName(userResponse.data.name);
         }
 
         const postsResponse = await axios.get(`${apiUrl}posts`);
+        console.log('Posts response:', postsResponse.data);
         setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -36,7 +38,7 @@ function Home() {
     const now = new Date();
     const postTime = new Date(timestamp);
     const diffInMinutes = Math.floor((now - postTime) / (1000 * 60));
-    
+
     if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} hours ago`;
     return `${Math.floor(diffInMinutes / 1440)} days ago`;

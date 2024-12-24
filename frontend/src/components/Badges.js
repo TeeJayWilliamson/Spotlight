@@ -1,4 +1,3 @@
-// Badges.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Lightbox from './Lightbox';
@@ -28,6 +27,7 @@ function Badges() {
     if (username) {
       axios.get(`${apiUrl}user/${username}`)
         .then(response => {
+          console.log('Current user response:', response.data);
           setCurrentUser(response.data.name);
         })
         .catch(error => {
@@ -38,6 +38,7 @@ function Badges() {
     // Fetch all users
     axios.get(`${apiUrl}users`)
       .then(response => {
+        console.log('Users response:', response.data);
         setUsers(response.data);
       })
       .catch(error => {
@@ -61,161 +62,118 @@ function Badges() {
     setSearchQuery('');
   };
 
-  const handleSend = async () => {
+  const handleSendEmblem = async () => {
     if (!selectedEmblem || selectedUsers.length === 0 || !message) {
-      alert('Please select an emblem, recipients, and write a message');
+      alert('Please fill in all the details.');
       return;
     }
 
     setSending(true);
 
+    const newPost = {
+      name: currentUser,
+      recipients: selectedUsers.map(user => user.name),
+      emblem: selectedEmblem,
+      message: message,
+      isPrivate: isPrivate,
+      timestamp: new Date().toISOString()
+    };
+
     try {
-      const newPost = {
-        name: currentUser,
-        emblem: {
-          title: selectedEmblem.title,
-          image: selectedEmblem.image
-        },
-        recipients: selectedUsers.map(user => user.name),
-        message: message,
-        isPrivate: isPrivate
-      };
-
       await axios.post(`${apiUrl}posts`, newPost);
-
-      // Clear form
-      setSelectedEmblem(null);
-      setSelectedUsers([]);
-      setMessage('');
-      setIsPrivate(false);
-
-      alert('Recognition sent successfully!');
+      alert('Emblem sent successfully!');
     } catch (error) {
-      console.error('Error sending recognition:', error);
-      alert('Failed to send recognition. Please try again.');
+      console.error('Error sending emblem:', error);
+      alert('Failed to send emblem.');
     } finally {
       setSending(false);
+      setSelectedUsers([]);
+      setBadgeType('');
+      setMessage('');
+      setIsLightboxOpen(false);
     }
   };
 
-  const handleEmblemSelect = (emblem) => {
-    setSelectedEmblem(emblem);
-    setIsLightboxOpen(false);
-  };
-
-  // Rest of your JSX remains the same until the send button
   return (
     <div className="badges-container">
-      {/* Left Pane - Emblem Selector */}
-      <div className="emblem-selector">
-        <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
-        <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
-          <img
-            src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
-            alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
-          />
-        </div>
+      <h2>Send a Spotlight</h2>
+      <div className="form-group">
+        <label htmlFor="badgeType">Select Badge Type</label>
+        <select
+          id="badgeType"
+          value={badgeType}
+          onChange={(e) => setBadgeType(e.target.value)}
+        >
+          <option value="">Select a badge type</option>
+          <option value="Thank You">Thank You</option>
+          <option value="Great Job">Great Job</option>
+          <option value="Outstanding Performance">Outstanding Performance</option>
+        </select>
       </div>
-
-      <Lightbox
-        isOpen={isLightboxOpen}
-        onClose={() => setIsLightboxOpen(false)}
-        onSelect={handleEmblemSelect}
-      />
-
-      {/* Middle Pane - Search Bar and User Selection */}
-      <div className="search-container">
-        <h3>Recipients:</h3>
-        
-        <div className="input-dropdown-container">
-          <input
-            type="text"
-            placeholder="Search for a user..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)} 
-          />
-          
-          {searchQuery && (
-            <div className="user-suggestions-emblem">
-              <ul>
-                {filteredUsers.length > 0 ? (
-                  filteredUsers.map((user) => (
-                    <li key={user.username} onClick={() => handleUserClick(user)}>
-                      <span>{user.username}</span> - <span>{user.name}</span>
-                    </li>
-                  ))
-                ) : (
-                  <li>No users found</li>
-                )}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        <div className="selected-users">
-          {!selectedUsers.length && <div className="empty-placeholder"></div>}
-
-          {selectedUsers.map(user => (
-            <div key={user.username} className="user-box">
-              <span>{user.name}</span>
-              <span 
-                className="remove-user" 
-                onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
-              >
-                &times;
-              </span>
-            </div>
+      <div className="form-group">
+        <label htmlFor="message">Message</label>
+        <textarea
+          id="message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Write your message..."
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="searchQuery">Search Users</label>
+        <input
+          type="text"
+          id="searchQuery"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search by username or name"
+        />
+        <ul className="search-results">
+          {filteredUsers.map((user) => (
+            <li key={user._id} onClick={() => handleUserClick(user)}>
+              {user.name} ({user.username})
+            </li>
           ))}
-        </div>
-
-        <div className="divider-emblem" />
-
-        <div className="message-container">
-          <h3>Personalized Message:</h3>
-          <p>Max 1000 characters</p>
-          <br></br>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            maxLength="1000"
-            placeholder="Write your message here..."
-            rows="6"
-          />
-          <button 
-            onClick={handleSend} 
-            disabled={sending}
-          >
-            {sending ? 'Sending...' : 'Send'}
-          </button>
-        </div>
+        </ul>
       </div>
-
-      {/* Right Pane */}
-      <div className="right-pane">
-        <h3>Remaining Points this Month</h3>
-        <br></br>
-        <p>{pointBalance}</p>
-
-        <br></br>
-        <div className="divider" />
-        <br></br>
-        <label>
-          <input
-            type="checkbox"
-            checked={isPrivate}
-            onChange={() => setIsPrivate(!isPrivate)}
-          />
-           Private
-        </label>
-        <br></br>
-        <br></br>
-        <div className="divider" />
-        <br></br>
-        <div className="tips-section">
-          <h3>Tips:</h3>
-          <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
-        </div>
+      <div className="form-group">
+        <label>Selected Users</label>
+        <ul>
+          {selectedUsers.map((user) => (
+            <li key={user._id}>
+              {user.name} ({user.username})
+            </li>
+          ))}
+        </ul>
       </div>
+      <div className="form-group">
+        <label htmlFor="private">Private</label>
+        <input
+          type="checkbox"
+          id="private"
+          checked={isPrivate}
+          onChange={(e) => setIsPrivate(e.target.checked)}
+        />
+      </div>
+      <div className="form-group">
+        <button onClick={() => setIsLightboxOpen(true)}>Select Emblem</button>
+        {selectedEmblem && (
+          <div>
+            <p>Selected Emblem: {selectedEmblem.title}</p>
+            <img src={selectedEmblem.image} alt={selectedEmblem.title} />
+          </div>
+        )}
+      </div>
+      <button onClick={handleSendEmblem} disabled={sending}>
+        {sending ? 'Sending...' : 'Send Emblem'}
+      </button>
+
+      {isLightboxOpen && (
+        <Lightbox
+          onClose={() => setIsLightboxOpen(false)}
+          onSelectEmblem={(emblem) => setSelectedEmblem(emblem)}
+        />
+      )}
     </div>
   );
 }
