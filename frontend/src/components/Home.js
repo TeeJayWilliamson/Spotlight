@@ -72,19 +72,25 @@ function Home() {
                 className="news-item"
                 style={{
                   backgroundColor: 'white',
-                  padding: '10px',
-                  marginBottom: '15px',
+                  padding: '20px', // Increased padding for more space around the content
+                  marginBottom: '20px', // Increased bottom margin
                   borderRadius: '8px',
                   boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                   display: 'flex',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  gap: '20px', // Adds space between image and text
                 }}
               >
-                <div style={{ marginRight: '15px', minWidth: '50px' }}>
+                <div style={{ marginRight: '20px', minWidth: '80px' }}> {/* Increase minWidth to give more space */}
                   <img 
                     src={post.emblem.image} 
                     alt={post.emblem.title}
-                    style={{ width: '40px', height: '40px' }}
+                    style={{
+                      width: '60px', // Increased size for better visibility
+                      height: '60px',
+                      borderRadius: '50%', // Optional: adds a circular border
+                      objectFit: 'cover', // Ensures the image scales nicely within its container
+                    }}
                   />
                 </div>
 
