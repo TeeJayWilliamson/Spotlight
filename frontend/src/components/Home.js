@@ -86,8 +86,8 @@ function Home() {
                     src={post.emblem.image} 
                     alt={post.emblem.title}
                     style={{
-                      width: '60px', // Increased size for better visibility
-                      height: '60px',
+                      width: '100px', // Increased size for better visibility
+                      height: '100px',
                       borderRadius: '50%', // Optional: adds a circular border
                       objectFit: 'cover', // Ensures the image scales nicely within its container
                     }}
