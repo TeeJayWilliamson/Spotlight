@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
-import NavBar from './components/NavBar';
+import NavBar from './components/Header';
 import Home from './components/Home';
 import Badges from './components/Badges';
 import Profile from './components/Profile';
