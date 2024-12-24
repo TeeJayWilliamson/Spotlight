@@ -137,6 +137,30 @@ app.post('/send-emblem', async (req, res) => {
   }
 });
 
+app.post('/posts', (req, res) => {
+  const { name, action, recipient, reason, time } = req.body;
+
+  // Create a new post object
+  const newPost = new Post({
+    name,
+    action,
+    recipient,
+    reason,
+    time,
+  });
+
+  // Save the post to MongoDB
+  newPost.save()
+    .then(() => {
+      res.status(201).json({ message: 'Recognition saved successfully!' });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Failed to save recognition' });
+    });
+});
+
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
