@@ -13,9 +13,6 @@ const authRoutes = require('./routes/auth'); // Correct path for auth.js
 const app = express();
 const port = process.env.PORT || 5000;
 
-const postsRoutes = require('./routes/posts');
-app.use('/api', postsRoutes);
-
 app.use(express.json());
 app.use(cors());
 
@@ -136,30 +133,6 @@ app.post('/send-emblem', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-app.post('/posts', (req, res) => {
-  const { name, action, recipient, reason, time } = req.body;
-
-  // Create a new post object
-  const newPost = new Post({
-    name,
-    action,
-    recipient,
-    reason,
-    time,
-  });
-
-  // Save the post to MongoDB
-  newPost.save()
-    .then(() => {
-      res.status(201).json({ message: 'Recognition saved successfully!' });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'Failed to save recognition' });
-    });
-});
-
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
