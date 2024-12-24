@@ -48,8 +48,8 @@ mongoose.connect(dbURI, {})
   });
 
 // Routes
-app.use('/api', postsRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);  // This maps the auth routes to /auth
+app.use('/posts', postsRoutes); // This maps the posts routes to /posts
 
 // Hardcoded test credentials for testing
 const TEST_USERNAME = 'testUser';
