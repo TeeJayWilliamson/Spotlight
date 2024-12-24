@@ -35,8 +35,6 @@
   },
   "engines": {
     "node": "16.x"
-  },
-  "compilerOptions": {
-     "baseUrl": "src"
   }
+
 }
