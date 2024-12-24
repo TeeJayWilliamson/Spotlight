@@ -1,107 +1,56 @@
+// Home.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../App.css';
 
 function Home() {
   const [name, setName] = useState('');
-
-    // Set the API URL to use Heroku in production
-    const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
-  
-  const newsFeed = [
-    {
-      name: 'Trevor Williamson',
-      action: 'sent a Spotlight recognition to',
-      recipient: 'Joseph Sturino',
-      reason: 'for outstanding teamwork during the project.',
-      time: '2 hours ago',
-    },
-    {
-      name: 'Gurinder Bhatti',
-      action: 'awarded a emblem to',
-      recipient: 'Sarva Gopalapillai',
-      reason: 'for exceptional problem-solving skills.',
-      time: '3 hours ago',
-    },
-    {
-      name: 'Talwinder Hayear',
-      action: 'gave a Spotlight to',
-      recipient: 'Benny Singh',
-      reason: 'for being a great team player.',
-      time: '5 hours ago',
-    },
-    {
-      name: 'Michael Del Sole',
-      action: 'sent a Spotlight recognition to',
-      recipient: 'Paul Cho',
-      reason: 'for his support on the latest project.',
-      time: '6 hours ago',
-    },
-    {
-      name: 'Ryan Watson',
-      action: 'awarded a emblem to',
-      recipient: 'Raminder Rai',
-      reason: 'for demonstrating excellent leadership skills.',
-      time: '8 hours ago',
-    },
-    {
-      name: 'Joseph Hurtubise',
-      action: 'gave a Spotlight to',
-      recipient: 'Trevor Williamson',
-      reason: 'for consistently going above and beyond in his work.',
-      time: '1 day ago',
-    },
-    {
-      name: 'Sarva Gopalapillai',
-      action: 'sent a Spotlight recognition to',
-      recipient: 'Gurinder Bhatti',
-      reason: 'for exceptional attention to detail in reports.',
-      time: '1 day ago',
-    },
-    {
-      name: 'Benny Singh',
-      action: 'awarded a emblem to',
-      recipient: 'Michael Del Sole',
-      reason: 'for keeping the team on track.',
-      time: '2 days ago',
-    },
-    {
-      name: 'Paul Cho',
-      action: 'sent a Spotlight to',
-      recipient: 'Talwinder Hayear',
-      reason: 'for his creativity and out-of-the-box thinking.',
-      time: '2 days ago',
-    },
-    {
-      name: 'Ryan Watson',
-      action: 'awarded a emblem to',
-      recipient: 'Joseph Hurtubise',
-      reason: 'for handling a difficult situation with professionalism.',
-      time: '3 days ago',
-    },
-  ];
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
   useEffect(() => {
-    const username = localStorage.getItem('username'); // Retrieve username from localStorage
-  
-    if (username) {
-      // Make an API call to fetch user info from the backend
-      axios
-        .get(`${apiUrl}user/${username}`) // Use the apiUrl for the API route
-        .then((response) => {
-          setName(response.data.name); // Set the full name in the state
-        })
-        .catch((error) => {
-          console.error('Error fetching user info:', error);
-        });
-    }
-  }, []);
+    const fetchData = async () => {
+      try {
+        const username = localStorage.getItem('username');
+        if (username) {
+          const userResponse = await axios.get(`${apiUrl}user/${username}`);
+          setName(userResponse.data.name);
+        }
+
+        // Fetch posts from the backend
+        const postsResponse = await axios.get(`${apiUrl}posts`);
+        setPosts(postsResponse.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    
+    // Fetch new posts every minute
+    const interval = setInterval(fetchData, 60000);
+    return () => clearInterval(interval);
+  }, [apiUrl]);
+
+  // Format the timestamp to "X time ago"
+  const formatTimeAgo = (timestamp) => {
+    const now = new Date();
+    const postTime = new Date(timestamp);
+    const diffInMinutes = Math.floor((now - postTime) / (1000 * 60));
+    
+    if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} hours ago`;
+    return `${Math.floor(diffInMinutes / 1440)} days ago`;
+  };
 
   return (
     <div className="home-container">
       <div className="left-pane">
         <div className="user-info">
-          <h3>{name.split(' ')[0]}'s Account</h3> {/* Use first name */}
+          <h3>{name.split(' ')[0]}'s Account</h3>
         </div>
         <div className="divider"></div>
         <div className="balance-info">
@@ -109,32 +58,52 @@ function Home() {
           <p className="large-number">1000</p>
         </div>
         <div className="divider"></div>
-
-        {/*<div className="divider"></div>
-        <button className="request-budget-btn">Request More Budget</button>*/}
       </div>
 
       <div className="center-pane">
         <div className="newsfeed">
           <h2>Newsfeed</h2>
-          {newsFeed.map((item, index) => (
-            <div
-              key={index}
-              className="news-item"
-              style={{
-                backgroundColor: 'white',
-                padding: '10px',
-                marginBottom: '15px',
-                borderRadius: '8px',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              }}
-            >
-              <p>
-                <strong>{item.name}</strong> {item.action} <strong>{item.recipient}</strong><br></br> {item.reason}{' '}
-                <em>({item.time})</em>
-              </p>
-            </div>
-          ))}
+          {loading ? (
+            <div>Loading...</div>
+          ) : posts.length === 0 ? (
+            <div>No recognitions yet</div>
+          ) : (
+            posts.map((post) => (
+              <div
+                key={post._id}
+                className="news-item"
+                style={{
+                  backgroundColor: 'white',
+                  padding: '10px',
+                  marginBottom: '15px',
+                  borderRadius: '8px',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+              >
+                {/* Emblem Image */}
+                <div style={{ marginRight: '15px', minWidth: '50px' }}>
+                  <img 
+                    src={post.emblem.image} 
+                    alt={post.emblem.title}
+                    style={{ width: '40px', height: '40px' }}
+                  />
+                </div>
+
+                {/* Content */}
+                <div>
+                  <p>
+                    <strong>{post.name}</strong> is Spotlighting{' '}
+                    <strong>{post.recipients.join(' and ')}</strong>
+                    <br />
+                    for {post.emblem.title}. {post.message}{' '}
+                    <em>({formatTimeAgo(post.timestamp)})</em>
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 

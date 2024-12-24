@@ -13,6 +13,9 @@ const authRoutes = require('./routes/auth'); // Correct path for auth.js
 const app = express();
 const port = process.env.PORT || 5000;
 
+const postsRoutes = require('./routes/posts');
+app.use('/api', postsRoutes);
+
 app.use(express.json());
 app.use(cors());
 

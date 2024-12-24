@@ -1,49 +1,112 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Header from './components/Header';
-import Login from './components/Login';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import axios from 'axios';
+import NavBar from './components/NavBar';
 import Home from './components/Home';
-import Profile from './components/Profile';
-import Users from './components/Users';
 import Badges from './components/Badges';
-import Rewards from './components/Rewards';
-import Scorecard from './components/Scorecard';
+import Profile from './components/Profile';
+import Login from './components/Login';
+import Register from './components/Register';
 import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const storedUsername = localStorage.getItem('username');
-    if (token && storedUsername) {
-      setIsAuthenticated(true);
-      setUsername(storedUsername);
-    }
+    // Check if user is authenticated
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          // Set default authorization header for all future requests
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
+          const response = await axios.get(`${apiUrl}verify-token`);
+          if (response.data.valid) {
+            setIsAuthenticated(true);
+          } else {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+          }
+        } catch (error) {
+          console.error('Auth check failed:', error);
+          localStorage.removeItem('token');
+          localStorage.removeItem('username');
+        }
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    setIsAuthenticated(false);
-    setUsername('');
+  // Protected Route component
+  const ProtectedRoute = ({ children }) => {
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    
+    if (!isAuthenticated) {
+      return <Navigate to="/login" />;
+    }
+
+    return children;
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Router>
-      <Header isAuthenticated={isAuthenticated} username={username} handleLogout={handleLogout} />
-      <Routes>
-        <Route path="/login" element={<Login setAuth={setIsAuthenticated} setUsername={setUsername} />} />
-        <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
-        <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/login" />} />
-        <Route path="/badges" element={isAuthenticated ? <Badges /> : <Navigate to="/login" />} />
-        <Route path="/rewards" element={isAuthenticated ? <Rewards /> : <Navigate to="/login" />} />
-        <Route path="/scorecard" element={isAuthenticated ? <Scorecard /> : <Navigate to="/login" />} />
-        {/* Default route points to /home */}
-        <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
-      </Routes>
+      <div className="App">
+        {isAuthenticated && <NavBar />}
+        <div className="content">
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/badges" 
+              element={
+                <ProtectedRoute>
+                  <Badges />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/login" 
+              element={
+                isAuthenticated ? 
+                <Navigate to="/" /> : 
+                <Login setIsAuthenticated={setIsAuthenticated} />
+              } 
+            />
+            <Route 
+              path="/register" 
+              element={
+                isAuthenticated ? 
+                <Navigate to="/" /> : 
+                <Register />
+              } 
+            />
+          </Routes>
+        </div>
+      </div>
     </Router>
   );
 }
