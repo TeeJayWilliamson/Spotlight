@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Lightbox from './Lightbox';
+import Lightbox from './Lightbox'; // Import the lightbox component
 import './Profile.css';
 import './Badges.css';
 import '../App.css';
 
-function Badges({ setNewsFeed }) {
+function Badges() {
   const [badgeType, setBadgeType] = useState('');
   const [message, setMessage] = useState('');
   const [recipient, setRecipient] = useState([]);
@@ -15,8 +15,8 @@ function Badges({ setNewsFeed }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isPrivate, setIsPrivate] = useState(false);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [selectedEmblem, setSelectedEmblem] = useState(null);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false); // State for managing lightbox visibility
+  const [selectedEmblem, setSelectedEmblem] = useState(null); // State for selected emblem
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
@@ -51,32 +51,7 @@ function Badges({ setNewsFeed }) {
   };
 
   const handleSend = () => {
-    if (selectedUsers.length === 0 || !selectedEmblem) {
-      alert('Please select a recipient and an emblem!');
-      return;
-    }
-
-    // Prepare the data for sending
-    const recognitionData = {
-      name: 'Your Username',  // Replace with the actual username
-      action: 'gave a Spotlight to',  // You can customize this
-      recipient: selectedUsers[0].name,
-      reason: message,
-      time: new Date().toLocaleString(),
-    };
-
-    // Call API to save recognition (you might need to adapt this depending on your backend setup)
-    axios.post(`${apiUrl}recognition`, recognitionData)
-      .then(response => {
-        // Update the newsfeed in the parent component
-        setNewsFeed(prevFeed => [recognitionData, ...prevFeed]);
-        setMessage('');
-        setSelectedUsers([]);
-        setSelectedEmblem(null);
-      })
-      .catch(error => {
-        console.error('Error sending recognition:', error);
-      });
+    // Handle send functionality here
   };
 
   const handleEmblemSelect = (emblem) => {
@@ -85,17 +60,18 @@ function Badges({ setNewsFeed }) {
   };
 
   return (
-    <div className="badges-container">
-      {/* Left Pane - Emblem Selector */}
-      <div className="emblem-selector">
-        <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
-        <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
-          <img
-            src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
-            alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
-          />
-        </div>
-      </div>
+<div className="badges-container">
+  {/* Left Pane - Emblem Selector */}
+  <div className="emblem-selector">
+    <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
+    <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
+      <img
+        src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
+        alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
+      />
+    </div>
+  </div>
+
 
       {/* Lightbox Component */}
       <Lightbox
@@ -107,13 +83,18 @@ function Badges({ setNewsFeed }) {
       {/* Middle Pane - Search Bar and User Selection */}
       <div className="search-container">
         <h3>Recipients:</h3>
+        
+        {/* Input and Suggestions Dropdown Container */}
         <div className="input-dropdown-container">
+          {/* Search Input Box */}
           <input
             type="text"
             placeholder="Search for a user..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)} 
           />
+          
+          {/* User Suggestions Dropdown */}
           {searchQuery && (
             <div className="user-suggestions-emblem">
               <ul>
@@ -131,12 +112,18 @@ function Badges({ setNewsFeed }) {
           )}
         </div>
 
+        {/* Added Recipients Below the Input */}
         <div className="selected-users">
+          {/* Placeholder for empty state */}
           {!selectedUsers.length && <div className="empty-placeholder"></div>}
+
           {selectedUsers.map(user => (
             <div key={user.username} className="user-box">
               <span>{user.name}</span>
-              <span className="remove-user" onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}>
+              <span 
+                className="remove-user" 
+                onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
+              >
                 &times;
               </span>
             </div>
@@ -149,6 +136,7 @@ function Badges({ setNewsFeed }) {
         <div className="message-container">
           <h3>Personalized Message:</h3>
           <p>Max 1000 characters</p>
+          <br></br>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -163,17 +151,24 @@ function Badges({ setNewsFeed }) {
       {/* Right Pane - Points, Private Checkbox, and Tips */}
       <div className="right-pane">
         <h3>Remaining Points this Month</h3>
+        <br></br>
         <p>{pointBalance}</p>
+
+        <br></br>
         <div className="divider" />
+        <br></br>
         <label>
           <input
             type="checkbox"
             checked={isPrivate}
             onChange={() => setIsPrivate(!isPrivate)}
           />
-          Private
+           Private
         </label>
+        <br></br>
+        <br></br>
         <div className="divider" />
+        <br></br>
         <div className="tips-section">
           <h3>Tips:</h3>
           <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
