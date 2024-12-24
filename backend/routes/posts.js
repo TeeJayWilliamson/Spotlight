@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/post'); // We'll create this next
 
-router.post('/posts', async (req, res) => {
+// POST route to create a new post
+router.post('/', async (req, res) => {  // Change from /posts to /
   try {
     const newPost = new Post({
       name: req.body.name,
@@ -23,7 +24,8 @@ router.post('/posts', async (req, res) => {
   }
 });
 
-router.get('/posts', async (req, res) => {
+// GET route to fetch posts
+router.get('/', async (req, res) => {  // Change from /posts to /
   try {
     const posts = await Post.find({ isPrivate: false })
       .sort({ timestamp: -1 })

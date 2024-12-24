@@ -10,7 +10,7 @@ const helmet = require('helmet');
 
 const User = require('./models/user'); // Ensure this path matches your directory structure
 const authRoutes = require('./routes/auth'); // Correct path for auth.js
-const postsRoutes = require('./routes/posts');
+const postsRoutes = require('./routes/posts'); // Correct path for posts.js
 
 const app = express();
 const port = process.env.PORT || 5000;
