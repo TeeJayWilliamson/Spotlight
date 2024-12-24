@@ -13,6 +13,16 @@ import './App.css';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState('');
+  const [newsFeed, setNewsFeed] = useState([
+    {
+      name: 'Trevor Williamson',
+      action: 'sent a Spotlight recognition to',
+      recipient: 'Joseph Sturino',
+      reason: 'for outstanding teamwork during the project.',
+      time: '2 hours ago',
+    },
+    // Include more dummy data here if needed
+  ]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -36,12 +46,14 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login setAuth={setIsAuthenticated} setUsername={setUsername} />} />
         <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
-        <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+        <Route
+          path="/home"
+          element={isAuthenticated ? <Home newsFeed={newsFeed} setNewsFeed={setNewsFeed} /> : <Navigate to="/login" />}
+        />
         <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/login" />} />
         <Route path="/badges" element={isAuthenticated ? <Badges /> : <Navigate to="/login" />} />
         <Route path="/rewards" element={isAuthenticated ? <Rewards /> : <Navigate to="/login" />} />
         <Route path="/scorecard" element={isAuthenticated ? <Scorecard /> : <Navigate to="/login" />} />
-        {/* Default route points to /home */}
         <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
       </Routes>
     </Router>

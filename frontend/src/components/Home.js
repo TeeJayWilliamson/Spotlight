@@ -2,35 +2,19 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../App.css';
 
-function Home() {
+function Home({ newsFeed, setNewsFeed }) {
   const [name, setName] = useState('');
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
-  const newsFeed = [
-    {
-      name: 'Trevor Williamson',
-      action: 'sent a Spotlight recognition to',
-      recipient: 'Joseph Sturino',
-      reason: 'for outstanding teamwork during the project.',
-      time: '2 hours ago',
-    },
-    {
-      name: 'Gurinder Bhatti',
-      action: 'awarded a emblem to',
-      recipient: 'Sarva Gopalapillai',
-      reason: 'for exceptional problem-solving skills.',
-      time: '3 hours ago',
-    },
-    // more items...
-  ];
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
   useEffect(() => {
     const username = localStorage.getItem('username'); // Retrieve username from localStorage
+  
     if (username) {
       axios
         .get(`${apiUrl}user/${username}`)
         .then((response) => {
-          setName(response.data.name); // Set the full name in the state
+          setName(response.data.name);
         })
         .catch((error) => {
           console.error('Error fetching user info:', error);
@@ -49,6 +33,7 @@ function Home() {
           <p className="label">Point Balance:</p>
           <p className="large-number">1000</p>
         </div>
+        <div className="divider"></div>
       </div>
 
       <div className="center-pane">
