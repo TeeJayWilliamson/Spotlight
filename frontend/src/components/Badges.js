@@ -5,7 +5,7 @@ import Lightbox from './Lightbox'; // Import the lightbox component
 import './Profile.css';
 import './Badges.css';
 import '../App.css';
-import { NewsFeedContext } from 'components/NewsFeedContext';
+import { NewsFeedContext } from './NewsFeedContext';
 
 function Badges() {
   const { addNewsItem } = useContext(NewsFeedContext);
