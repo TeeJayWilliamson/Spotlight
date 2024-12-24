@@ -1,14 +1,11 @@
-// Badges.js
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Lightbox from './Lightbox'; // Import the lightbox component
 import './Profile.css';
 import './Badges.css';
 import '../App.css';
-import { NewsFeedContext } from './NewsFeedContext';
 
 function Badges() {
-  const { addNewsItem } = useContext(NewsFeedContext);
   const [badgeType, setBadgeType] = useState('');
   const [message, setMessage] = useState('');
   const [recipient, setRecipient] = useState([]);
@@ -54,23 +51,7 @@ function Badges() {
   };
 
   const handleSend = () => {
-    selectedUsers.forEach((user) => {
-      const newsItem = {
-        name: 'Current User', // Replace with the current user's name
-        action: 'sent a Spotlight recognition to',
-        recipient: user.name,
-        reason: message,
-        time: 'Just now',
-      };
-      addNewsItem(newsItem);
-    });
-
-    // Clear the inputs after sending
-    setBadgeType('');
-    setMessage('');
-    setSelectedUsers([]);
-    setSelectedEmblem(null);
-    setIsPrivate(false);
+    // Handle send functionality here
   };
 
   const handleEmblemSelect = (emblem) => {
@@ -79,17 +60,18 @@ function Badges() {
   };
 
   return (
-    <div className="badges-container">
-      {/* Left Pane - Emblem Selector */}
-      <div className="emblem-selector">
-        <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
-        <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
-          <img
-            src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
-            alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
-          />
-        </div>
-      </div>
+<div className="badges-container">
+  {/* Left Pane - Emblem Selector */}
+  <div className="emblem-selector">
+    <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
+    <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
+      <img
+        src={selectedEmblem ? selectedEmblem.image : require('../img/emblem.png')}
+        alt={selectedEmblem ? selectedEmblem.title : 'Add Emblem'}
+      />
+    </div>
+  </div>
+
 
       {/* Lightbox Component */}
       <Lightbox
@@ -98,51 +80,99 @@ function Badges() {
         onSelect={handleEmblemSelect}
       />
 
-      {/* Right Pane - User and Message Form */}
-      <div className="recognition-form">
-        <h2>Recognize Your Colleagues</h2>
-        <div className="recipient-section">
+      {/* Middle Pane - Search Bar and User Selection */}
+      <div className="search-container">
+        <h3>Recipients:</h3>
+        
+        {/* Input and Suggestions Dropdown Container */}
+        <div className="input-dropdown-container">
+          {/* Search Input Box */}
           <input
             type="text"
-            placeholder="Search users..."
+            placeholder="Search for a user..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)} 
           />
-          <div className="suggestions">
-            {filteredUsers.map((user) => (
-              <div key={user.username} className="suggestion-item" onClick={() => handleUserClick(user)}>
-                {user.name} ({user.username})
-              </div>
-            ))}
-          </div>
-          <div className="selected-users">
-            {selectedUsers.map((user) => (
-              <div key={user.username} className="selected-user">
-                {user.name} <button onClick={() => handleRemoveUser(user.username)}>x</button>
-              </div>
-            ))}
-          </div>
+          
+          {/* User Suggestions Dropdown */}
+          {searchQuery && (
+            <div className="user-suggestions-emblem">
+              <ul>
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map((user) => (
+                    <li key={user.username} onClick={() => handleUserClick(user)}>
+                      <span>{user.username}</span> - <span>{user.name}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li>No users found</li>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
 
-        <div className="message-section">
+        {/* Added Recipients Below the Input */}
+        <div className="selected-users">
+          {/* Placeholder for empty state */}
+          {!selectedUsers.length && <div className="empty-placeholder"></div>}
+
+          {selectedUsers.map(user => (
+            <div key={user.username} className="user-box">
+              <span>{user.name}</span>
+              <span 
+                className="remove-user" 
+                onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
+              >
+                &times;
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="divider-emblem" />
+
+        {/* Personalized Message Section */}
+        <div className="message-container">
+          <h3>Personalized Message:</h3>
+          <p>Max 1000 characters</p>
+          <br></br>
           <textarea
-            placeholder="Write your message..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            maxLength="1000"
+            placeholder="Write your message here..."
+            rows="6"
           />
+          <button onClick={handleSend}>Send</button>
         </div>
+      </div>
 
-        <div className="private-checkbox">
+      {/* Right Pane - Points, Private Checkbox, and Tips */}
+      <div className="right-pane">
+        <h3>Remaining Points this Month</h3>
+        <br></br>
+        <p>{pointBalance}</p>
+
+        <br></br>
+        <div className="divider" />
+        <br></br>
+        <label>
           <input
             type="checkbox"
-            id="private"
             checked={isPrivate}
-            onChange={(e) => setIsPrivate(e.target.checked)}
+            onChange={() => setIsPrivate(!isPrivate)}
           />
-          <label htmlFor="private">Keep recognition private</label>
+           Private
+        </label>
+        <br></br>
+        <br></br>
+        <div className="divider" />
+        <br></br>
+        <div className="tips-section">
+          <h3>Tips:</h3>
+          <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
         </div>
-
-        <button onClick={handleSend}>Send</button>
       </div>
     </div>
   );

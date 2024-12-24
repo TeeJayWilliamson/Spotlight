@@ -13,7 +13,6 @@ import './App.css';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState('');
-  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -22,7 +21,6 @@ function App() {
       setIsAuthenticated(true);
       setUsername(storedUsername);
     }
-    setLoading(false); // Set loading to false after checking
   }, []);
 
   const handleLogout = () => {
@@ -31,10 +29,6 @@ function App() {
     setIsAuthenticated(false);
     setUsername('');
   };
-
-  if (loading) {
-    return <div>Loading...</div>; // Show loading state while checking auth
-  }
 
   return (
     <Router>
@@ -47,6 +41,7 @@ function App() {
         <Route path="/badges" element={isAuthenticated ? <Badges /> : <Navigate to="/login" />} />
         <Route path="/rewards" element={isAuthenticated ? <Rewards /> : <Navigate to="/login" />} />
         <Route path="/scorecard" element={isAuthenticated ? <Scorecard /> : <Navigate to="/login" />} />
+        {/* Default route points to /home */}
         <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
