@@ -27,7 +27,7 @@ body {
   
   .login-box h2 {
     width: 100%;
-    background-color: #8f18be;
+    background-color: #621E8B;
     color: white;
     padding: 15px;
     text-align: center;
@@ -52,7 +52,7 @@ body {
   }
   
   .login-box input:focus {
-    border-color: #8f18be;
+    border-color: #621E8B;
     outline: none;
   }
   
@@ -69,7 +69,7 @@ body {
   }
   
   .additional-options .forgot-details {
-    color: #8f18be;
+    color: #621E8B;
     text-decoration: none;
   }
   
@@ -80,7 +80,7 @@ body {
   button {
     width: fit-content;
     padding: 10px 20px;
-    background-color: #8f18be;
+    background-color: #621E8B;
     color: white;
     border: none;
     border-radius: 5px;

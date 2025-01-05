@@ -22,7 +22,7 @@ header {
   display: flex;
   justify-content: flex-start;
   padding: 15px 20px;
-  background-color: #8f18be;
+  background-color: #621E8B;
   color: white;
   align-items: center;
 }
@@ -118,7 +118,7 @@ header .users-link span {
 
 .login-container h2 {
   font-size: 36px;
-  color: #8f18be;
+  color: #621E8B;
   margin-bottom: 20px;
 }
 
@@ -151,13 +151,13 @@ header .users-link span {
 }
 
 .login-container input:focus {
-  border-color: #8f18be;
+  border-color: #621E8B;
   outline: none;
 }
 
 .login-container button {
   padding: 10px 20px;
-  background-color: #8f18be;
+  background-color: #621E8B;
   color: white;
   border: none;
   border-radius: 5px;
@@ -172,7 +172,7 @@ header .users-link span {
 }
 
 .error {
-  color: #8f18be;
+  color: #621E8B;
   font-size: 14px;
 }
 
@@ -215,7 +215,7 @@ header .users-link span {
 .user-info h3 {
   font-size: 24px;
   font-weight: bold;
-  color: #8f18be;
+  color: #621E8B;
 }
 
 .balance-info,
@@ -227,17 +227,17 @@ header .users-link span {
 .balance-info .label,
 .recognize-info .label {
   font-size: 16px;
-  color: #8f18be;
+  color: #621E8B;
 }
 
 .large-number {
   font-size: 48px;
   font-weight: bold;
-  color: #8f18be;
+  color: #621E8B;
 }
 
 .request-budget-btn {
-  background-color: #8f18be;
+  background-color: #621E8B;
   color: white;
   border: none;
   padding: 10px 60px;
@@ -259,7 +259,7 @@ header .users-link span {
 }
 
 .top-recognized {
-  background-color: #8f18be;
+  background-color: #621E8B;
   color: white;
   padding: 20px;
   border-radius: 10px;
@@ -327,7 +327,7 @@ header .users-link span {
 
 .bottom-section {
   background-color: white;
-  color: #8f18be;
+  color: #621E8B;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

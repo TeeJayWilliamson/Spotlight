@@ -15,7 +15,7 @@
 
 .profile-header h2 {
   font-size: 2rem;
-  color: #8f18be; /* Classic red */
+  color: #621E8B; /* Classic red */
 }
 
 .profile-header h3 {
@@ -35,7 +35,7 @@
 }
 
 .profile-details strong {
-  color: #8f18be; /* Classic red for labels */
+  color: #621E8B; /* Classic red for labels */
 }
 
 .badges {
@@ -56,12 +56,12 @@
 .badges li::before {
   content: "🏅"; /* Adds a badge icon before the badge name */
   margin-right: 10px;
-  color: #8f18be;
+  color: #621E8B;
 }
 
 .divider {
   height: 2px;
-  background-color: #8f18be; /* Red divider */
+  background-color: #621E8B; /* Red divider */
   margin: 10px 0;
 }
 
@@ -108,7 +108,7 @@
 
 /* Optional - Style the Profile Edit Button (if any) */
 .profile-edit-btn {
-  background-color: #8f18be;
+  background-color: #621E8B;
   color: #fff;
   padding: 10px 15px;
   border: none;
@@ -197,7 +197,7 @@ textarea {
 .send-spotlight-btn {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #8f18be;
+  background-color: #621E8B;
   color: white;
   border: none;
   border-radius: 5px;
