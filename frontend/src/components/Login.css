@@ -117,7 +117,7 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('path-to-your-image.jpg') no-repeat center center;
+  background: url('../img/ttc1.png') no-repeat center center;
   background-size: cover; /* Ensures the image fills the container */
   border-left: 5px solid white; /* Adds a neat divider between sections */
 }
