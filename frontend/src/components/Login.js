@@ -72,7 +72,7 @@ function Login({ setAuth, setUsername }) {
       </div>
       <div className="login-image">
         {/* Add your image or logo here */}
-        <img src={require('../img/ttc1.png')} alt="Logo or background" />
+        <img src={require('../img/ttc1.jpg')} alt="Logo or background" />
       </div>
     </div>
   );
