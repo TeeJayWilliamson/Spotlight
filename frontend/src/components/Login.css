@@ -9,14 +9,18 @@ body {
 
 .login-page {
   display: flex;
-  height: 75vh; /* Consistent height for the layout */
-  align-items: center; /* Centers vertically */
-  justify-content: center; /* Centers horizontally */
-  gap: 0; /* Removes any spacing between the columns */
+  height: 75vh;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px; /* Add max-width */
+  margin: 0 auto; /* Center the container */
+  gap: 40px; /* Add space between form and image */
 }
 
+
 .login-box {
-  flex: 1; /* Adjust to share available space equally */
+  flex: 0 1 450px; /* Don't grow, can shrink, base width 450px */
+  height: 480px; /* Set fixed height */
   max-width: 650px;
   display: flex;
   flex-direction: column;
@@ -103,17 +107,17 @@ button:hover {
 }
 
 .login-image {
-  flex: 1; /* Adjust to share available space equally */
+  flex: 0 1 650px; /* Don't grow, can shrink, base width 650px */
+  height: 480px; /* Match login-box height */
   display: flex;
   align-items: center;
   justify-content: flex-start; /* Align content to the left edge */
   background-color: #f4f4f4;
-  height: 100%; /* Matches the height of the login-box */
 }
 
 .login-image img {
-  max-height: 51.3%; /* Keeps image height in sync with login box */
-  max-width: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   width: auto;
 }
