@@ -12,12 +12,10 @@ body {
   height: 75vh;
   align-items: center;
   justify-content: center;
-  max-width: 1300px;
-  margin: 0 auto;
 }
 
 .login-box {
-  width: 400px; /* Restored to original wider width */
+  width: 460px; /* Fixed width */
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -48,7 +46,6 @@ body {
   border: 2px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
-  box-sizing: border-box;
 }
 
 .login-box input:focus {
@@ -102,11 +99,12 @@ button:hover {
 }
 
 .login-image {
-  height: 460px; /* Match full height of login box including white background/padding */
+  display: flex;
+  align-items: center;
 }
 
 .login-image img {
-  height: 100%;
+  height: 380px; /* Match the login box height */
   width: auto;
   object-fit: contain;
 }
