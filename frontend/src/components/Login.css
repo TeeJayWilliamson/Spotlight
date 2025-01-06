@@ -1,123 +1,147 @@
 /* Global styles for the login page */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #f4f4f4;
-}
-
-.login-page {
-  display: grid;
-  grid-template-columns: 40% 60%; /* 40% for login form, 60% for image */
-  height: 75vh;
-}
-
-.login-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  padding: 30px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px; /* Adds rounded corners */
-  margin: auto; /* Centers the box vertically */
-  width: 80%; /* Adjust width to make it more compact */
-  height: 80%; /* Maintain proportions */
-}
-
-.login-box h2 {
-  width: 100%;
-  background-color: #621E8B;
-  color: white;
-  padding: 15px;
-  text-align: center;
-  margin: 0 0 20px;
-  border-radius: 5px 5px 0 0;
-}
-
-.login-box form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.login-box input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.login-box input:focus {
-  border-color: #621E8B;
-  outline: none;
-}
-
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f4f4f4;
+  }
+  
+  .login-page {
+    display: flex;
+    height: 75vh;
+  }
+  
+  .login-box {
+    flex: 1;
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: auto;
+  }
+  
+  .login-box h2 {
+    width: 100%;
+    background-color: #621E8B;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    margin: 0 0 20px;
+    border-radius: 5px 5px 0 0;
+  }
+  
+  .login-box form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .login-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .login-box input:focus {
+    border-color: #621E8B;
+    outline: none;
+  }
+  
+  .additional-options {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .additional-options label {
+    display: flex;
+    align-items: center;
+  }
+  
+  .additional-options .forgot-details {
+    color: #621E8B;
+    text-decoration: none;
+  }
+  
+  .additional-options .forgot-details:hover {
+    text-decoration: underline;
+  }
+  
+  button {
+    width: fit-content;
+    padding: 10px 20px;
+    background-color: #621E8B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: auto;
+  }
+  
+  button:hover {
+    background-color: #721099;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  .login-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    max-width: 50%;
+  }
+  
+  .login-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+/* Add white-space: nowrap; to prevent wrapping */
 .additional-options {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 15px;
-  white-space: nowrap; /* Prevent wrapping in the whole container */
-}
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+    white-space: nowrap; /* Prevent wrapping in the whole container */
+  }
+  
+  .additional-options label {
+    display: flex;
+    align-items: center;
+  }
+  
+  .keep-logged-in {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    white-space: nowrap; /* Prevents breaking text into two lines */
+    margin-left: 5px;
+    margin-top: 15px;
+  }
 
-.additional-options label {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px; /* Adds some space between checkbox and the label text */
-}
-
-.additional-options .forgot-details {
-  color: #621E8B;
-  text-decoration: none;
-}
-
-.additional-options .forgot-details:hover {
-  text-decoration: underline;
-}
-
-button {
-  width: fit-content;
-  padding: 10px 20px;
-  background-color: #621E8B;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-left: auto;
-}
-
-button:hover {
-  background-color: #721099;
-}
-
-.error {
-  color: red;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.keep-logged-in {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  white-space: nowrap; /* Prevents breaking text into two lines */
-  margin-left: 5px;
-  margin-top: 15px;
-}
-
-.login-image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: url('../img/ttc1.png') no-repeat center center;
-  background-size: cover; /* Ensures the image fills the container */
-  border-left: 5px solid white; /* Adds a neat divider between sections */
-}
+  .additional-options label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  /* Ensures proper alignment and spacing */
+    gap: 10px;  /* Adds some space between checkbox and the label text */
+  }
+  
+  
