@@ -104,7 +104,7 @@ button:hover {
 }
 
 .login-image img {
-  height: 380px; /* Match the login box height */
+  height: 362px; /* Match the login box height */
   width: auto;
   object-fit: contain;
 }
