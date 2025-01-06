@@ -1,5 +1,6 @@
 // Badges.js
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 import Lightbox from './Lightbox';
 import './Profile.css';
@@ -21,6 +22,7 @@ function Badges() {
   const [sending, setSending] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     // Fetch current user
@@ -90,6 +92,9 @@ function Badges() {
       setIsPrivate(false);
 
       alert('Recognition sent successfully!');
+
+      // Redirect to homepage/newsfeed
+      navigate('/newsfeed'); // Adjust the path to your newsfeed route
     } catch (error) {
       console.error('Error sending recognition:', error);
       alert('Failed to send recognition. Please try again.');
@@ -125,15 +130,13 @@ function Badges() {
       {/* Middle Pane - Search Bar and User Selection */}
       <div className="search-container">
         <h3>Recipients:</h3>
-        
         <div className="input-dropdown-container">
           <input
             type="text"
             placeholder="Search for a user..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)} 
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-          
           {searchQuery && (
             <div className="user-suggestions-emblem">
               <ul>
@@ -153,7 +156,6 @@ function Badges() {
 
         <div className="selected-users">
           {!selectedUsers.length && <div className="empty-placeholder"></div>}
-
           {selectedUsers.map(user => (
             <div key={user.username} className="user-box">
               <span>{user.name}</span>
@@ -172,7 +174,6 @@ function Badges() {
         <div className="message-container">
           <h3>Personalized Message:</h3>
           <p>Max 1000 characters</p>
-          <br></br>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -192,24 +193,17 @@ function Badges() {
       {/* Right Pane */}
       <div className="right-pane">
         <h3>Remaining Points this Month</h3>
-        <br></br>
         <p>{pointBalance}</p>
-
-        <br></br>
         <div className="divider" />
-        <br></br>
         <label>
           <input
             type="checkbox"
             checked={isPrivate}
             onChange={() => setIsPrivate(!isPrivate)}
           />
-           Private
+          Private
         </label>
-        <br></br>
-        <br></br>
         <div className="divider" />
-        <br></br>
         <div className="tips-section">
           <h3>Tips:</h3>
           <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
