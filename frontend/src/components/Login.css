@@ -132,9 +132,10 @@ button:hover {
 }
 
 .login-image img {
-  height: 51.25%; /* Matches the height of the .login-image container */
+  height: 100%; /* Matches the height of the .login-image container */
   width: auto; /* Maintains aspect ratio */
   object-fit: contain; /* Ensures the image fits within the container */
+  max-width: 100%; /* Ensures the image doesn't overflow the container */
 }
 
 
