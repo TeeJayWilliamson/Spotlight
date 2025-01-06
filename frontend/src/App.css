@@ -38,7 +38,7 @@ header {
 }
 
 .separator {
-  color: white;
+  color: #621E8B;
   margin: 0 10px;
 }
 
@@ -482,7 +482,7 @@ header .users-link span {
 .separator {
   width: 100%;
   height: 1px;
-  background-color: #ddd;
+  background-color: #621E8B;
   margin: 10px 0;
 }
 
