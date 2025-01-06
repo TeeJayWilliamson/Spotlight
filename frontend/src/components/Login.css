@@ -17,11 +17,9 @@ body {
 }
 
 .login-box {
-  width: 460px;
+  width: 400px; /* Restored to original wider width */
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
   background-color: white;
   padding: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -50,6 +48,7 @@ body {
   border: 2px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
 .login-box input:focus {
@@ -103,9 +102,7 @@ button:hover {
 }
 
 .login-image {
-  display: flex;
-  align-items: center;
-  height: 400px;
+  height: 460px; /* Match full height of login box including white background/padding */
 }
 
 .login-image img {
