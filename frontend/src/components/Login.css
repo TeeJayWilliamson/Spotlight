@@ -9,9 +9,9 @@ body {
 
 .login-page {
   display: flex;
-  height: 75vh;
-  align-items: center; /* Centering vertically */
-  justify-content: center; /* Centering horizontally */
+  height: 75vh; /* Sets consistent height for the layout */
+  align-items: center; /* Centers vertically */
+  justify-content: center; /* Centers horizontally */
 }
 
 .login-box {
@@ -24,7 +24,7 @@ body {
   background-color: white;
   padding: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-right: 0px; /* Reduced space between the form and image */
+  margin-right: 0; /* No extra space between the form and image */
 }
 
 .login-box h2 {
@@ -101,22 +101,27 @@ button:hover {
   margin-top: 10px;
 }
 
+
+
 .login-image {
-  flex: 2; /* Keeps the existing space ratio */
+  flex: 2; /* Keeps the image taking more space */
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #f4f4f4;
   height: 100%; /* Matches the height of the .login-box */
-  max-width: 60%; /* Prevents the container from exceeding 60% of the screen */
+  width: auto; /* Allows the image container to stretch horizontally */
+  max-width: 60%; /* Caps the width at 60% of the screen */
+  margin-right: 0; /* Removes padding or margins on the right side */
 }
 
 .login-image img {
-  height: 100%; /* Matches the height of the .login-image container */
-  width: auto; /* Maintains aspect ratio */
-  object-fit: contain; /* Ensures the image fits within the container */
-  max-width: 100%; /* Ensures the image doesn't overflow the container */
+  height: 100%; /* Matches the container height */
+  width: auto; /* Ensures the aspect ratio is maintained */
+  object-fit: cover; /* Ensures the image fills the height */
+  max-width: 100%; /* Prevents overflowing horizontally */
 }
+
 
 
 /* Additional options adjustments */
