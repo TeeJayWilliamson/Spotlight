@@ -12,19 +12,15 @@ body {
   height: 75vh;
   align-items: center;
   justify-content: center;
-  max-width: 1200px; /* Add max-width */
+  max-width: 1100px; /* Control overall width */
   margin: 0 auto; /* Center the container */
-  gap: 40px; /* Add space between form and image */
 }
 
-
 .login-box {
-  flex: 0 1 450px; /* Don't grow, can shrink, base width 450px */
-  height: 480px; /* Set fixed height */
-  max-width: 650px;
+  width: 400px; /* Fixed width for login box */
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Align content to the right edge */
+  align-items: flex-end;
   justify-content: center;
   background-color: white;
   padding: 30px;
@@ -86,7 +82,7 @@ body {
   display: flex;
   align-items: center;
   font-size: 14px;
-  white-space: nowrap; /* Prevents breaking text into two lines */
+  white-space: nowrap;
   margin-top: 15px;
 }
 
@@ -107,17 +103,12 @@ button:hover {
 }
 
 .login-image {
-  flex: 0 1 650px; /* Don't grow, can shrink, base width 650px */
-  height: 480px; /* Match login-box height */
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* Align content to the left edge */
-  background-color: #f4f4f4;
+  height: 460px; /* Match login box height */
+  width: 700px; /* Fixed width for image container */
 }
 
 .login-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  width: auto;
 }
