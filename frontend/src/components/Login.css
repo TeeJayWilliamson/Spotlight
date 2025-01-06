@@ -127,7 +127,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   background-color: #f4f4f4;
-  height: 100%; /* Matches the height of the .login-box */
+  height: 110%; /* Matches the height of the .login-box */
   max-width: 60%; /* Prevents the container from exceeding 60% of the screen */
 }
 
