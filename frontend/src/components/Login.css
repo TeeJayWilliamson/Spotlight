@@ -12,14 +12,15 @@ body {
   height: 75vh; /* Consistent height for the layout */
   align-items: center; /* Centers vertically */
   justify-content: center; /* Centers horizontally */
+  gap: 0; /* Removes any spacing between the columns */
 }
 
 .login-box {
-  flex: 1; /* Takes up 50% of the space */
+  flex: 1; /* Adjust to share available space equally */
   max-width: 650px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Pushes content to the right edge */
+  align-items: flex-end; /* Align content to the right edge */
   justify-content: center;
   background-color: white;
   padding: 30px;
@@ -102,16 +103,16 @@ button:hover {
 }
 
 .login-image {
-  flex: 1; /* Takes up 50% of the space */
+  flex: 1; /* Adjust to share available space equally */
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Pushes content to the left edge */
+  justify-content: flex-start; /* Align content to the left edge */
   background-color: #f4f4f4;
   height: 100%; /* Matches the height of the login-box */
 }
 
 .login-image img {
-  max-height: 90%; /* Ensures the image stays within bounds */
+  max-height: 51.3%; /* Keeps image height in sync with login box */
   max-width: 100%;
   object-fit: contain;
   width: auto;
