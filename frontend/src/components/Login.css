@@ -9,29 +9,22 @@ body {
 
 .login-page {
   display: flex;
-  height: 75vh;
-  align-items: center; /* Centering vertically */
-  justify-content: right; /* Centering horizontally */
-}
-
-.login-box, .login-page {
-  align-items: center;
-  display: flex
-;
-  /* justify-content: right; */
+  height: 75vh; /* Consistent height for the layout */
+  align-items: center; /* Centers vertically */
+  justify-content: center; /* Centers horizontally */
 }
 
 .login-box {
-  background-color: #fff;
-  box-shadow: 0 0 10px #0000001a;
-  flex: 1 1;
-  flex-direction: column;
-  margin-right: 0;
+  flex: 1; /* Takes up 50% of the space */
   max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Pushes content to the right edge */
+  justify-content: center;
+  background-color: white;
   padding: 30px;
-  justify-content: right;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
 
 .login-box h2 {
   width: 100%;
@@ -46,7 +39,6 @@ body {
 .login-box form {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
 }
 
@@ -85,6 +77,14 @@ body {
   text-decoration: underline;
 }
 
+.keep-logged-in {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  white-space: nowrap; /* Prevents breaking text into two lines */
+  margin-top: 15px;
+}
+
 button {
   width: fit-content;
   padding: 10px 20px;
@@ -101,78 +101,18 @@ button:hover {
   background-color: #721099;
 }
 
-.error {
-  color: red;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.login-page {
-  display: flex;
-  height: 75vh; /* Sets consistent height for the layout */
-  align-items: center; /* Centers vertically */
-  justify-content: center; /* Centers horizontally */
-}
-
-.login-box {
-  flex: 1;
-  max-width: 650px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  padding: 30px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-right: 0; /* No extra space between the form and image */
-}
-
 .login-image {
-  align-items: center;
-  background-color: #f4f4f4;
+  flex: 1; /* Takes up 50% of the space */
   display: flex;
-  flex: 1 1;
-  height: 86%;
-  justify-content: center;
-  max-width: 100%;
+  align-items: center;
+  justify-content: flex-start; /* Pushes content to the left edge */
+  background-color: #f4f4f4;
+  height: 100%; /* Matches the height of the login-box */
 }
 
 .login-image img {
-  max-height: 60%;
+  max-height: 90%; /* Ensures the image stays within bounds */
   max-width: 100%;
   object-fit: contain;
   width: auto;
-}
-
-
-
-
-/* Additional options adjustments */
-.additional-options {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 15px;
-  white-space: nowrap; /* Prevent wrapping in the whole container */
-}
-
-.additional-options label {
-  display: flex;
-  align-items: center;
-}
-
-.keep-logged-in {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  white-space: nowrap; /* Prevents breaking text into two lines */
-  margin-left: 5px;
-  margin-top: 15px;
-}
-
-.additional-options label {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;  /* Ensures proper alignment and spacing */
-  gap: 10px;  /* Adds some space between checkbox and the label text */
 }
