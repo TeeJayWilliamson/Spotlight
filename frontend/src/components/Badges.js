@@ -93,8 +93,8 @@ function Badges() {
 
       alert('Recognition sent successfully!');
 
-      // Redirect to homepage/newsfeed
-      navigate('/newsfeed'); // Adjust the path to your newsfeed route
+      // Redirect to homepage
+      navigate('/home'); // Adjust the path to your newsfeed route
     } catch (error) {
       console.error('Error sending recognition:', error);
       alert('Failed to send recognition. Please try again.');
