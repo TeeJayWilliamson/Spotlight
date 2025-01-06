@@ -259,35 +259,36 @@ header .users-link span {
 }
 
 .top-recognized {
-  background-color: #621E8B;
-  color: white;
+  background-color: white;
+  color: #621E8B;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .top-recognized h4 {
-  color: white;
+  color: #621E8B;
   margin-bottom: 10px;
   font-size: 24px;
 }
 
 .separator {
   height: 1px;
-  background-color: #fff;
+  background-color: #621E8B;
   margin: 10px 0;
 }
 
 .this-month p {
   font-size: 18px;
   font-weight: bold;
-  color: white;
+  color: #621E8B;
 }
 
 .rank-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  color: #621E8B;
 }
 
 .rank-number {
@@ -298,7 +299,7 @@ header .users-link span {
 .rank-label,
 .recognition-stats p {
   font-size: 14px;
-  color: white;
+  color: #621E8B;
   text-align: center;
   
 }
