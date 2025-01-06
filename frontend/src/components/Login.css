@@ -9,14 +9,14 @@ body {
 
 .login-page {
   display: flex;
-  height: 75vh;
-  align-items: center; /* Centering vertically */
-  justify-content: center; /* Centering horizontally */
+  justify-content: center;
+  align-items: center; /* Centers the form and image vertically */
+  gap: 20px; /* Adds some space between the form and image */
+  height: 100vh;
 }
 
 .login-box {
-  flex: 1;
-  max-width: 650px;
+  flex: 0 1 650px; /* Keep the fixed size of the box */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +24,6 @@ body {
   background-color: white;
   padding: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-right: 20px; /* Reduced space between the form and image */
 }
 
 .login-box h2 {
@@ -102,18 +101,18 @@ button:hover {
 }
 
 .login-image {
-  flex: 2; /* Adjusted for the image to take more space */
+  flex: 0 1 auto; /* Prevents the image from growing */
+  height: auto; /* Will be controlled by the next rule */
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f4f4f4;
-  max-width: 50%;
+  max-width: 50%; /* Limits image width */
 }
 
 .login-image img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  height: 100%; /* Matches the height of the .login-box */
+  width: auto; /* Maintains the aspect ratio */
+  object-fit: cover; /* Ensures it fills the allocated space cleanly */
 }
 
 /* Additional options adjustments */
@@ -142,6 +141,6 @@ button:hover {
 .additional-options label {
   display: flex;
   align-items: center;
-  justify-content: flex-start;  /* Ensures proper alignment and spacing */
-  gap: 10px;  /* Adds some space between checkbox and the label text */
+  justify-content: flex-start; /* Ensures proper alignment and spacing */
+  gap: 10px; /* Adds some space between checkbox and the label text */
 }
