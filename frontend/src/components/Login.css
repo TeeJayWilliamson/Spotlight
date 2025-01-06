@@ -15,7 +15,7 @@ body {
 }
 
 .login-box {
-  width: 460px; /* Fixed width */
+  width: 650px; /* Fixed width */
   display: flex;
   flex-direction: column;
   background-color: white;
