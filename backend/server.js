@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? 'https://spotlight-ttc-30e93233aa0e.herokuapp.com'
-    : ['http://localhost:3000', 'http://localhost:5000'],
+    : 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
