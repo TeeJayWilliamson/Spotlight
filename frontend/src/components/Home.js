@@ -6,29 +6,42 @@ function Home() {
   const [name, setName] = useState('');
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
-
+  // Remove trailing slash from apiUrl definition
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Add debugging logs
+        console.log('Current API URL:', apiUrl);
+        
         const username = localStorage.getItem('username');
+        console.log('Username from localStorage:', username);
+        
         if (username) {
-          const userResponse = await axios.get(`${apiUrl}user/${username}`);
+          // Add forward slash before endpoint
+          const userResponse = await axios.get(`${apiUrl}/user/${username}`);
           console.log('User response:', userResponse.data);
           setName(userResponse.data.name);
         }
-
-        const postsResponse = await axios.get(`${apiUrl}posts`);
+  
+        // Add forward slash before endpoint
+        const postsResponse = await axios.get(`${apiUrl}/posts`);
         console.log('Posts response:', postsResponse.data);
         setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
+        console.error('Error details:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status
+        });
         setPosts([]);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchData();
     const interval = setInterval(fetchData, 60000);
     return () => clearInterval(interval);
