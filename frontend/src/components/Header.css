@@ -98,6 +98,133 @@
     width: auto;
   }
   
+/* Reset Bootstrap effects on navbar */
+header.site-header {
+    all: unset;
+    display: block;
+    width: 100%;
+  }
+  
+  /* Purple navbar (Spotlight navbar) */
+  nav.navbar-purple {
+    background: white !important;
+    font-size: large !important;
+    font-weight: bold !important;
+    padding: 10px 20px !important;
+    color: purple !important;
+    height: 60px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    z-index: 10 !important;
+    position: relative !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+  
+  /* Red navbar (secondary navbar) */
+  nav.navbar-red {
+    background: linear-gradient(to bottom, red, #8b0000) !important;
+    padding: 10px 20px !important;
+    color: white !important;
+    width: 100% !important;
+    z-index: 9 !important;
+    height: 60px !important;
+    margin-top: 0 !important;
+    position: relative !important;
+    border: none !important;
+  }
+  
+  /* Container for navbar items */
+  .navbar-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  nav .navbar-nav {
+    display: flex !important;
+    list-style: none !important;
+    align-items: center !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+    flex-direction: row !important;
+  }
+  
+  nav .navbar-item {
+    margin-right: 15px !important;
+    padding: 0 !important;
+    background: none !important;
+  }
+  
+  nav .navbar-link,
+  nav .navbar-link-profile {
+    color: white !important;
+    text-decoration: none !important;
+    font-size: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    text-align: center !important;
+    margin-bottom: 13px !important;
+    padding: 0 !important;
+    background: none !important;
+  }
+  
+  nav .navbar-link:hover,
+  nav .logout-button:hover {
+    color: #f0f0f0 !important;
+    text-decoration: none !important;
+  }
+  
+  nav .navbar-right {
+    display: flex !important;
+    align-items: center !important;
+    margin-left: auto !important;
+    padding: 0 !important;
+  }
+  
+  nav .logout-button {
+    background: none !important;
+    border: none !important;
+    color: white !important;
+    cursor: pointer !important;
+    font-size: 18px !important;
+    margin-left: 15px !important;
+    padding: 0 !important;
+  }
+  
+  nav .lightbulb-icon,
+  nav .user-icon,
+  nav .badge-icon,
+  nav .gift-icon {
+    margin-right: 5px !important;
+  }
+  
+  nav .navbar-spotlight-logo {
+    height: 60px !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Media queries */
+  @media (max-width: 768px) {
+    .navbar-container {
+      flex-direction: column !important;
+    }
+  
+    nav .navbar-nav {
+      flex-direction: column !important;
+    }
+  
+    nav .navbar-item {
+      margin: 5px 0 !important;
+    }
+  }
 
 /* Optional: Add responsive design for smaller screens */
 @media (max-width: 768px) {

@@ -242,4 +242,84 @@ textarea {
   background-color: #f0f0f0; /* Highlight on hover */
 }
 
+.profile-content {
+  width: 100%;
+}
 
+.profile-layout {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.profile-image-section {
+  width: 300px;
+  margin-left: 20px;
+}
+
+.profile-image-container {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.profile-image-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-image-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.profile-upload-btn {
+  background-color: #621E8B;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.profile-upload-btn:hover {
+  background-color: #721099;
+}
+
+/* Keep all your existing media queries and add this one */
+@media (max-width: 768px) {
+  .profile-layout {
+    flex-direction: column-reverse;
+  }
+
+  .profile-image-section {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 2rem;
+  }
+
+  .profile-image-container {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}

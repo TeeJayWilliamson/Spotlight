@@ -8,7 +8,9 @@ import Users from './components/Users';
 import Badges from './components/Badges';
 import Rewards from './components/Rewards';
 import Scorecard from './components/Scorecard';
-import './App.css';
+import './App.css';     // Your other custom styles
+import 'bootstrap/dist/css/bootstrap.min.css';  // Bootstrap last
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

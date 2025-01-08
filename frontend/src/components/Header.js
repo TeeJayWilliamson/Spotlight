@@ -42,25 +42,17 @@ function Header({ handleLogout }) {
   };
 
   return (
-    <>
+    <header className="site-header">
       <nav className="navbar-purple">
         <div className="navbar-container">
           <ul className="navbar-nav">
-            {isAuthenticated ? (
-              <Link to="/home">
-                <img
-                  src={spotlightLogo}
-                  alt="Spotlight Logo"
-                  className="navbar-spotlight-logo"
-                />
-              </Link>
-            ) : (
+            <Link to="/home">
               <img
                 src={spotlightLogo}
                 alt="Spotlight Logo"
                 className="navbar-spotlight-logo"
               />
-            )}
+            </Link>
           </ul>
         </div>
       </nav>
@@ -82,7 +74,6 @@ function Header({ handleLogout }) {
                     <span>Users</span>
                   </Link>
                 </li>
-
                 <li className="navbar-item">
                   <Link to="/badges" className="navbar-link">
                     <i className="bx bxs-badge-check badge-icon"></i>
@@ -121,7 +112,7 @@ function Header({ handleLogout }) {
           )}
         </div>
       </nav>
-    </>
+    </header>
   );
 }
 
