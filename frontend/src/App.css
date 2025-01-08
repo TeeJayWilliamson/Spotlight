@@ -261,21 +261,27 @@ header .users-link span {
 .top-recognized {
   background-color: white;
   color: #621E8B;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 0; /* Remove padding from the top-recognized div */
+  border-radius: 10px; /* Keep rounded corners for the container */
   box-shadow: 0 4px 6px #621E8B;
+  padding-bottom: 1px;
 }
 
-.top-recognized h4 {
-  color: #621E8B;
-  margin-bottom: 10px;
-  font-size: 24px;
+.top-bar {
+  background-color: #621E8B; /* Purple background */
+  width: 100%; /* Full width */
+  padding: 15px; /* Padding for spacing inside the bar */
+  border-radius: 0; /* No rounded corners */
+}
+
+.top-bar h4 {
+  color: white; /* White font color */
+  margin: 0; /* Remove default margins */
 }
 
 .separator {
   height: 1px;
   background-color: #621E8B;
-  margin: 10px 0;
 }
 
 .this-month p {
@@ -284,10 +290,18 @@ header .users-link span {
   color: #621E8B;
 }
 
+.this-month{
+  margin-right: 10%;
+  margin-left: 10%;
+
+}
+
 .rank-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  margin-right: 10%;
+  margin-left: 10%;
   color: #621E8B;
 }
 
@@ -301,43 +315,21 @@ header .users-link span {
   font-size: 14px;
   color: #621E8B;
   text-align: center;
-  
-}
-
-.top-10-list {
-  margin-top: 10px;
-}
-
-.top-10-list h5 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: white;
-}
-
-.top-10-list ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.top-10-list li {
-  font-size: 14px;
-  color: white;
-  margin-bottom: 8px;
 }
 
 .bottom-section {
-  background-color: white;
-  color: #621E8B;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px #621E8B;
+  background-color: white; /* Changed to white for consistency */
+  border-radius: 10px; /* Keep rounded corners for bottom section */
+  box-shadow: 0 4px 6px #621E8B; /* Shadow for visual depth */
+  color: #621E8B; /* Text color */
+  padding: 20px; /* Padding inside bottom section */
+  margin: 5% 5% 10%; /* Add a bottom margin of 10% */
 }
+
 
 .bottom-section h5 {
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 .bottom-section ul {
@@ -346,9 +338,9 @@ header .users-link span {
 }
 
 .bottom-section li {
-  font-size: 14px;
-  margin-bottom: 8px;
+  font-size: 16px;
 }
+
 
 .spotlight-link {
   text-decoration: none;
@@ -472,19 +464,15 @@ header .users-link span {
   padding: 20px;
 }
 
-.right-pane {
-  width: 250px;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-left: 1px solid #ddd;
-}
+
 
 .separator {
-  width: 100%;
-  height: 1px;
-  background-color: #621E8B;
-  margin: 10px 0;
+  width: 90%; /* Set width to 90% */
+  height: 1px; /* Height of the separator */
+  background-color: #621E8B; /* Color of the separator */
+  margin: 10px auto; /* Center horizontally and add vertical margin */
 }
+
 
 .left-pane h3,
 .left-pane .label,
@@ -529,6 +517,7 @@ header .users-link span {
 .right-pane {
   width: 250px; /* Keep fixed width */
   padding: 20px;
+  padding-bottom: 20%;
   background-color: #f5f5f5;
   border-left: 1px solid #ddd;
 }
@@ -547,5 +536,84 @@ header .users-link span {
   margin-bottom: 20px; /* Optional, just to give space between sections */
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+/* Body Styling */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Home Page Layout */
+.home-container {
+  display: flex;
+}
+
+/* Left Pane */
+.left-pane {
+  flex: 0.3; /* Adjust width to desired percentage */
+  padding: 20px;
+}
+
+/* Center Pane (Newsfeed area) */
+.center-pane {
+  flex-grow: 1; /* Allow the center pane to grow and take up available space */
+  padding: 20px;
+}
+
+/* Right Pane */
+.right-pane {
+  flex: 0.3; /* Adjust width to desired percentage */
+  padding: 20px;
+}
+
+/* Newsfeed Styling */
+.newsfeed {
+  background-color: #ecf0f1;
+}
+
+.news-item {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: rgba(0,0,0,0.1) 0px 2px 4px;
+}
+
+.news-item-header {
+   display: flex;
+   align-items: center;
+   gap: 20px; /* Space between emblem image and text */
+}
+
+.emblem-image {
+   width: 80px; /* Adjust size as needed */
+   height: auto; /* Maintain aspect ratio */
+   border-radius:50%; /* Circular image */
+   object-fit: cover; /* Ensures the image scales nicely within its container */
+}
+
+.emblem-info {
+   flex-grow:1; /* Allow this section to take up available space */
+}
+
+.emblem-name {
+   font-weight:bold; 
+}
+
+.recipients {
+   color:#555; /* Lighter color for recipients */
+}
+
+.news-item-message {
+   margin-top:10px; /* Space between header and message */
+}
+
+.sender-name {
+   font-weight:bold; /* Bold sender's name */
+   font-size: small;
+}
 

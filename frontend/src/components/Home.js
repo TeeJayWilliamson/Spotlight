@@ -8,35 +8,34 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const username = localStorage.getItem('username');
-      if (username) {
-        const userUrl = new URL(`user/${username}`, apiUrl);
-        const userResponse = await axios.get(userUrl.toString());
-        console.log('User response:', userResponse.data);
-        setName(userResponse.data.name);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const username = localStorage.getItem('username');
+        if (username) {
+          const userUrl = new URL(`user/${username}`, apiUrl);
+          const userResponse = await axios.get(userUrl.toString());
+          console.log('User response:', userResponse.data);
+          setName(userResponse.data.name);
+        }
+
+        const postsUrl = new URL('posts', apiUrl);
+        const postsResponse = await axios.get(postsUrl.toString());
+        console.log('Posts response:', postsResponse.data);
+        setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+        console.error('Full error:', error);
+        setPosts([]);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const postsUrl = new URL('posts', apiUrl);
-      const postsResponse = await axios.get(postsUrl.toString());
-      console.log('Posts response:', postsResponse.data);
-      setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
-    } catch (error) {
-      console.error('Error fetching data:', error.message);
-      console.error('Full error:', error);
-      setPosts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchData();
-  const interval = setInterval(fetchData, 60000);
-  return () => clearInterval(interval);
-}, [apiUrl]);
-
+    fetchData();
+    const interval = setInterval(fetchData, 60000);
+    return () => clearInterval(interval);
+  }, [apiUrl]);
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
@@ -46,6 +45,12 @@ useEffect(() => {
     if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} hours ago`;
     return `${Math.floor(diffInMinutes / 1440)} days ago`;
+  };
+
+  const handleLike = (postId) => {
+    setPosts(posts.map(post => 
+      post._id === postId ? { ...post, liked: !post.liked } : post
+    ));
   };
 
   return (
@@ -71,41 +76,38 @@ useEffect(() => {
             <div>No recognitions yet</div>
           ) : (
             posts.map((post) => (
-              <div
-                key={post._id}
-                className="news-item"
-                style={{
-                  backgroundColor: 'white',
-                  padding: '20px', // Increased padding for more space around the content
-                  marginBottom: '20px', // Increased bottom margin
-                  borderRadius: '8px',
-                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '20px', // Adds space between image and text
-                }}
-              >
-                <div style={{ marginRight: '20px', minWidth: '80px' }}> {/* Increase minWidth to give more space */}
+              <div key={post._id} className="news-item">
+                <div className="news-item-header">
                   <img 
                     src={post.emblem.image} 
                     alt={post.emblem.title}
-                    style={{
-                      width: '100px', // Increased size for better visibility
-                      height: '100px',
-                      borderRadius: '25%', // Optional: adds a circular border
-                      objectFit: 'cover', // Ensures the image scales nicely within its container
-                    }}
+                    className="emblem-image"
                   />
+                  <div className="emblem-info">
+                    <p className="emblem-name">{post.emblem.title}</p>
+                    <p className="recipients">{post.recipients.join(', ')}</p>
+                  </div>
                 </div>
-
-                <div>
-                  <p>
-                    <strong>{post.name}</strong> is Spotlighting{' '}
-                    <strong>{post.recipients.join(' and ')}</strong>
-                    <br />
-                    for {post.emblem.title}. {post.message}{' '}
-                    <em>({formatTimeAgo(post.timestamp)})</em>
-                  </p>
+                <div className="separator"></div>
+                <div className="news-item-message">
+                  <p>{post.message}</p>
+                </div>
+                <div className="news-item-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <p className="sender-name">{post.name}</p>
+                    <p className="timestamp" style={{ marginLeft: '5px' }}><em>({formatTimeAgo(post.timestamp)})</em></p>
+                  </div>
+                  <div className="action-links" style={{ display: 'flex', gap: '10px' }}>
+                    <a href="#" onClick={() => handleLike(post._id)} style={{ textDecoration: 'none', color: '#621E8B' }}>
+                      {post.liked ? (
+                        <i className='bx bxs-like'></i> // Filled thumbs up
+                      ) : (
+                        <i className='bx bx-like'></i> // Empty thumbs up
+                      )}
+                    </a>
+                    <a href="#" style={{ textDecoration: 'none', color: '#621E8B' }}>Comment</a>
+                    <a href="#" style={{ textDecoration: 'none', color: '#621E8B' }}>Share</a>
+                  </div>
                 </div>
               </div>
             ))
@@ -114,9 +116,10 @@ useEffect(() => {
       </div>
 
       <div className="right-pane">
-        {/* Rest of your right pane code remains the same */}
         <div className="top-recognized">
-          <h4>Top Recognized</h4>
+          <div className="top-bar">
+            <h4>Top Recognized</h4>
+          </div>
           <div className="separator"></div>
           <div className="this-month">
             <p>This Month</p>
@@ -151,6 +154,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
+
     </div>
   );
 }
