@@ -4,35 +4,46 @@ import './Profile.css';
 
 const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
-
 function Scorecard() {
   const [scorecard, setScorecard] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const scorecardUrl = new URL('scorecard', apiUrl);
     axios
       .get(scorecardUrl.toString())
       .then((response) => {
-        setScorecard(response.data);
+        if (Array.isArray(response.data)) {
+          setScorecard(response.data);
+        } else {
+          console.error("Unexpected data format:", response.data);
+          setScorecard([]);
+          setError("Received invalid data format");
+        }
       })
       .catch((error) => {
         console.error("Error fetching scorecard:", error);
+        setError("Failed to fetch scorecard data");
       });
   }, [apiUrl]);
-  
 
   return (
     <div className="rewards-container">
       <h2>Scorecard</h2>
       <div className="divider"></div>
-      <ul>
-        {scorecard.map((scorecard) => (
-          <li key={scorecard.id}>
-            <span>{scorecard.name}</span>
-            {/* Additional scorecard info could be added here */}
-          </li>
-        ))}
-      </ul>
+      {error && <p className="error-message">{error}</p>}
+      {Array.isArray(scorecard) && scorecard.length > 0 ? (
+        <ul>
+          {scorecard.map((item) => (
+            <li key={item.id}>
+              <span>{item.name}</span>
+              {/* Additional scorecard info could be added here */}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No scorecard data available</p>
+      )}
     </div>
   );
 }

@@ -8,35 +8,35 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const username = localStorage.getItem('username');
-        if (username) {
-          const userUrl = new URL(`user/${username}`, apiUrl);
-          const userResponse = await axios.get(userUrl.toString());
-          console.log('User response:', userResponse.data);
-          setName(userResponse.data.name);
-        }
-  
-        const postsUrl = new URL('posts', apiUrl);
-        const postsResponse = await axios.get(postsUrl.toString());
-        console.log('Posts response:', postsResponse.data);
-        setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
-        console.error('Full error:', error);
-        setPosts([]);
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const username = localStorage.getItem('username');
+      if (username) {
+        const userUrl = new URL(`user/${username}`, apiUrl);
+        const userResponse = await axios.get(userUrl.toString());
+        console.log('User response:', userResponse.data);
+        setName(userResponse.data.name);
       }
-    };
-  
-    fetchData();
-    const interval = setInterval(fetchData, 60000);
-    return () => clearInterval(interval);
-  }, [apiUrl]);
-  
+
+      const postsUrl = new URL('posts', apiUrl);
+      const postsResponse = await axios.get(postsUrl.toString());
+      console.log('Posts response:', postsResponse.data);
+      setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+      console.error('Full error:', error);
+      setPosts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+  const interval = setInterval(fetchData, 60000);
+  return () => clearInterval(interval);
+}, [apiUrl]);
+
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();

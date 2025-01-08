@@ -15,8 +15,6 @@ const postsRoutes = require('./routes/posts'); // Correct path for posts.js
 const app = express();
 const port = process.env.PORT || 5000;
 
-const allowedApiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
-
 // Middleware
 app.use(express.json());
 app.use(bodyParser.json());
@@ -38,14 +36,14 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
-    connectSrc: ["'self'", allowedApiUrl],
+    connectSrc: ["'self'", process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com'],
     styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
     fontSrc: ["'self'", 'https://fonts.gstatic.com'],
     scriptSrc: ["'self'", "'unsafe-inline'"],
+    imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'], // Allow Cloudinary images
   },
 }));
 
