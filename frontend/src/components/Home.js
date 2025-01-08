@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import '../App.css';
 
 function Home() {
@@ -7,6 +8,7 @@ function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,20 +84,31 @@ function Home() {
                     src={post.emblem.image} 
                     alt={post.emblem.title}
                     className="emblem-image"
+                    style={{ width: '50px', height: '50px' }} // Adjusted size for emblem
                   />
                   <div className="emblem-info">
                     <p className="emblem-name">{post.emblem.title}</p>
                     <p className="recipients">{post.recipients.join(', ')}</p>
                   </div>
                 </div>
-                <div className="separator"></div>
-                <div className="news-item-message">
+                <div className="news-item-message" style={{ marginBottom: '20px', padding: '15px', borderRadius: '5px', backgroundColor: '#f9f9f9' }}>
                   <p>{post.message}</p>
                 </div>
                 <div className="news-item-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <p className="sender-name">{post.name}</p>
-                    <p className="timestamp" style={{ marginLeft: '5px' }}><em>({formatTimeAgo(post.timestamp)})</em></p>
+                    {/* Link to Users.js page with search query */}
+                    <a 
+                      href="#" // Prevent default anchor behavior
+                      onClick={(e) => {
+                        e.preventDefault(); // Prevent default anchor click behavior
+                        navigate(`/users?search=${encodeURIComponent(post.name)}`); // Navigate to users page with search query
+                      }} 
+                      className="sender-name" 
+                      style={{ textDecoration: 'none', color: '#621E8B' }}
+                    >
+                      {post.name}
+                    </a>
+                    <p className="timestamp" style={{ marginLeft: '5px', fontSize: '14px' }}><em>({formatTimeAgo(post.timestamp)})</em></p>
                   </div>
                   <div className="action-links" style={{ display: 'flex', gap: '10px' }}>
                     <a href="#" onClick={() => handleLike(post._id)} style={{ textDecoration: 'none', color: '#621E8B' }}>

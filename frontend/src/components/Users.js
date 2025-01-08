@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom'; // Import useLocation
 import './Profile.css';  // Use the same CSS file for consistent styling
 
 function Users() {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
-
+  
   // Set the API URL to use Heroku in production
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
-
+  
+  // Get search query from URL parameters
+  const location = useLocation();
+  
   useEffect(() => {
+    // Parse search query from URL
+    const params = new URLSearchParams(location.search);
+    const searchParam = params.get('search');
+    if (searchParam) {
+      setSearchQuery(searchParam); // Set initial search query from URL
+    }
+
     const usersUrl = new URL('users', apiUrl);
     axios
       .get(usersUrl.toString())
@@ -20,8 +31,21 @@ function Users() {
       .catch((error) => {
         console.error('Error fetching users:', error);
       });
-  }, [apiUrl]);
-  
+  }, [apiUrl, location.search]); // Add location.search as a dependency
+
+  // Automatically select user if searchQuery is set
+  useEffect(() => {
+    if (searchQuery) {
+      const foundUser = users.find(user => 
+        user.username.toLowerCase() === searchQuery.toLowerCase() || 
+        user.name.toLowerCase() === searchQuery.toLowerCase()
+      );
+      if (foundUser) {
+        setSelectedUser(foundUser); // Automatically select the user
+        setSearchQuery(''); // Clear the search input
+      }
+    }
+  }, [searchQuery, users]);
 
   // Filter users based on the search query
   const filteredUsers = users.filter((user) => {
