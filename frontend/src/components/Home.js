@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import '../App.css';
+import './Home.css'; // Assuming you will create this CSS file for additional styles
 
 function Home() {
   const [name, setName] = useState('');
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState([]); // State to hold users for recognition
+  const [searchQuery, setSearchQuery] = useState(''); // Search query for user recognition
+  const [filteredUsers, setFilteredUsers] = useState([]); // Filtered users based on search query
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -25,10 +29,14 @@ function Home() {
         const postsResponse = await axios.get(postsUrl.toString());
         console.log('Posts response:', postsResponse.data);
         setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
+
+        // Fetch users for recognition
+        const usersUrl = new URL('users', apiUrl);
+        const usersResponse = await axios.get(usersUrl.toString());
+        console.log('Users data loaded:', usersResponse.data);
+        setUsers(usersResponse.data || []);
       } catch (error) {
         console.error('Error fetching data:', error.message);
-        console.error('Full error:', error);
-        setPosts([]);
       } finally {
         setLoading(false);
       }
@@ -38,6 +46,35 @@ function Home() {
     const interval = setInterval(fetchData, 60000);
     return () => clearInterval(interval);
   }, [apiUrl]);
+
+  // Filter users based on search query
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      const filtered = users.filter(user =>
+        (user.username?.toLowerCase().includes(lowerCaseQuery) || false) ||
+        (user.name?.toLowerCase().includes(lowerCaseQuery) || false)
+      );
+      console.log('Filtered users:', filtered); // Debugging line
+      setFilteredUsers(filtered);
+    } else {
+      setFilteredUsers([]);
+    }
+  }, [searchQuery, users]);
+
+  const handleUserClick = (user) => {
+    navigate(`/badges`, { 
+      state: { selectedUser: user } 
+    });
+    setSearchQuery('');
+    setFilteredUsers([]);
+  };
+
+  const handleSearchSubmit = () => {
+    if (filteredUsers.length > 0) {
+      handleUserClick(filteredUsers[0]); // Automatically select the first user in the suggestions
+    }
+  };
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
@@ -70,6 +107,68 @@ function Home() {
       </div>
 
       <div className="center-pane">
+        <div className="recognition-section" style={{ backgroundColor: '#621E8B', padding: '15px', borderRadius: '8px', marginBottom: '20px', position: 'relative' }}>
+          <div className="input-container" style={{ display: 'flex', alignItems: 'center' }}>
+            <input
+              type="text"
+              placeholder="Who would you like to recognize?"
+              value={searchQuery}
+              onChange={(e) => {
+                console.log('Search input changed:', e.target.value);
+                setSearchQuery(e.target.value);
+              }}
+              style={{
+                flex: '1',
+                padding: '10px',
+                borderRadius: '5px',
+                border: 'none',
+                outline: 'none',
+                marginRight: '10px'
+              }}
+            />
+            <i 
+              className='bx bx-search-alt' 
+              onClick={handleSearchSubmit} 
+              style={{ fontSize: '24px', color: 'white', cursor: 'pointer' }}
+            />
+          </div>
+
+          {filteredUsers.length > 0 && searchQuery && (
+            <div className="user-suggestions" style={{ 
+              backgroundColor: '#fff', 
+              borderRadius: '5px', 
+              marginTop: '5px',
+              maxHeight: '150px', 
+              overflowY: 'auto',
+              position: 'absolute',
+              top: '100%',
+              left: '15px',
+              right: '15px',
+              zIndex: 1000,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}>
+              <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
+                {filteredUsers.map(user => (
+                  <li 
+                    key={user.username} 
+                    onClick={() => handleUserClick(user)}
+                    style={{ 
+                      padding: '10px', 
+                      cursor: 'pointer',
+                      borderBottom: '1px solid #eee'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                  >
+                    {user.name} - {user.username}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {/* Newsfeed Section */}
         <div className="newsfeed">
           <h2>Newsfeed</h2>
           {loading ? (

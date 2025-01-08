@@ -5,6 +5,7 @@ import Lightbox from './Lightbox';
 import './Profile.css';
 import './Badges.css';
 import '../App.css';
+import { useLocation } from 'react-router-dom';
 
 function Badges() {
   const [currentUser, setCurrentUser] = useState('');
@@ -19,6 +20,15 @@ function Badges() {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedEmblem, setSelectedEmblem] = useState(null);
   const [sending, setSending] = useState(false);
+
+  const location = useLocation();
+
+useEffect(() => {
+  // Check for user passed through navigation state
+  if (location.state?.selectedUser) {
+    setSelectedUsers([location.state.selectedUser]);
+  }
+}, [location]);
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
   const navigate = useNavigate();

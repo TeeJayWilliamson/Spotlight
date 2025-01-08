@@ -1,0 +1,37 @@
+.recognition-section {
+    background-color: #621E8B; /* Purple background */
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  .recognition-input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px; /* Set border radius to 5px */
+    border: none;
+    outline: none;
+    margin-right: 10px;
+  }
+  
+  
+  .input-container {
+    display: flex;
+  }
+  
+  .input-container input {
+    flex-grow: 1;
+  }
+  
+  .user-suggestions {
+    background-color: #fff; /* White background for suggestions */
+    border-radius: 5px;
+  }
+  
+  .user-suggestions ul {
+    list-style-type: none;
+  }
+  
+  .user-suggestions li:hover {
+    background-color: #f0f0f0; /* Light gray on hover */
+  }
+  
