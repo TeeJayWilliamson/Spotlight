@@ -21,9 +21,16 @@ function Login({ setAuth, setUsername }) {
         password,
       });
 
-      localStorage.setItem('token', response.data.token);
+      // Log response data for debugging
+      console.log('Login response:', response.data);
+
+      // Assuming response contains { token, userId }
+      const { token, userId } = response.data;
+
+      // Store both token and userId in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId); // Store userId
       localStorage.setItem('username', username);
-      localStorage.setItem('name', response.data.name);
 
       if (keepLoggedIn) {
         localStorage.setItem('keepLoggedIn', 'true');
@@ -34,6 +41,7 @@ function Login({ setAuth, setUsername }) {
 
       navigate('/home');
     } catch (err) {
+      console.error('Login error:', err); // Log full error for debugging
       setError('Invalid username or password');
     }
   };

@@ -46,7 +46,21 @@ function Header({ handleLogout }) {
       <nav className="navbar-purple">
         <div className="navbar-container">
           <ul className="navbar-nav">
-            <img src={spotlightLogo} alt="Spotlight Logo" className="navbar-spotlight-logo" />
+            {isAuthenticated ? (
+              <Link to="/home">
+                <img
+                  src={spotlightLogo}
+                  alt="Spotlight Logo"
+                  className="navbar-spotlight-logo"
+                />
+              </Link>
+            ) : (
+              <img
+                src={spotlightLogo}
+                alt="Spotlight Logo"
+                className="navbar-spotlight-logo"
+              />
+            )}
           </ul>
         </div>
       </nav>
@@ -56,18 +70,18 @@ function Header({ handleLogout }) {
           <ul className="navbar-nav">
             {!isLoginPage && (
               <>
-<li className="navbar-item">
-  <Link to="/" className="navbar-link">
-  <i className="bx bxs-bulb bx-sm lightbulb-icon"></i>
-  <span>Newsfeed</span>
-  </Link>
-</li>
-<li className="navbar-item">
-  <Link to="/users" className="navbar-link">
-  <i className="bx bxs-user bx-sm user-icon"></i>
-  <span>Users</span>
-  </Link>
-</li>
+                <li className="navbar-item">
+                  <Link to="/" className="navbar-link">
+                    <i className="bx bxs-bulb bx-sm lightbulb-icon"></i>
+                    <span>Newsfeed</span>
+                  </Link>
+                </li>
+                <li className="navbar-item">
+                  <Link to="/users" className="navbar-link">
+                    <i className="bx bxs-user bx-sm user-icon"></i>
+                    <span>Users</span>
+                  </Link>
+                </li>
 
                 <li className="navbar-item">
                   <Link to="/badges" className="navbar-link">

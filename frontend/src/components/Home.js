@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
-import './Home.css'; // Assuming you will create this CSS file for additional styles
+import './Home.css';
 
 function Home() {
   const [name, setName] = useState('');
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState([]); // State to hold users for recognition
-  const [searchQuery, setSearchQuery] = useState(''); // Search query for user recognition
-  const [filteredUsers, setFilteredUsers] = useState([]); // Filtered users based on search query
+  const [users, setUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const username = localStorage.getItem('username');
+        const userId = localStorage.getItem('userId');
+        
         if (username) {
           const userUrl = new URL(`user/${username}`, apiUrl);
           const userResponse = await axios.get(userUrl.toString());
@@ -28,9 +30,15 @@ function Home() {
         const postsUrl = new URL('posts', apiUrl);
         const postsResponse = await axios.get(postsUrl.toString());
         console.log('Posts response:', postsResponse.data);
-        setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
+        
+        // Transform posts data to include likedByUser status
+        const postsData = Array.isArray(postsResponse.data) ? postsResponse.data : [];
+        const postsWithLikeStatus = postsData.map(post => ({
+          ...post,
+          likedByUser: post.likedByUsers?.includes(userId) || false
+        }));
+        setPosts(postsWithLikeStatus);
 
-        // Fetch users for recognition
         const usersUrl = new URL('users', apiUrl);
         const usersResponse = await axios.get(usersUrl.toString());
         console.log('Users data loaded:', usersResponse.data);
@@ -47,7 +55,6 @@ function Home() {
     return () => clearInterval(interval);
   }, [apiUrl]);
 
-  // Filter users based on search query
   useEffect(() => {
     if (searchQuery.trim()) {
       const lowerCaseQuery = searchQuery.toLowerCase();
@@ -55,7 +62,7 @@ function Home() {
         (user.username?.toLowerCase().includes(lowerCaseQuery) || false) ||
         (user.name?.toLowerCase().includes(lowerCaseQuery) || false)
       );
-      console.log('Filtered users:', filtered); // Debugging line
+      console.log('Filtered users:', filtered);
       setFilteredUsers(filtered);
     } else {
       setFilteredUsers([]);
@@ -72,7 +79,7 @@ function Home() {
 
   const handleSearchSubmit = () => {
     if (filteredUsers.length > 0) {
-      handleUserClick(filteredUsers[0]); // Automatically select the first user in the suggestions
+      handleUserClick(filteredUsers[0]);
     }
   };
 
@@ -86,10 +93,33 @@ function Home() {
     return `${Math.floor(diffInMinutes / 1440)} days ago`;
   };
 
-  const handleLike = (postId) => {
-    setPosts(posts.map(post => 
-      post._id === postId ? { ...post, liked: !post.liked } : post
-    ));
+  const handleLike = async (postId) => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      console.error('User ID not found');
+      return;
+    }
+
+    try {
+      const likeUrl = new URL(`posts/${postId}/like`, apiUrl);
+      const response = await axios.post(likeUrl.toString(), { userId });
+
+      if (response.data) {
+        setPosts(prevPosts =>
+          prevPosts.map(post =>
+            post._id === postId
+              ? {
+                  ...post,
+                  likes: response.data.likes,
+                  likedByUser: response.data.likedByUsers.includes(userId)
+                }
+              : post
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error liking post:', error);
+    }
   };
 
   return (
@@ -168,7 +198,6 @@ function Home() {
           )}
         </div>
 
-        {/* Newsfeed Section */}
         <div className="newsfeed">
           <h2>Newsfeed</h2>
           {loading ? (
@@ -183,42 +212,89 @@ function Home() {
                     src={post.emblem.image} 
                     alt={post.emblem.title}
                     className="emblem-image"
-                    style={{ width: '50px', height: '50px' }} // Adjusted size for emblem
+                    style={{ width: '100px', height: '100px' }}
                   />
                   <div className="emblem-info">
                     <p className="emblem-name">{post.emblem.title}</p>
                     <p className="recipients">{post.recipients.join(', ')}</p>
+                    <div className="separator" style={{
+                      height: '2px',
+                      backgroundColor: '#ccc',
+                      margin: '5px 0',
+                      marginLeft: '0'
+                    }}></div>
                   </div>
                 </div>
-                <div className="news-item-message" style={{ marginBottom: '20px', padding: '15px', borderRadius: '5px', backgroundColor: '#f9f9f9' }}>
+                
+                <div className="news-item-message" style={{ 
+                  marginBottom: '20px', 
+                  padding: '15px', 
+                  borderRadius: '5px', 
+                  backgroundColor: '#f9f9f9' 
+                }}>
                   <p>{post.message}</p>
                 </div>
-                <div className="news-item-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+
+                <div className="news-item-footer" style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center' 
+                }}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {/* Link to Users.js page with search query */}
-                    <a 
-                      href="#" // Prevent default anchor behavior
-                      onClick={(e) => {
-                        e.preventDefault(); // Prevent default anchor click behavior
-                        navigate(`/users?search=${encodeURIComponent(post.name)}`); // Navigate to users page with search query
-                      }} 
+                    <button 
+                      onClick={() => navigate(`/users?search=${encodeURIComponent(post.name)}`)} 
                       className="sender-name" 
-                      style={{ textDecoration: 'none', color: '#621E8B' }}
+                      style={{ 
+                        textDecoration: 'none', 
+                        color: '#621E8B', 
+                        background: 'none', 
+                        border: 'none', 
+                        cursor: 'pointer' 
+                      }}
                     >
                       {post.name}
-                    </a>
-                    <p className="timestamp" style={{ marginLeft: '5px', fontSize: '14px' }}><em>({formatTimeAgo(post.timestamp)})</em></p>
+                    </button>
+                    <p className="timestamp" style={{ marginLeft: '5px', fontSize: '14px' }}>
+                      <em>({formatTimeAgo(post.timestamp)})</em>
+                    </p>
                   </div>
-                  <div className="action-links" style={{ display: 'flex', gap: '10px' }}>
-                    <a href="#" onClick={() => handleLike(post._id)} style={{ textDecoration: 'none', color: '#621E8B' }}>
-                      {post.liked ? (
-                        <i className='bx bxs-like'></i> // Filled thumbs up
-                      ) : (
-                        <i className='bx bx-like'></i> // Empty thumbs up
-                      )}
-                    </a>
-                    <a href="#" style={{ textDecoration: 'none', color: '#621E8B' }}>Comment</a>
-                    <a href="#" style={{ textDecoration: 'none', color: '#621E8B' }}>Share</a>
+
+                  <div className="action-links" style={{ display: 'flex', gap: '10px', position: 'relative' }}>
+                    <button 
+                      onClick={() => handleLike(post._id)} 
+                      style={{ 
+                        textDecoration: 'none', 
+                        color: post.likedByUser ? '#621E8B' : '#666',
+                        background: 'none', 
+                        border: 'none', 
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      <i className={`bx ${post.likedByUser ? 'bxs-like' : 'bx-like'}`}></i>
+                      <span>{post.likes || 0}</span>
+                    </button>
+
+                    <button style={{ 
+                      textDecoration: 'none', 
+                      color: '#621E8B', 
+                      background: 'none', 
+                      border: 'none', 
+                      cursor: 'pointer'
+                    }}>
+                      Comment
+                    </button>
+                    <button style={{ 
+                      textDecoration: 'none', 
+                      color: '#621E8B', 
+                      background: 'none', 
+                      border: 'none', 
+                      cursor: 'pointer'
+                    }}>
+                      Share
+                    </button>
                   </div>
                 </div>
               </div>
@@ -266,7 +342,6 @@ function Home() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

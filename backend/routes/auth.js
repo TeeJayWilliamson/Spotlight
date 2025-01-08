@@ -43,7 +43,8 @@ router.post('/login', [
       { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        // Include userId in response
+        res.json({ token, userId: user.id }); // Send both token and userId
       }
     );
   } catch (err) {
