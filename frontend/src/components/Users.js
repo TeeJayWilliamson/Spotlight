@@ -11,15 +11,17 @@ function Users() {
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
 
   useEffect(() => {
+    const usersUrl = new URL('users', apiUrl);
     axios
-      .get(`${apiUrl}users`)  // Use apiUrl here
+      .get(usersUrl.toString())
       .then((response) => {
         setUsers(response.data);
       })
       .catch((error) => {
         console.error('Error fetching users:', error);
       });
-  }, []);
+  }, [apiUrl]);
+  
 
   // Filter users based on the search query
   const filteredUsers = users.filter((user) => {

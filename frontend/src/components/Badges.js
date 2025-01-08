@@ -1,6 +1,5 @@
-// Badges.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Lightbox from './Lightbox';
 import './Profile.css';
@@ -21,14 +20,14 @@ function Badges() {
   const [selectedEmblem, setSelectedEmblem] = useState(null);
   const [sending, setSending] = useState(false);
 
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
-  const navigate = useNavigate(); // Initialize useNavigate
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch current user
     const username = localStorage.getItem('username');
     if (username) {
-      axios.get(`${apiUrl}user/${username}`)
+      const userUrl = new URL(`user/${username}`, apiUrl);
+      axios.get(userUrl.toString())
         .then(response => {
           setCurrentUser(response.data.name);
         })
@@ -37,8 +36,8 @@ function Badges() {
         });
     }
 
-    // Fetch all users
-    axios.get(`${apiUrl}users`)
+    const usersUrl = new URL('users', apiUrl);
+    axios.get(usersUrl.toString())
       .then(response => {
         setUsers(response.data);
       })
@@ -83,18 +82,16 @@ function Badges() {
         isPrivate: isPrivate
       };
 
-      await axios.post(`${apiUrl}posts`, newPost);
+      const postsUrl = new URL('posts', apiUrl);
+      await axios.post(postsUrl.toString(), newPost);
 
-      // Clear form
       setSelectedEmblem(null);
       setSelectedUsers([]);
       setMessage('');
       setIsPrivate(false);
 
       alert('Recognition sent successfully!');
-
-      // Redirect to homepage
-      navigate('/home'); // Adjust the path to your newsfeed route
+      navigate('/home');
     } catch (error) {
       console.error('Error sending recognition:', error);
       alert('Failed to send recognition. Please try again.');
@@ -110,7 +107,6 @@ function Badges() {
 
   return (
     <div className="badges-container">
-      {/* Left Pane - Emblem Selector */}
       <div className="emblem-selector">
         <h3>{selectedEmblem ? selectedEmblem.title : 'Choose an Emblem'}</h3>
         <div className="circle-button" onClick={() => setIsLightboxOpen(true)}>
@@ -127,7 +123,6 @@ function Badges() {
         onSelect={handleEmblemSelect}
       />
 
-      {/* Middle Pane - Search Bar and User Selection */}
       <div className="search-container">
         <h3>Recipients:</h3>
         <div className="input-dropdown-container">
@@ -190,7 +185,6 @@ function Badges() {
         </div>
       </div>
 
-      {/* Right Pane */}
       <div className="right-pane">
         <h3>Remaining Points this Month</h3>
         <p>{pointBalance}</p>

@@ -4,15 +4,13 @@ import './Profile.css';
 
 function Rewards() {
   const [rewards, setRewards] = useState([]);
-
-  // Set the API URL to use Heroku in production
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
   useEffect(() => {
+    const rewardsUrl = new URL('rewards', apiUrl);
     axios
-      .get(`${apiUrl}rewards`) // Use apiUrl here
+      .get(rewardsUrl.toString())
       .then((response) => {
-        // Ensure the response data is an array
         if (Array.isArray(response.data)) {
           setRewards(response.data);
         } else {

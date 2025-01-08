@@ -13,14 +13,15 @@ function Header({ handleLogout }) {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
 
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
   useEffect(() => {
     const username = localStorage.getItem('username');
-
+  
     if (username) {
+      const userUrl = new URL(`user/${username}`, apiUrl);
       axios
-        .get(`${apiUrl}user/${username}`)
+        .get(userUrl.toString())
         .then((response) => {
           setName(response.data.name);
           setIsAuthenticated(true);
@@ -34,6 +35,7 @@ function Header({ handleLogout }) {
       setIsAuthenticated(false);
     }
   }, [apiUrl, location.pathname]);
+  
 
   const handleLogoutClick = () => {
     handleLogout();

@@ -20,13 +20,25 @@ const allowedApiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30
 // Middleware
 app.use(express.json());
 app.use(bodyParser.json());
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://spotlight-ttc-30e93233aa0e.herokuapp.com'
+];
+
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? 'https://spotlight-ttc-30e93233aa0e.herokuapp.com'
-    : 'http://localhost:3000',
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],

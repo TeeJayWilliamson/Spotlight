@@ -11,10 +11,11 @@ function Profile() {
 
   useEffect(() => {
     const username = localStorage.getItem('username');
-
+  
     if (username) {
+      const userUrl = new URL(`user/${username}`, apiUrl);
       axios
-        .get(`${apiUrl}user/${username}`) // Use apiUrl here
+        .get(userUrl.toString())
         .then((response) => {
           setUserInfo(response.data);
         })
@@ -22,7 +23,8 @@ function Profile() {
           console.error('Error fetching user info:', error);
         });
     }
-  }, []);
+  }, [apiUrl]);
+  
 
   if (!userInfo) {
     return <p className="loading">Loading...</p>;

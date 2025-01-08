@@ -2,19 +2,24 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Profile.css';
 
+const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+
+
 function Scorecard() {
   const [scorecard, setScorecard] = useState([]);
 
   useEffect(() => {
+    const scorecardUrl = new URL('scorecard', apiUrl);
     axios
-      .get('http://localhost:5000/scorecard') // Adjust URL if needed
+      .get(scorecardUrl.toString())
       .then((response) => {
         setScorecard(response.data);
       })
       .catch((error) => {
         console.error("Error fetching scorecard:", error);
       });
-  }, []);
+  }, [apiUrl]);
+  
 
   return (
     <div className="rewards-container">

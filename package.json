@@ -2,13 +2,16 @@
   "name": "spotlightttc",
   "version": "1.0.0",
   "main": "index.js",
-"scripts": {
-  "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
-  "start-frontend": "cd frontend && npm start",
-  "start-backend": "cd backend && node server.js",
-  "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
-  "serve": "serve -s build"
-},
+  "scripts": {
+    "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
+    "start-frontend": "cd frontend && npm start",
+    "start-backend": "cd backend && node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
+    "serve": "serve -s build",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd backend && nodemon server.js",
+    "dev:client": "cd frontend && npm start"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -31,7 +34,8 @@
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "nodemon": "^3.1.9"
   },
   "engines": {
     "node": "16.x"

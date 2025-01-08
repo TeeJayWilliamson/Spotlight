@@ -10,7 +10,7 @@ function Login({ setAuth, setUsername }) {
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
