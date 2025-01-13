@@ -306,6 +306,16 @@ textarea {
   background-color: #721099;
 }
 
+.rewards-container {
+  max-height: 100vh; /* Ensures the container doesn't exceed the viewport */
+  overflow-y: auto;  /* Allows scrolling if content overflows */
+}
+
+body {
+  overflow: auto; /* Ensures the body itself allows scrolling */
+}
+
+
 /* Keep all your existing media queries and add this one */
 @media (max-width: 768px) {
   .profile-layout {

@@ -8,13 +8,14 @@ import Users from './components/Users';
 import Badges from './components/Badges';
 import Rewards from './components/Rewards';
 import Scorecard from './components/Scorecard';
-import './App.css';     // Your other custom styles
-import 'bootstrap/dist/css/bootstrap.min.css';  // Bootstrap last
-
+import Checkout from './components/Checkout';  // Import the Checkout component
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState('');
+  const [cart, setCart] = useState([]);  // Add cart state
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -30,6 +31,7 @@ function App() {
     localStorage.removeItem('username');
     setIsAuthenticated(false);
     setUsername('');
+    setCart([]); // Clear cart on logout
   };
 
   return (
@@ -41,9 +43,9 @@ function App() {
         <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
         <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/login" />} />
         <Route path="/badges" element={isAuthenticated ? <Badges /> : <Navigate to="/login" />} />
-        <Route path="/rewards" element={isAuthenticated ? <Rewards /> : <Navigate to="/login" />} />
+        <Route path="/rewards" element={isAuthenticated ? <Rewards cart={cart} setCart={setCart} /> : <Navigate to="/login" />} />
         <Route path="/scorecard" element={isAuthenticated ? <Scorecard /> : <Navigate to="/login" />} />
-        {/* Default route points to /home */}
+        <Route path="/checkout" element={isAuthenticated ? <Checkout cart={cart} setCart={setCart} /> : <Navigate to="/login" />} />
         <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
