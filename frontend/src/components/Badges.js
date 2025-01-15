@@ -7,9 +7,22 @@ import './Badges.css';
 import '../App.css';
 import { useLocation } from 'react-router-dom';
 
+const presetMessages = [
+  "Thank you for your outstanding contribution to the team!",
+  "Great job on delivering exceptional results!",
+  "Your dedication and hard work are truly appreciated.",
+  "Thank you for going above and beyond in your work.",
+  "Your positive attitude makes such a difference to our team.",
+  "Excellent work on the recent project completion!",
+  "Your leadership and initiative are truly valued.",
+  "Thank you for being such a supportive team member.",
+  "Your innovative thinking helped solve a complex challenge.",
+  "Outstanding demonstration of our company values!"
+];
+
 function Badges() {
   const [currentUser, setCurrentUser] = useState('');
-  const [badgeType, setBadgeType] = useState('');
+  const [badgeType, setBadgeType] = useState('Free Recognition');
   const [message, setMessage] = useState('');
   const [pointBalance, setPointBalance] = useState(1000);
   const [recognizeNow, setRecognizeNow] = useState(5000);
@@ -22,16 +35,14 @@ function Badges() {
   const [sending, setSending] = useState(false);
 
   const location = useLocation();
-
-useEffect(() => {
-  // Check for user passed through navigation state
-  if (location.state?.selectedUser) {
-    setSelectedUsers([location.state.selectedUser]);
-  }
-}, [location]);
-
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+
+  useEffect(() => {
+    if (location.state?.selectedUser) {
+      setSelectedUsers([location.state.selectedUser]);
+    }
+  }, [location]);
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -39,7 +50,7 @@ useEffect(() => {
       const userUrl = new URL(`user/${username}`, apiUrl);
       axios.get(userUrl.toString())
         .then(response => {
-          setCurrentUser(response.data.name);
+          setCurrentUser(response.data);
         })
         .catch(error => {
           console.error('Error fetching current user:', error);
@@ -74,7 +85,7 @@ useEffect(() => {
 
   const handleSend = async () => {
     if (!selectedEmblem || selectedUsers.length === 0 || !message) {
-      alert('Please select an emblem, recipients, and write a message');
+      alert('Please select an emblem, recipients, and message');
       return;
     }
 
@@ -82,14 +93,15 @@ useEffect(() => {
 
     try {
       const newPost = {
-        name: currentUser,
+        name: currentUser.name,
         emblem: {
           title: selectedEmblem.title,
-          image: selectedEmblem.image
+          image: selectedEmblem.image,
         },
-        recipients: selectedUsers.map(user => user.name),
+        recipients: selectedUsers.map((user) => user.name),
         message: message,
-        isPrivate: isPrivate
+        isPrivate: isPrivate,
+        recognitionType: badgeType,
       };
 
       const postsUrl = new URL('posts', apiUrl);
@@ -99,6 +111,7 @@ useEffect(() => {
       setSelectedUsers([]);
       setMessage('');
       setIsPrivate(false);
+      setBadgeType('Free Recognition');
 
       alert('Recognition sent successfully!');
       navigate('/home');
@@ -113,6 +126,43 @@ useEffect(() => {
   const handleEmblemSelect = (emblem) => {
     setSelectedEmblem(emblem);
     setIsLightboxOpen(false);
+  };
+
+  const MessageInput = () => {
+    if (currentUser?.isManagement) {
+      return (
+        <div className="message-container">
+          <h3>Personalized Message:</h3>
+          <p>Max 1000 characters</p>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            maxLength="1000"
+            placeholder="Write your message here..."
+            rows="6"
+            className="w-full p-2 border rounded"
+          />
+        </div>
+      );
+    }
+
+    return (
+      <div className="message-container">
+        <h3>Select a Recognition Message:</h3>
+        <select 
+          value={message} 
+          onChange={(e) => setMessage(e.target.value)}
+          className="w-full p-2 border rounded"
+        >
+          <option value="">Select a message...</option>
+          {presetMessages.map((msg, index) => (
+            <option key={index} value={msg}>
+              {msg}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
   };
 
   return (
@@ -141,6 +191,7 @@ useEffect(() => {
             placeholder="Search for a user..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-2 border rounded"
           />
           {searchQuery && (
             <div className="user-suggestions-emblem">
@@ -161,12 +212,14 @@ useEffect(() => {
 
         <div className="selected-users">
           {!selectedUsers.length && <div className="empty-placeholder"></div>}
-          {selectedUsers.map(user => (
+          {selectedUsers.map((user) => (
             <div key={user.username} className="user-box">
               <span>{user.name}</span>
-              <span 
-                className="remove-user" 
-                onClick={() => setSelectedUsers(selectedUsers.filter(u => u.username !== user.username))}
+              <span
+                className="remove-user"
+                onClick={() =>
+                  setSelectedUsers(selectedUsers.filter((u) => u.username !== user.username))
+                }
               >
                 &times;
               </span>
@@ -176,36 +229,60 @@ useEffect(() => {
 
         <div className="divider-emblem" />
 
-        <div className="message-container">
-          <h3>Personalized Message:</h3>
-          <p>Max 1000 characters</p>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            maxLength="1000"
-            placeholder="Write your message here..."
-            rows="6"
-          />
-          <button 
-            onClick={handleSend} 
-            disabled={sending}
-          >
-            {sending ? 'Sending...' : 'Send'}
-          </button>
-        </div>
-      </div>
+        <MessageInput />
+
+        <div className="send-button-container mt-8">
+  <button
+    onClick={handleSend}
+    disabled={sending}
+    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
+  >
+    {sending ? 'Sending...' : 'Send'}
+  </button>
+
+  {currentUser?.isManagement && (
+    <div className="badge-options"> {/* This will align radio buttons to the far right */}
+      <label className="flex items-center">
+        <input
+          type="radio"
+          value="Free Recognition"
+          checked={badgeType === 'Free Recognition'}
+          onChange={(e) => setBadgeType(e.target.value)}
+          className="mr-2"
+        />
+        Free Recognition
+      </label>
+      <label className="flex items-center">
+        <input
+          type="radio"
+          value="Point Recognition"
+          checked={badgeType === 'Point Recognition'}
+          onChange={(e) => setBadgeType(e.target.value)}
+          className="mr-2"
+        />
+        Point Recognition
+      </label>
+    </div>
+  )}
+</div>
+
+
+
+
+
+</div>
 
       <div className="right-pane">
         <h3>Remaining Points this Month</h3>
         <p>{pointBalance}</p>
         <div className="divider" />
-        <label>
+        <label className="flex items-center space-x-2">
           <input
             type="checkbox"
             checked={isPrivate}
             onChange={() => setIsPrivate(!isPrivate)}
           />
-          Private
+          <span>Private</span>
         </label>
         <div className="divider" />
         <div className="tips-section">

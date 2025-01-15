@@ -7,18 +7,21 @@ mongoose.connect('mongodb+srv://trevorjwilliamson:DPKiDCeTtjikih65@ttccluster.u6
 })
 
   .then(() => {
+    // Update the schema to include isManagement
     const User = mongoose.model('User', {
       username: { type: String, required: true, unique: true },
       password: { type: String, required: true },
       name: { type: String, required: true },
       email: { type: String, required: true },
+      isManagement: { type: Boolean, default: false }, // New field
     });
 
     const createUser = async () => {
-      const username = '68503';
+      const username = '71500';
       const password = 'password'; // Plaintext password
-      const name = 'Joseph Sturino';
-      const email = 'joseph.sturino@ttc.ca';
+      const name = 'Kenneth Dias';
+      const email = 'kenneth.dias@ttc.ca';
+      const isManagement = true; // Assign management status
 
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,6 +32,7 @@ mongoose.connect('mongodb+srv://trevorjwilliamson:DPKiDCeTtjikih65@ttccluster.u6
         password: hashedPassword,
         name,
         email,
+        isManagement, // Include the management status
       });
 
       try {

@@ -378,3 +378,42 @@ textarea {
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .message-container .send-and-recognition {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: flex-start; /* Align items to the start */
+}
+
+.badge-options {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    margin-left: 10px; /* Small space between send button and radio options */
+}
+
+.badge-options label {
+    margin-left: 10px; /* Space between radio buttons */
+}
+
+/* Ensure proper space between the button and the dropdown */
+.mt-8 {
+    margin-top: 24px; /* Adjust this value if needed */
+  }
+  
+  /* Add Flexbox for the container */
+  .send-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Ensure radio buttons are aligned to the right */
+  .badge-options {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+  }
+  
+
