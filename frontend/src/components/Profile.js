@@ -8,7 +8,7 @@ function Profile() {
   const [avatarURL, setAvatarURL] = useState('path/to/default-image.png');
   const [imageFile, setImageFile] = useState(null);
 
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
   useEffect(() => {
     const username = localStorage.getItem('username');
