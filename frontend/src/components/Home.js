@@ -13,6 +13,23 @@ function Home() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
   const navigate = useNavigate();
+  const [profileImage, setProfileImage] = useState('');
+
+  useEffect(() => {
+    const username = localStorage.getItem('username');
+    if (username) {
+      const userUrl = new URL(`user/${username}`, apiUrl);
+      axios
+        .get(userUrl.toString())
+        .then((response) => {
+          setName(response.data.name);
+          setProfileImage(response.data.profileImage);
+        })
+        .catch((error) => {
+          console.error('Error fetching user info:', error);
+        });
+    }
+  }, [apiUrl]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -123,18 +140,27 @@ function Home() {
   };
 
   return (
-    <div className="home-container">
-      <div className="left-pane">
-        <div className="user-info">
-          <h3>{name.split(' ')[0]}'s Account</h3>
-        </div>
-        <div className="divider"></div>
-        <div className="balance-info">
-          <p className="label">Point Balance:</p>
-          <p className="large-number">1000</p>
-        </div>
-        <div className="divider"></div>
+<div className="home-container">
+  <div className="left-pane">
+    <div className="user-info">
+      <div className="user-header">
+        <h3>{name.split(' ')[0]}'s Account</h3>
+        {profileImage && (
+          <img
+            src={profileImage}
+            alt="Profile"
+            className="account-profile-image"
+          />
+        )}
       </div>
+    </div>
+    <div className="divider"></div>
+    <div className="balance-info">
+      <p className="label">Point Balance:</p>
+      <p className="large-number">1000</p>
+    </div>
+    <div className="divider"></div>
+  </div>
 
       <div className="center-pane">
         <div className="recognition-section" style={{ backgroundColor: '#621E8B', padding: '15px', borderRadius: '8px', marginBottom: '20px', position: 'relative' }}>

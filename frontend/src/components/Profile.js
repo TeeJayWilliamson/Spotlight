@@ -43,15 +43,32 @@ function Profile() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
     if (imageFile) {
       const formData = new FormData();
-      formData.append('profileImage', imageFile);
-      
+      formData.append('file', imageFile);
+  
       try {
-        await axios.post(`${apiUrl}/upload`, formData);
-        alert('Image uploaded successfully!');
+        // Upload image to Cloudinary
+        const uploadResponse = await axios.post(`${apiUrl}/upload`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+  
+        const imageUrl = uploadResponse.data.url;
+  
+        // Update user profile with new image URL
+        const username = localStorage.getItem('username');
+        await axios.post(`${apiUrl}/updateProfileImage`, {
+          username,
+          profileImage: imageUrl
+        });
+  
+        alert('Profile image updated successfully!');
+        setAvatarURL(imageUrl);
+  
       } catch (error) {
         console.error('Error uploading image:', error);
+        alert('Error uploading image');
       }
     }
   };

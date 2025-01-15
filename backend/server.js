@@ -5,15 +5,25 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const path = require('path'); // Add path module to serve static files
+const path = require('path');
 const helmet = require('helmet');
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
 
-const User = require('./models/user'); // Ensure this path matches your directory structure
-const authRoutes = require('./routes/auth'); // Correct path for auth.js
-const postsRoutes = require('./routes/posts'); // Correct path for posts.js
+const User = require('./models/user');
+const authRoutes = require('./routes/auth');
+const postsRoutes = require('./routes/posts');
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // Middleware
 app.use(express.json());
@@ -43,12 +53,12 @@ app.use(helmet.contentSecurityPolicy({
     styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
     fontSrc: ["'self'", 'https://fonts.gstatic.com'],
     scriptSrc: ["'self'", "'unsafe-inline'"],
-    imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'], // Allow Cloudinary images
+    imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'],
   },
 }));
 
 // Connect to MongoDB
-const dbURI = process.env.MONGO_URI; // Always use MONGO_URI from the .env file
+const dbURI = process.env.MONGO_URI;
 mongoose.connect(dbURI, {})
   .then(() => {
     console.log('MongoDB connected');
@@ -58,8 +68,63 @@ mongoose.connect(dbURI, {})
   });
 
 // Routes
-app.use('/auth', authRoutes);  // This maps the auth routes to /auth
-app.use('/posts', postsRoutes); // This maps the posts routes to /posts
+app.use('/auth', authRoutes);
+app.use('/posts', postsRoutes);
+
+// File upload endpoint
+app.post('/upload', upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+
+  try {
+    // Convert buffer to base64
+    const fileStr = req.file.buffer.toString('base64');
+    const fileType = req.file.mimetype;
+
+    // Upload to Cloudinary
+    const uploadResponse = await cloudinary.uploader.upload(
+      `data:${fileType};base64,${fileStr}`,
+      {
+        folder: 'profile_pictures',
+        resource_type: 'auto'
+      }
+    );
+
+    res.json({ 
+      url: uploadResponse.secure_url,
+      public_id: uploadResponse.public_id
+    });
+  } catch (error) {
+    console.error('Error uploading to Cloudinary:', error);
+    res.status(500).json({ message: 'Error uploading image' });
+  }
+});
+
+// Update profile image endpoint
+app.post('/updateProfileImage', async (req, res) => {
+  const { username, profileImage } = req.body;
+  
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { username },
+      { $set: { profileImage } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ 
+      message: 'Profile image updated successfully',
+      profileImage: updatedUser.profileImage 
+    });
+  } catch (error) {
+    console.error('Error updating profile image:', error);
+    res.status(500).json({ message: 'Error updating profile image' });
+  }
+});
 
 // Hardcoded test credentials for testing
 const TEST_USERNAME = 'testUser';
@@ -82,15 +147,14 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Compare the password with the stored hashed password (for database users)
+    // Compare the password with the stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token for the user from the database
+    // Generate JWT token for the database user
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
     res.json({ token });
   } catch (err) {
     console.error(err);
@@ -110,7 +174,7 @@ app.get('/verify-token', (req, res) => {
   }
 });
 
-// Endpoint to get user info
+// Get user info endpoint
 app.get('/user/:username', async (req, res) => {
   const { username } = req.params;
   try {
@@ -124,7 +188,7 @@ app.get('/user/:username', async (req, res) => {
   }
 });
 
-// Endpoint to get all users (for sending emblems, etc.)
+// Get all users endpoint
 app.get('/users', async (req, res) => {
   try {
     const users = await User.find();
@@ -134,7 +198,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
-// Endpoint to send an emblem to another user
+// Send emblem endpoint
 app.post('/send-emblem', async (req, res) => {
   const { fromUsername, toUsername, reason } = req.body;
   try {
@@ -145,11 +209,9 @@ app.post('/send-emblem', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Add the emblem to the recipient's profile
     toUser.emblemsReceived.push({ from: fromUsername, reason });
     fromUser.emblemsGiven += 1;
 
-    // Save the updated users
     await fromUser.save();
     await toUser.save();
 

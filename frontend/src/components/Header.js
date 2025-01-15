@@ -7,6 +7,7 @@ import spotlightLogo from '../img/spotlightlogo.png';
 
 function Header({ handleLogout }) {
   const [name, setName] = useState('');
+  const [profileImage, setProfileImage] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
@@ -22,6 +23,7 @@ function Header({ handleLogout }) {
         .get(userUrl.toString())
         .then((response) => {
           setName(response.data.name);
+          setProfileImage(response.data.profileImage);
           setIsAuthenticated(true);
         })
         .catch((error) => {
@@ -30,6 +32,7 @@ function Header({ handleLogout }) {
         });
     } else {
       setName('');
+      setProfileImage('');
       setIsAuthenticated(false);
     }
   }, [apiUrl, location.pathname]);
@@ -37,6 +40,7 @@ function Header({ handleLogout }) {
   const handleLogoutClick = () => {
     handleLogout();
     setName('');
+    setProfileImage('');
     setIsAuthenticated(false);
     localStorage.removeItem('username');
   };
@@ -100,6 +104,13 @@ function Header({ handleLogout }) {
             <ul className="navbar-nav navbar-right">
               <li className="navbar-item">
                 <Link to="/profile" className="navbar-link-profile">
+                  {profileImage && (
+                    <img
+                      src={profileImage}
+                      alt="Profile"
+                      className="header-profile-image"
+                    />
+                  )}
                   {name.split(' ')[0]}
                 </Link>
               </li>

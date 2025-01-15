@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  profileImage: { type: String, default: null }, // Add this line for profile image
   currentPointBalance: { type: Number, default: 0 },
   recognizeNowBalance: { type: Number, default: 0 },
   badgesGiven: { type: Number, default: 0 },
@@ -16,4 +17,3 @@ const UserSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('User', UserSchema, 'users');
-
