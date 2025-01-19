@@ -316,6 +316,10 @@ body {
 }
 
 
+
+
+
+
 /* Keep all your existing media queries and add this one */
 @media (max-width: 768px) {
   .profile-layout {

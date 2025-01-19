@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom'; // Import useLocation
-import './Profile.css';  // Use the same CSS file for consistent styling
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import './Profile.css';
+import './Users.css';
 
 function Users() {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
-  
-  // Set the API URL to use Heroku in production
+
+  const [imageLoaded, setImageLoaded] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com/';
-  
-  // Get search query from URL parameters
   const location = useLocation();
-  
+
   useEffect(() => {
-    // Parse search query from URL
     const params = new URLSearchParams(location.search);
     const searchParam = params.get('search');
     if (searchParam) {
-      setSearchQuery(searchParam); // Set initial search query from URL
+      setSearchQuery(searchParam);
     }
 
     const usersUrl = new URL('users', apiUrl);
@@ -31,18 +29,17 @@ function Users() {
       .catch((error) => {
         console.error('Error fetching users:', error);
       });
-  }, [apiUrl, location.search]); // Add location.search as a dependency
+  }, [apiUrl, location.search]);
 
-  // Automatically select user if searchQuery is set
   useEffect(() => {
     if (searchQuery) {
-      const foundUser = users.find(user => 
-        user.username.toLowerCase() === searchQuery.toLowerCase() || 
+      const foundUser = users.find(user =>
+        user.username.toLowerCase() === searchQuery.toLowerCase() ||
         user.name.toLowerCase() === searchQuery.toLowerCase()
       );
       if (foundUser) {
-        setSelectedUser(foundUser); // Automatically select the user
-        setSearchQuery(''); // Clear the search input
+        setSelectedUser(foundUser);
+        setSearchQuery('');
       }
     }
   }, [searchQuery, users]);
@@ -57,69 +54,90 @@ function Users() {
     );
   });
 
-  // Handle user selection from the suggestions list
   const handleUserClick = (user) => {
     setSelectedUser(user);
-    setSearchQuery('');  // Clear the search input when a user is selected
+    setSearchQuery('');
   };
 
   return (
-    <div className="profile-container">  {/* Use Profile container class for consistency */}
+    <div className="profile-container">
       <h2>Users List</h2>
       <div className="divider"></div>
 
-      {/* Search bar */}
       <div className="search-container">
         <input
           type="text"
           placeholder="Search for a user..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} // Update search query as user types
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
-        
-        {/* Conditionally render the suggestion list when there's a search query */}
+
         {searchQuery && (
           <div className="user-suggestions">
             <ul>
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
                   <li key={user.username} onClick={() => handleUserClick(user)}>
-                    <span>{user.username}</span> - <span>{user.name}</span> {/* Show username and name */}
+                    <span>{user.username}</span> - <span>{user.name}</span>
                   </li>
                 ))
               ) : (
-                <li>No users found</li> // Display a message if no users match the search query
+                <li>No users found</li>
               )}
             </ul>
           </div>
         )}
       </div>
 
-      {/* Detailed user profile */}
       {selectedUser && (
         <div className="profile-header">
           <h3>{selectedUser.name}'s Profile</h3>
           <div className="divider"></div>
-          <div className="profile-details">
-            <p><strong>Name:</strong> {selectedUser.name}</p>
-            <p><strong>Employee Number:</strong> {selectedUser.username}</p>
-            <p><strong>Email:</strong> {selectedUser.email}</p>
-            <br />
-            <p><strong>Point Balance:</strong> {selectedUser.currentPointBalance}</p>
-            <p><strong>Spotlight Now Balance:</strong> {selectedUser.recognizeNowBalance}</p>
-            <p><strong>Badges Given:</strong> {selectedUser.badgesGiven}</p>
-            <p><strong>Rewards Redeemed:</strong> {selectedUser.rewardsRedeemed}</p>
-            <p><strong>Joined:</strong> {new Date(selectedUser.joinedDate).toLocaleDateString()}</p>
+          <div className="profile-layout">
+            <div className="profile-details">
+              <p><strong>Name:</strong> {selectedUser.name}</p>
+              <p><strong>Employee Number:</strong> {selectedUser.username}</p>
+              <p><strong>Email:</strong> {selectedUser.email}</p>
+              <br />
+              <p><strong>Point Balance:</strong> {selectedUser.currentPointBalance}</p>
+              <p><strong>Spotlight Now Balance:</strong> {selectedUser.recognizeNowBalance}</p>
+              <p><strong>Badges Given:</strong> {selectedUser.badgesGiven}</p>
+              <p><strong>Rewards Redeemed:</strong> {selectedUser.rewardsRedeemed}</p>
+              <p><strong>Joined:</strong> {new Date(selectedUser.joinedDate).toLocaleDateString()}</p>
+              <p><strong>Accomplishments:</strong> {selectedUser.accomplishments || "No accomplishments yet"}</p>
 
-            <p><strong>Accomplishments:</strong> {selectedUser.accomplishments || "No accomplishments yet"}</p>
+              <div className="badges">
+                <h4>Badges Earned:</h4>
+                <ul>
+                  {(selectedUser.badges || []).map((badge, index) => (
+                    <li key={index}>{badge}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
 
-            <div className="badges">
-              <h4>Badges Earned:</h4>
-              <ul>
-                {(selectedUser.badges || []).map((badge, index) => (
-                  <li key={index}>{badge}</li>
-                ))}
-              </ul>
+            <div className="profile-image-section">
+              <div
+                className="profile-image-container"
+                style={{
+                  backgroundImage: `url(${imageLoaded ? selectedUser.profileImage : '/img/defaultprofilepic.png'})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                {/* Image will be set as background, no need for alt text */}
+                <img
+                  src={selectedUser.profileImage || '/img/defaultprofilepic.png'}
+                  alt={`${selectedUser.name}'s avatar`}
+                  className="profile-avatar"
+                  onLoad={() => setImageLoaded(true)}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/img/defaultprofilepic.png';
+                  }}
+                  style={{ display: 'none' }} // Hide the image tag itself
+                />
+              </div>
             </div>
           </div>
         </div>
