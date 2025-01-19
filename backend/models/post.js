@@ -1,3 +1,4 @@
+// models/post.js
 const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
@@ -31,13 +32,31 @@ const postSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  likes: { // New field to track total likes
+  likes: {
     type: Number,
-    default: 0 // Default to zero likes
+    default: 0
   },
-  likedByUsers: [{ // New field to track users who liked this post
-    type: String, // Assuming you are storing user IDs as strings
-    default: [] // Default to an empty array
+  likedByUsers: [{
+    type: String,
+    default: []
+  }],
+  comments: [{
+    userId: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true  // Add name to the schema
+    },
+    comment: {
+      type: String,
+      required: true
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now
+    }
   }]
 });
 

@@ -11,9 +11,20 @@ function Home() {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [profileImage, setProfileImage] = useState('');
+  const [activeCommentPost, setActiveCommentPost] = useState(null);
+  const [expandedComments, setExpandedComments] = useState({});
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
   const navigate = useNavigate();
-  const [profileImage, setProfileImage] = useState('');
+
+  const presetComments = [
+    "Great work! Keep it up! 👏",
+    "Well deserved! 🌟",
+    "Inspiring work! 💫",
+    "Amazing contribution! 🎯",
+    "Outstanding job! 🏆",
+    "Excellent work! 💪"
+  ];
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -40,15 +51,12 @@ function Home() {
         if (username) {
           const userUrl = new URL(`user/${username}`, apiUrl);
           const userResponse = await axios.get(userUrl.toString());
-          console.log('User response:', userResponse.data);
           setName(userResponse.data.name);
         }
 
         const postsUrl = new URL('posts', apiUrl);
         const postsResponse = await axios.get(postsUrl.toString());
-        console.log('Posts response:', postsResponse.data);
         
-        // Transform posts data to include likedByUser status
         const postsData = Array.isArray(postsResponse.data) ? postsResponse.data : [];
         const postsWithLikeStatus = postsData.map(post => ({
           ...post,
@@ -58,7 +66,6 @@ function Home() {
 
         const usersUrl = new URL('users', apiUrl);
         const usersResponse = await axios.get(usersUrl.toString());
-        console.log('Users data loaded:', usersResponse.data);
         setUsers(usersResponse.data || []);
       } catch (error) {
         console.error('Error fetching data:', error.message);
@@ -79,7 +86,6 @@ function Home() {
         (user.username?.toLowerCase().includes(lowerCaseQuery) || false) ||
         (user.name?.toLowerCase().includes(lowerCaseQuery) || false)
       );
-      console.log('Filtered users:', filtered);
       setFilteredUsers(filtered);
     } else {
       setFilteredUsers([]);
@@ -109,6 +115,73 @@ function Home() {
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)} hours ago`;
     return `${Math.floor(diffInMinutes / 1440)} days ago`;
   };
+
+  const toggleComments = (postId) => {
+    setExpandedComments(prev => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
+
+  const handleCommentClick = (postId) => {
+    const userId = localStorage.getItem('userId');
+    const post = posts.find(p => p._id === postId);
+    
+    // Check if user has already commented
+    if (post.comments?.some(comment => comment.userId === userId)) {
+      alert('You have already commented on this post');
+      return;
+    }
+    
+    setActiveCommentPost(activeCommentPost === postId ? null : postId);
+  };
+
+  const handleCommentSubmit = async (postId, comment) => {
+    const userId = localStorage.getItem('userId');
+    const username = localStorage.getItem('username');
+    const userName = name; // Use the name state variable that you already have
+    
+    try {
+      const commentUrl = new URL(`posts/${postId}/comment`, apiUrl);
+      const response = await axios.post(commentUrl.toString(), {
+        userId,
+        username,
+        name: userName,
+        comment: comment
+      });
+      
+      // Refresh posts to get updated comments
+      const postsUrl = new URL('posts', apiUrl);
+      const postsResponse = await axios.get(postsUrl.toString());
+      
+      const postsData = Array.isArray(postsResponse.data) ? postsResponse.data : [];
+      const postsWithLikeStatus = postsData.map(post => ({
+        ...post,
+        likedByUser: post.likedByUsers?.includes(userId) || false
+      }));
+      
+      setPosts(postsWithLikeStatus);
+      setActiveCommentPost(null);
+      
+      // Auto-expand comments for the post that was just commented on
+      setExpandedComments(prev => ({
+        ...prev,
+        [postId]: true
+      }));
+  
+      // Optionally, show a success message to the user
+      alert('Comment added successfully!');
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        // This is the case when the user has already commented
+        alert(error.response.data.message);
+      } else {
+        console.error('Error submitting comment:', error);
+        alert('An error occurred while submitting your comment. Please try again.');
+      }
+    }
+  };
+  
 
   const handleLike = async (postId) => {
     const userId = localStorage.getItem('userId');
@@ -225,14 +298,15 @@ function Home() {
         </div>
 
         <div className="newsfeed">
-          <h2>Newsfeed</h2>
-          {loading ? (
-            <div>Loading...</div>
-          ) : !Array.isArray(posts) || posts.length === 0 ? (
-            <div>No recognitions yet</div>
-          ) : (
-            posts.map((post) => (
-              <div key={post._id} className="news-item">
+        <h2>Newsfeed</h2>
+        {loading ? (
+          <div>Loading...</div>
+        ) : !Array.isArray(posts) || posts.length === 0 ? (
+          <div>No recognitions yet</div>
+        ) : (
+          posts.map((post) => (
+            <div key={post._id} className="news-item">
+                {/* News item header from first version */}
                 <div className="news-item-header">
                   <img 
                     src={post.emblem.image} 
@@ -252,6 +326,7 @@ function Home() {
                   </div>
                 </div>
                 
+                {/* Message section from first version */}
                 <div className="news-item-message" style={{ 
                   marginBottom: '20px', 
                   padding: '15px', 
@@ -262,71 +337,173 @@ function Home() {
                 </div>
 
                 <div className="news-item-footer" style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                flexDirection: 'column'
+              }}>
+                <div style={{ 
                   display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center' 
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  width: '100%'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <button 
-                      onClick={() => navigate(`/users?search=${encodeURIComponent(post.name)}`)} 
-                      className="sender-name" 
-                      style={{ 
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <button 
+                        onClick={() => navigate(`/users?search=${encodeURIComponent(post.name)}`)} 
+                        className="sender-name" 
+                        style={{ 
+                          textDecoration: 'none', 
+                          color: '#621E8B', 
+                          background: 'none', 
+                          border: 'none', 
+                          cursor: 'pointer' 
+                        }}
+                      >
+                        {post.name}
+                      </button>
+                      <p className="timestamp" style={{ marginLeft: '5px', fontSize: '14px' }}>
+                        <em>({formatTimeAgo(post.timestamp)})</em>
+                      </p>
+                    </div>
+
+                    <div className="action-links" style={{ display: 'flex', gap: '10px', position: 'relative' }}>
+                      <button 
+                        onClick={() => handleLike(post._id)} 
+                        style={{ 
+                          textDecoration: 'none', 
+                          color: post.likedByUser ? '#621E8B' : '#666',
+                          background: 'none', 
+                          border: 'none', 
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        <i className={`bx ${post.likedByUser ? 'bxs-like' : 'bx-like'}`}></i>
+                        <span>{post.likes || 0}</span>
+                      </button>
+
+                      <div className="relative">
+                      <button 
+                        onClick={() => handleCommentClick(post._id)}
+                        style={{ 
+                          textDecoration: 'none', 
+                          color: '#621E8B', 
+                          background: 'none', 
+                          border: 'none', 
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Comment {post.comments?.length > 0 && `(${post.comments.length})`}
+                      </button>
+                      
+                      {activeCommentPost === post._id && (
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '100%',
+                          right: '0',
+                          width: '200px',
+                          backgroundColor: 'white',
+                          border: '1px solid #ddd',
+                          borderRadius: '8px',
+                          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                          zIndex: 1000
+                        }}>
+                          {presetComments.map((comment, index) => (
+                            <button
+                              key={index}
+                              onClick={() => handleCommentSubmit(post._id, comment)}
+                              style={{
+                                width: '100%',
+                                textAlign: 'left',
+                                padding: '8px 12px',
+                                border: 'none',
+                                borderBottom: index < presetComments.length - 1 ? '1px solid #eee' : 'none',
+                                background: 'none',
+                                cursor: 'pointer',
+                                color: '#621E8B'
+                              }}
+                              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
+                              onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                            >
+                              {comment}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                      <button style={{ 
                         textDecoration: 'none', 
                         color: '#621E8B', 
                         background: 'none', 
                         border: 'none', 
-                        cursor: 'pointer' 
-                      }}
-                    >
-                      {post.name}
-                    </button>
-                    <p className="timestamp" style={{ marginLeft: '5px', fontSize: '14px' }}>
-                      <em>({formatTimeAgo(post.timestamp)})</em>
-                    </p>
+                        cursor: 'pointer'
+                      }}>
+                        Share
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="action-links" style={{ display: 'flex', gap: '10px', position: 'relative' }}>
-                    <button 
-                      onClick={() => handleLike(post._id)} 
-                      style={{ 
-                        textDecoration: 'none', 
-                        color: post.likedByUser ? '#621E8B' : '#666',
-                        background: 'none', 
-                        border: 'none', 
+                  {/* Comments section */}
+                  {post.comments && post.comments.length > 0 && (
+                  <div style={{ width: '100%', marginTop: '10px' }}>
+                    <button
+                      onClick={() => toggleComments(post._id)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#621E8B',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '4px'
+                        gap: '5px',
+                        marginBottom: '5px'
                       }}
                     >
-                      <i className={`bx ${post.likedByUser ? 'bxs-like' : 'bx-like'}`}></i>
-                      <span>{post.likes || 0}</span>
+                      <i className={`bx ${expandedComments[post._id] ? 'bx-chevron-up' : 'bx-chevron-down'}`}></i>
+                      {expandedComments[post._id] ? 'Hide comments' : 'Show comments'}
                     </button>
+                    
+                    {expandedComments[post._id] && (
+                      <div style={{ 
+                        padding: '10px',
+                        backgroundColor: '#f9f9f9',
+                        borderRadius: '8px'
+                      }}>
 
-                    <button style={{ 
-                      textDecoration: 'none', 
-                      color: '#621E8B', 
-                      background: 'none', 
-                      border: 'none', 
-                      cursor: 'pointer'
-                    }}>
-                      Comment
-                    </button>
-                    <button style={{ 
-                      textDecoration: 'none', 
-                      color: '#621E8B', 
-                      background: 'none', 
-                      border: 'none', 
-                      cursor: 'pointer'
-                    }}>
-                      Share
-                    </button>
+                        {post.comments.map((comment, index) => (
+                          <div key={index} style={{
+                            padding: '8px',
+                            marginBottom: '4px',
+                            borderBottom: index < post.comments.length - 1 ? '1px solid #eee' : 'none',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                          }}>
+                            <span>{comment.comment}</span>
+                            <span style={{
+                              color: '#621E8B',
+                              fontSize: '0.9em',
+                              marginLeft: '10px'
+                            }}>
+                              - {comment.name}
+                            </span>
+                          </div>
+                          
+                        ))}
+
+
+                      </div>
+                    )}
                   </div>
-                </div>
+                )}
               </div>
-            ))
-          )}
-        </div>
+            </div>
+          ))
+        )}
+      </div>
       </div>
 
       <div className="right-pane">

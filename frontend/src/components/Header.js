@@ -12,7 +12,9 @@ function Header({ handleLogout }) {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
 
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+  const apiUrl =
+    process.env.REACT_APP_API_URL ||
+    'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -90,12 +92,20 @@ function Header({ handleLogout }) {
                     <span>Rewards</span>
                   </Link>
                 </li>
+                  {/* Added the Cart Option */}
+                  <li className="navbar-item">
+                  <Link to="/checkout" className="navbar-link">
+                    <i className="bx bxs-cart-alt bx-sm"></i>
+                    <span>Cart</span>
+                  </Link>
+                </li>
                 <li className="navbar-item">
                   <Link to="/scorecard" className="navbar-link">
                     <i className="bx bxs-report bx-sm"></i>
                     <span>Scorecard</span>
                   </Link>
                 </li>
+
               </>
             )}
           </ul>

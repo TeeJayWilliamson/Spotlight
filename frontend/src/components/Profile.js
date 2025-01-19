@@ -5,14 +5,14 @@ import './Profile.css';
 
 function Profile() {
   const [userInfo, setUserInfo] = useState(null);
-  const [avatarURL, setAvatarURL] = useState('path/to/default-image.png');
+  const [avatarURL, setAvatarURL] = useState('./img/defaultprofilepic.png');
   const [imageFile, setImageFile] = useState(null);
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
   useEffect(() => {
     const username = localStorage.getItem('username');
-
+    
     if (username) {
       const userUrl = new URL(`user/${username}`, apiUrl);
       axios
@@ -28,6 +28,7 @@ function Profile() {
         });
     }
   }, [apiUrl]);
+  
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];

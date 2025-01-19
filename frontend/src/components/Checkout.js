@@ -28,7 +28,7 @@ const Checkout = ({ cart = [], setCart }) => {
           onClick={() => navigate('/rewards')}
           style={{
             padding: '10px 20px',
-            backgroundColor: '#007bff',
+            backgroundColor: '#621E8B',
             color: 'white',
             border: 'none',
             borderRadius: '5px',

@@ -36,6 +36,39 @@ router.get('/', async (req, res) => {
   }
 });
 
+// POST route to add a comment to a post
+router.post('/:id/comment', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Check if the current user has already commented on this post
+    const hasCommented = post.comments.some(comment => comment.userId === req.body.userId);
+
+    if (hasCommented) {
+      return res.status(400).json({ message: 'You have already commented on this post.' });
+    }
+
+    const newComment = {
+      userId: req.body.userId,
+      username: req.body.username,
+      name: req.body.name,
+      comment: req.body.comment,
+      timestamp: new Date()
+    };
+
+    post.comments.push(newComment);
+    const updatedPost = await post.save();
+    res.status(201).json(updatedPost);
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    res.status(500).json({ message: 'An error occurred while adding the comment.' });
+  }
+});
+
+
 // POST route to like a post
 router.post('/:id/like', async (req, res) => {
   const userId = req.body.userId; // Assuming user ID is sent in the request body
