@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Lightbox from './Lightbox';
 import './Profile.css';
 import './Badges.css';
 import '../App.css';
-import { useLocation } from 'react-router-dom';
 
 const presetMessages = [
   "Thank you for your outstanding contribution to the team!",
@@ -20,6 +19,42 @@ const presetMessages = [
   "Outstanding demonstration of our company values!"
 ];
 
+const MessageInput = ({ message, handleMessageChange, isManagement }) => {
+  if (isManagement) {
+    return (
+      <div className="message-container">
+        <h3>Personalized Message:</h3>
+        <p>Max 1000 characters</p>
+        <textarea
+          value={message}
+          onChange={handleMessageChange}
+          maxLength="1000"
+          placeholder="Write your message here..."
+          rows="6"
+          className="w-full p-2 border rounded"
+        />
+      </div>
+    );
+  }
+  return (
+    <div className="message-container">
+      <h3>Select a Recognition Message:</h3>
+      <select
+        value={message}
+        onChange={handleMessageChange}
+        className="w-full p-2 border rounded"
+      >
+        <option value="">Select a message...</option>
+        {presetMessages.map((msg, index) => (
+          <option key={index} value={msg}>
+            {msg}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
 function Badges() {
   const [currentUser, setCurrentUser] = useState('');
   const [badgeType, setBadgeType] = useState('Free Recognition');
@@ -33,6 +68,7 @@ function Badges() {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedEmblem, setSelectedEmblem] = useState(null);
   const [sending, setSending] = useState(false);
+  const [pointValue, setPointValue] = useState('');
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -76,16 +112,30 @@ function Badges() {
     );
   });
 
-  const handleUserClick = (user) => {
+  const handleUserClick = useCallback((user) => {
     if (!selectedUsers.includes(user)) {
-      setSelectedUsers([...selectedUsers, user]);
+      setSelectedUsers(prevUsers => [...prevUsers, user]);
     }
     setSearchQuery('');
+  }, [selectedUsers]);
+
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
   };
 
-  const handleSend = async () => {
+  const handlePointValueChange = (e) => {
+    const value = e.target.value.replace(/[^0-9]/g, '');
+    setPointValue(value);
+  };
+
+  const handleSend = useCallback(async () => {
     if (!selectedEmblem || selectedUsers.length === 0 || !message) {
       alert('Please select an emblem, recipients, and message');
+      return;
+    }
+
+    if (badgeType === 'Point Recognition' && !pointValue) {
+      alert('Please enter a point value for point recognition');
       return;
     }
 
@@ -102,6 +152,7 @@ function Badges() {
         message: message,
         isPrivate: isPrivate,
         recognitionType: badgeType,
+        pointValue: badgeType === 'Point Recognition' ? parseInt(pointValue) : null,
       };
 
       const postsUrl = new URL('posts', apiUrl);
@@ -112,6 +163,7 @@ function Badges() {
       setMessage('');
       setIsPrivate(false);
       setBadgeType('Free Recognition');
+      setPointValue('');
 
       alert('Recognition sent successfully!');
       navigate('/home');
@@ -121,49 +173,12 @@ function Badges() {
     } finally {
       setSending(false);
     }
-  };
+  }, [selectedEmblem, selectedUsers, message, isPrivate, badgeType, currentUser, apiUrl, navigate, pointValue]);
 
-  const handleEmblemSelect = (emblem) => {
+  const handleEmblemSelect = useCallback((emblem) => {
     setSelectedEmblem(emblem);
     setIsLightboxOpen(false);
-  };
-
-  const MessageInput = () => {
-    if (currentUser?.isManagement) {
-      return (
-        <div className="message-container">
-          <h3>Personalized Message:</h3>
-          <p>Max 1000 characters</p>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            maxLength="1000"
-            placeholder="Write your message here..."
-            rows="6"
-            className="w-full p-2 border rounded"
-          />
-        </div>
-      );
-    }
-
-    return (
-      <div className="message-container">
-        <h3>Select a Recognition Message:</h3>
-        <select 
-          value={message} 
-          onChange={(e) => setMessage(e.target.value)}
-          className="w-full p-2 border rounded"
-        >
-          <option value="">Select a message...</option>
-          {presetMessages.map((msg, index) => (
-            <option key={index} value={msg}>
-              {msg}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  };
+  }, []);
 
   return (
     <div className="badges-container">
@@ -229,39 +244,65 @@ function Badges() {
 
         <div className="divider-emblem" />
 
-        <MessageInput />
+        <MessageInput 
+          message={message}
+          handleMessageChange={handleMessageChange}
+          isManagement={currentUser?.isManagement}
+        />
 
-        <div className="send-button-container mt-8">
+
+
+<div className="flex items-center space-x-6 mt-4">
   <button
     onClick={handleSend}
     disabled={sending}
-    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
+    className="button"
   >
     {sending ? 'Sending...' : 'Send'}
   </button>
 
   {currentUser?.isManagement && (
-    <div className="badge-options"> {/* This will align radio buttons to the far right */}
-      <label className="flex items-center">
-        <input
-          type="radio"
-          value="Free Recognition"
-          checked={badgeType === 'Free Recognition'}
-          onChange={(e) => setBadgeType(e.target.value)}
-          className="mr-2"
-        />
-        Free Recognition
-      </label>
-      <label className="flex items-center">
-        <input
-          type="radio"
-          value="Point Recognition"
-          checked={badgeType === 'Point Recognition'}
-          onChange={(e) => setBadgeType(e.target.value)}
-          className="mr-2"
-        />
-        Point Recognition
-      </label>
+    <div className="flex items-center space-x-6 ml-6">
+      <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
+          <input
+            type="radio"
+            id="freeRecognition"
+            name="recognitionType"
+            value="Free Recognition"
+            checked={badgeType === 'Free Recognition'}
+            onChange={(e) => {
+              setBadgeType(e.target.value);
+              setPointValue('');
+            }}
+          />
+          <label htmlFor="freeRecognition">Free Recognition</label>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <input
+            type="radio"
+            id="pointRecognition"
+            name="recognitionType"
+            value="Point Recognition"
+            checked={badgeType === 'Point Recognition'}
+            onChange={(e) => setBadgeType(e.target.value)}
+          />
+          <label htmlFor="pointRecognition">Point Recognition</label>
+        </div>
+
+        {badgeType === 'Point Recognition' && (
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              value={pointValue}
+              onChange={handlePointValueChange}
+              placeholder="Points"
+              className="w-20 px-2 py-1 border rounded"
+            />
+          </div>
+        )}
+      </div>
     </div>
   )}
 </div>
@@ -270,7 +311,9 @@ function Badges() {
 
 
 
-</div>
+
+
+      </div>
 
       <div className="right-pane">
         <h3>Remaining Points this Month</h3>

@@ -233,7 +233,6 @@ textarea {
     margin-bottom: 10px;
 }
 
-
 .selected-user {
     margin-top: 20px;
     padding: 10px;
@@ -247,12 +246,11 @@ textarea {
     font-weight: bold;
 }
 
-
 .input-dropdown-container {
     position: relative;
-  }
+}
   
-  .user-suggestions-emblem {
+.user-suggestions-emblem {
     position: absolute;
     top: 100%; /* Position it directly below the input */
     left: 0;
@@ -263,23 +261,22 @@ textarea {
     max-height: 200px;
     overflow-y: auto;
     z-index: 10; /* Ensure it appears above other content */
-    }
-  
+}
 
-    .user-suggestions-emblem ul {
+.user-suggestions-emblem ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
-    }
+}
 
-    .user-suggestions-emblem li {
+.user-suggestions-emblem li {
     padding: 8px;
     cursor: pointer;
-    }
+}
 
-    .user-suggestions-emblem li:hover {
+.user-suggestions-emblem li:hover {
     background-color: #f1f1f1;
-    }
+}
 
 /* Buttons */
 .send-spotlight-btn {
@@ -305,14 +302,14 @@ textarea {
     cursor: pointer;
     margin-left: 20%;
     margin-top: 10px; /* Add margin to space it below the text */
-  }
+}
   
-  .circle-button img {
+.circle-button img {
     width: 100%;   /* Ensure the image fills the button */
     height: 100%;  /* Ensure the image maintains the correct aspect ratio */
     object-fit: contain; /* Ensure the image is contained within the circle */
     border-radius: 50%; /* Keep the circular shape */
-  }
+}
 
 /* Remove User Button */
 .remove-user {
@@ -328,7 +325,6 @@ textarea {
     text-decoration: underline;
 }
 
-
 .popup {
     position: fixed;
     top: 0;
@@ -339,26 +335,26 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
+}
   
-  .popup-inner {
+.popup-inner {
     background: white;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-  }
+}
   
-  .emblem-list {
+.emblem-list {
     list-style-type: none;
     padding: 0;
-  }
+}
   
-  .emblem-list li {
+.emblem-list li {
     margin: 10px 0;
     cursor: pointer;
-  }
+}
   
-  .emblem-placeholder {
+.emblem-placeholder {
     width: 50px;
     height: 50px;
     background-color: #eee;
@@ -367,9 +363,9 @@ textarea {
     justify-content: center;
     border: 1px solid #ccc;
     border-radius: 50%;
-  }
+}
   
-  .close-button {
+.close-button {
     margin-top: 20px;
     background-color: #621E8B;
     color: white;
@@ -377,43 +373,62 @@ textarea {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-  }
+}
 
-  .message-container .send-and-recognition {
+.message-container .send-and-recognition {
     display: flex;
     align-items: center; /* Align items vertically */
-    justify-content: flex-start; /* Align items to the start */
+    justify-content: flex-start; /* Align items to the left */
 }
 
-.badge-options {
-    display: flex;
-    align-items: center; /* Align items vertically */
-    margin-left: 10px; /* Small space between send button and radio options */
-}
-
-.badge-options label {
-    margin-left: 10px; /* Space between radio buttons */
-}
-
-/* Ensure proper space between the button and the dropdown */
-.mt-8 {
-    margin-top: 24px; /* Adjust this value if needed */
-  }
-  
-  /* Add Flexbox for the container */
-  .send-button-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.input-dropdown-container input {
     width: 100%;
-  }
-  
-  /* Ensure radio buttons are aligned to the right */
-  .badge-options {
+}
+
+.submit-message {
+    border: none;
+    padding: 10px 20px;
+    background-color: #621E8B;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.submit-message:hover {
+    background-color: #8e24aa;
+}
+
+/* Flex container for radio buttons and input */
+.flex.items-center.space-x-6.mt-4 {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    width: 100%;
+    gap: 10px;
   }
   
+  .flex.items-center.space-x-2 {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  input[type="radio"] {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+  }
+  
+  label {
+    font-size: 14px;
+    margin: 0;
+    cursor: pointer;
+  }
+  
+  /* Unique styling for point value input */
+  input.point-input {
+    margin-left: 10px; /* Space between the radio buttons and the input */
+    width: 60px;
+    padding: 5px;
+  }
+  
+
 
