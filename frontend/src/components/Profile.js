@@ -7,6 +7,7 @@ function Profile() {
   const [userInfo, setUserInfo] = useState(null);
   const [avatarURL, setAvatarURL] = useState('./img/defaultprofilepic.png');
   const [imageFile, setImageFile] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
@@ -28,7 +29,6 @@ function Profile() {
         });
     }
   }, [apiUrl]);
-  
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -36,6 +36,7 @@ function Profile() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarURL(reader.result);
+        setImageLoaded(true);
       };
       reader.readAsDataURL(file);
       setImageFile(file);
@@ -66,6 +67,7 @@ function Profile() {
   
         alert('Profile image updated successfully!');
         setAvatarURL(imageUrl);
+        setImageLoaded(true);
   
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -111,9 +113,29 @@ function Profile() {
           </div>
 
           <div className="profile-image-section">
-            <div className="profile-image-container">
-              <img src={avatarURL} alt="Profile" className="profile-avatar" />
-              <div className="profile-image-controls">
+            <div 
+              className="profile-image-container"
+              style={{
+                backgroundImage: `url(${imageLoaded ? avatarURL : './img/defaultprofilepic.png'})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <img
+                src={avatarURL}
+                alt="Profile"
+                className="profile-avatar"
+                onLoad={() => setImageLoaded(true)}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = './img/defaultprofilepic.png';
+                  setImageLoaded(false);
+                }}
+                style={{ display: 'none' }}
+              />
+
+            </div>
+            <div className="profile-image-controls">
                 <input 
                   type="file" 
                   accept="image/*" 
@@ -127,7 +149,6 @@ function Profile() {
                   Upload
                 </button>
               </div>
-            </div>
           </div>
         </div>
       </div>

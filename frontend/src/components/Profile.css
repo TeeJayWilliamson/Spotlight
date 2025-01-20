@@ -281,6 +281,7 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-left: -30%;
 }
 
 .profile-image-input {

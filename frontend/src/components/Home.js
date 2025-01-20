@@ -124,46 +124,91 @@ function Home() {
   };
 
   const handleCommentClick = (postId) => {
-    const username = localStorage.getItem('username');
+    const userName = name; // Use name instead of username
     const post = posts.find(p => p._id === postId);
     
-    // Check if user has already commented using username
-    if (post.comments?.some(comment => comment.username === username)) {
+    // Debug logs
+    console.log('Current user name:', userName);
+    console.log('Post comments:', post?.comments);
+    
+    if (!post) {
+      console.error('Post not found');
+      return;
+    }
+  
+    const comments = post.comments || [];
+    
+    // Log each comment's name for debugging
+    comments.forEach((comment, index) => {
+      console.log(`Comment ${index} name:`, comment.name);
+    });
+    
+    const hasCommented = comments.some(comment => {
+      const match = comment.name && comment.name.toLowerCase() === userName.toLowerCase();
+      console.log('Comparing:', comment.name, 'with', userName, 'Match:', match);
+      return match;
+    });
+    
+    if (hasCommented) {
       alert('You have already commented on this post');
       return;
     }
     
     setActiveCommentPost(activeCommentPost === postId ? null : postId);
-};
-
+  };
+  
   const handleCommentSubmit = async (postId, comment) => {
     const username = localStorage.getItem('username');
     const userName = name;
     
     try {
-      console.log('Attempting to submit comment:', {
-        postId,
-        username,
-        name: userName,
-        comment
+      // Debug log
+      console.log('Attempting to submit comment with name:', userName);
+      
+      const post = posts.find(p => p._id === postId);
+      if (!post) {
+        alert('Post not found');
+        return;
+      }
+  
+      const comments = post.comments || [];
+      
+      // Log existing comments
+      console.log('Existing comments:', comments);
+      
+      const hasCommented = comments.some(existingComment => {
+        const match = existingComment.name && 
+                     existingComment.name.toLowerCase() === userName.toLowerCase();
+        console.log('Checking existing comment:', existingComment.name, 'Match:', match);
+        return match;
       });
+      
+      if (hasCommented) {
+        alert('You have already commented on this post');
+        return;
+      }
   
       const commentUrl = new URL(`posts/${postId}/comment`, apiUrl);
+      console.log('Sending comment with data:', { username, name: userName, comment });
+      
       const response = await axios.post(commentUrl.toString(), {
         username,
         name: userName,
         comment: comment
       });
       
+      console.log('Comment response:', response.data);
+      
       // Refresh posts to get updated comments
       const postsUrl = new URL('posts', apiUrl);
       const postsResponse = await axios.get(postsUrl.toString());
       
       const postsData = Array.isArray(postsResponse.data) ? postsResponse.data : [];
+      console.log('Updated posts data:', postsData);
+      
       setPosts(postsData);
       setActiveCommentPost(null);
       
-      // Auto-expand comments for the post that was just commented on
       setExpandedComments(prev => ({
         ...prev,
         [postId]: true
