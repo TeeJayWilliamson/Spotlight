@@ -48,30 +48,47 @@ const Rewards = ({ cart = [], setCart }) => {
   const cartTotal = cart.reduce((sum, item) => sum + item.points * (item.quantity || 1), 0);
 
   const handleAddToCart = (card) => {
+    console.log('Adding to cart:', card);
+    console.log('Current Cart:', cart);
+    console.log('Point Balance:', pointBalance);
+  
+    // Check if the card is redeemable
     if (!card.redeemable) {
       alert('This gift card is not redeemable.');
       return;
     }
-
-    // Check if user has enough points
+  
+    // Calculate potential total points after adding this card
     const potentialCartTotal = cart.reduce((sum, item) => sum + item.points * (item.quantity || 1), 0) + card.points;
-    
+  
+    console.log('Potential Cart Total:', potentialCartTotal);
+  
+    // Check if user has enough points
     if (potentialCartTotal > pointBalance) {
-      alert(`Insufficient points. Your current balance is ${pointBalance} pts.`);
+      alert(`Insufficient points!\n\nCurrent Balance: ${pointBalance} pts\nRequired: ${card.points} pts\nTotal After Adding: ${potentialCartTotal} pts`);
       return;
     }
-
+  
+    // Proceed with adding to cart
     const existingCardIndex = cart.findIndex(item => item.id === card.id);
     if (existingCardIndex !== -1) {
       const updatedCart = [...cart];
       updatedCart[existingCardIndex].quantity += 1;
       setCart(updatedCart);
+      console.log('Updated existing cart item');
     } else {
-      setCart([...cart, { ...card, quantity: 1 }]);
+      const newCartItem = { ...card, quantity: 1 };
+      setCart([...cart, newCartItem]);
+      console.log('Added new cart item:', newCartItem);
     }
+  
+    // Force cart to open if needed
     setIsCartOpen(true);
     setIsCartMinimized(false);
   };
+  
+  
+  
 
   const handleRemoveFromCart = (cardId) => {
     const updatedCart = cart.map(item => 
@@ -101,7 +118,6 @@ const Rewards = ({ cart = [], setCart }) => {
         {!isCartMinimized && (
           <>
             <h2>Your Cart ({cartItemCount})</h2>
-            <p>Available Points: {pointBalance} pts</p>
           </>
         )}
         <div>
@@ -255,7 +271,6 @@ const Rewards = ({ cart = [], setCart }) => {
               <p>{card.points} pts</p>
               <button 
                 onClick={() => handleAddToCart(card)}
-                disabled={card.points > pointBalance}
               >
                 Add to Cart
               </button>
