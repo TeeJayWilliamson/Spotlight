@@ -124,27 +124,32 @@ function Home() {
   };
 
   const handleCommentClick = (postId) => {
-    const userId = localStorage.getItem('userId');
+    const username = localStorage.getItem('username');
     const post = posts.find(p => p._id === postId);
     
-    // Check if user has already commented
-    if (post.comments?.some(comment => comment.userId === userId)) {
+    // Check if user has already commented using username
+    if (post.comments?.some(comment => comment.username === username)) {
       alert('You have already commented on this post');
       return;
     }
     
     setActiveCommentPost(activeCommentPost === postId ? null : postId);
-  };
+};
 
   const handleCommentSubmit = async (postId, comment) => {
-    const userId = localStorage.getItem('userId');
     const username = localStorage.getItem('username');
-    const userName = name; // Use the name state variable that you already have
+    const userName = name;
     
     try {
+      console.log('Attempting to submit comment:', {
+        postId,
+        username,
+        name: userName,
+        comment
+      });
+  
       const commentUrl = new URL(`posts/${postId}/comment`, apiUrl);
       const response = await axios.post(commentUrl.toString(), {
-        userId,
         username,
         name: userName,
         comment: comment
@@ -155,12 +160,7 @@ function Home() {
       const postsResponse = await axios.get(postsUrl.toString());
       
       const postsData = Array.isArray(postsResponse.data) ? postsResponse.data : [];
-      const postsWithLikeStatus = postsData.map(post => ({
-        ...post,
-        likedByUser: post.likedByUsers?.includes(userId) || false
-      }));
-      
-      setPosts(postsWithLikeStatus);
+      setPosts(postsData);
       setActiveCommentPost(null);
       
       // Auto-expand comments for the post that was just commented on
@@ -169,16 +169,10 @@ function Home() {
         [postId]: true
       }));
   
-      // Optionally, show a success message to the user
       alert('Comment added successfully!');
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        // This is the case when the user has already commented
-        alert(error.response.data.message);
-      } else {
-        console.error('Error submitting comment:', error);
-        alert('An error occurred while submitting your comment. Please try again.');
-      }
+      console.error('Comment submission error:', error.response?.data || error);
+      alert(error.response?.data?.message || 'Error submitting comment. Please try again.');
     }
   };
   

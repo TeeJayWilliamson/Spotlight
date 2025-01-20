@@ -41,13 +41,9 @@ const postSchema = new mongoose.Schema({
     default: []
   }],
   comments: [{
-    userId: {
+    name: {  // Change from username to name
       type: String,
       required: true
-    },
-    name: {
-      type: String,
-      required: true  // Add name to the schema
     },
     comment: {
       type: String,
@@ -58,6 +54,8 @@ const postSchema = new mongoose.Schema({
       default: Date.now
     }
   }]
+  
+  
 });
 
 module.exports = mongoose.model('Post', postSchema, 'posts');

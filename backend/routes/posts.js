@@ -20,6 +20,7 @@ router.post('/', async (req, res) => {
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
   } catch (error) {
+    console.error('Error creating post:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -32,6 +33,7 @@ router.get('/', async (req, res) => {
       .limit(50); // Limit to most recent 50 posts
     res.json(posts);
   } catch (error) {
+    console.error('Error fetching posts:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -39,32 +41,39 @@ router.get('/', async (req, res) => {
 // POST route to add a comment to a post
 router.post('/:id/comment', async (req, res) => {
   try {
+    console.log('Received comment request:', req.body);
+    
+    if (!req.body.name || !req.body.comment) {  // Check for name and comment
+      console.log('Missing required fields');
+      return res.status(400).json({ message: 'Name and comment are required' });
+    }
+
     const post = await Post.findById(req.params.id);
     if (!post) {
+      console.log('Post not found');
       return res.status(404).json({ message: 'Post not found' });
     }
 
-    // Check if the current user has already commented on this post
-    const hasCommented = post.comments.some(comment => comment.userId === req.body.userId);
-
-    if (hasCommented) {
-      return res.status(400).json({ message: 'You have already commented on this post.' });
-    }
-
     const newComment = {
-      userId: req.body.userId,
-      username: req.body.username,
       name: req.body.name,
       comment: req.body.comment,
       timestamp: new Date()
     };
 
+    console.log('Adding new comment:', newComment);
+    
     post.comments.push(newComment);
     const updatedPost = await post.save();
+    
+    console.log('Comment added successfully');
     res.status(201).json(updatedPost);
   } catch (error) {
-    console.error('Error adding comment:', error);
-    res.status(500).json({ message: 'An error occurred while adding the comment.' });
+    console.error('Server error:', error);
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ 
+      message: 'An error occurred while adding the comment', 
+      error: error.message 
+    });
   }
 });
 
@@ -95,6 +104,7 @@ router.post('/:id/like', async (req, res) => {
     const updatedPost = await post.save();
     res.json(updatedPost);
   } catch (error) {
+    console.error('Error liking post:', error);
     res.status(500).json({ message: error.message });
   }
 });
