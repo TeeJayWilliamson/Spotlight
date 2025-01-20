@@ -172,4 +172,13 @@
     background: #e68900;
   }
   
+  .point-balance-display {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+    color: #621E8B; /* Your brand color */
+    padding: 5px;
+    border-radius: 2px;
+  }
+  
   

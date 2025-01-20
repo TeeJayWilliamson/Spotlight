@@ -232,3 +232,80 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+// Get user points
+app.get('/user-points/:username', async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ currentPointBalance: user.currentPointBalance });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Award points
+app.post('/award-points', async (req, res) => {
+  const { username, points } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { username },
+      { $inc: { currentPointBalance: points } },
+      { new: true }
+    );
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    res.json({ 
+      message: 'Points awarded successfully',
+      newBalance: user.currentPointBalance 
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/user/:id', async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  res.json(user);
+});
+
+app.post('/redeem-points', async (req, res) => {
+  const { username, pointsToDeduct } = req.body;
+  
+  try {
+    // Find the user by username
+    const user = await User.findOne({ username });
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    // Check if user has sufficient points
+    if (user.currentPointBalance < pointsToDeduct) {
+      return res.status(400).json({ message: 'Insufficient points' });
+    }
+    
+    // Deduct points
+    user.currentPointBalance -= pointsToDeduct;
+    await user.save();
+    
+    res.json({ 
+      message: 'Points redeemed successfully',
+      newBalance: user.currentPointBalance 
+    });
+  } catch (error) {
+    console.error('Redemption error:', error);
+    res.status(500).json({ message: 'Server error during redemption' });
+  }
+});
+

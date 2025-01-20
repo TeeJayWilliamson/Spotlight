@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react'; // Add useContext
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext'; // Import UserContext
 import '../App.css';
 import './Home.css';
 
@@ -16,6 +17,7 @@ function Home() {
   const [expandedComments, setExpandedComments] = useState({});
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
   const navigate = useNavigate();
+  const { pointBalance, setPointBalance } = useContext(UserContext);
 
   const presetComments = [
     "Great work! Keep it up! 👏",
@@ -35,12 +37,17 @@ function Home() {
         .then((response) => {
           setName(response.data.name);
           setProfileImage(response.data.profileImage);
+          
+          // Update point balance from user data
+          if (response.data.currentPointBalance !== undefined) {
+            setPointBalance(response.data.currentPointBalance);
+          }
         })
         .catch((error) => {
           console.error('Error fetching user info:', error);
         });
     }
-  }, [apiUrl]);
+  }, [apiUrl, setPointBalance]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -252,27 +259,27 @@ function Home() {
   };
 
   return (
-<div className="home-container">
-  <div className="left-pane">
-    <div className="user-info">
-      <div className="user-header">
-        <h3>{name.split(' ')[0]}'s Account</h3>
-        {profileImage && (
-          <img
-            src={profileImage}
-            alt="Profile"
-            className="account-profile-image"
-          />
-        )}
+    <div className="home-container">
+      <div className="left-pane">
+        <div className="user-info">
+          <div className="user-header">
+            <h3>{name.split(' ')[0]}'s Account</h3>
+            {profileImage && (
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="account-profile-image"
+              />
+            )}
+          </div>
+        </div>
+        <div className="divider"></div>
+        <div className="balance-info">
+          <p className="label">Point Balance:</p>
+          <p className="large-number">{pointBalance || 0}</p>
+        </div>
+        <div className="divider"></div>
       </div>
-    </div>
-    <div className="divider"></div>
-    <div className="balance-info">
-      <p className="label">Point Balance:</p>
-      <p className="large-number">1000</p>
-    </div>
-    <div className="divider"></div>
-  </div>
 
       <div className="center-pane">
         <div className="recognition-section" style={{ backgroundColor: '#621E8B', padding: '15px', borderRadius: '8px', marginBottom: '20px', position: 'relative' }}>

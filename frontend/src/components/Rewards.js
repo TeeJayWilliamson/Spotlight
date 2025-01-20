@@ -1,8 +1,10 @@
-  import React, { useState } from 'react';
-  import { Link } from 'react-router-dom';
-  import './Rewards.css';
+import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../UserContext'; // Import UserContext
+import './Rewards.css';
 
-  const Rewards = ({ cart = [], setCart }) => {
+const Rewards = ({ cart = [], setCart }) => {
+  const { pointBalance, setPointBalance } = useContext(UserContext); // 
     const [searchTerm, setSearchTerm] = useState("");
     const [category, setCategory] = useState("All");
     const [sortOrder, setSortOrder] = useState("Low");
@@ -43,101 +45,138 @@
       { id: 30, name: "Boston Pizza Gift Card", category: "Dining & Food Delivery", points: 80, redeemable: true, image: "/img/giftcards/boston-pizza-gc.jpg" },
   ];
 
-    const cartTotal = cart.reduce((sum, item) => sum + item.points * (item.quantity || 1), 0);
+  const cartTotal = cart.reduce((sum, item) => sum + item.points * (item.quantity || 1), 0);
 
-    const filteredGiftCards = giftCards
-      .filter((card) => (category === "All" ? true : card.category === category))
-      .filter((card) => card.name.toLowerCase().includes(searchTerm.toLowerCase()))
-      .filter((card) => (redeemableOnly ? card.redeemable : true))
-      .sort((a, b) => (sortOrder === "Low" ? a.points - b.points : b.points - a.points));
+  const handleAddToCart = (card) => {
+    if (!card.redeemable) {
+      alert('This gift card is not redeemable.');
+      return;
+    }
 
-      const handleAddToCart = (card) => {
-        if (card.redeemable) {
-          const existingCardIndex = cart.findIndex(item => item.id === card.id);
-          if (existingCardIndex !== -1) {
-            const updatedCart = [...cart];
-            updatedCart[existingCardIndex].quantity += 1;
-            setCart(updatedCart);
-          } else {
-            setCart([...cart, { ...card, quantity: 1 }]);
-          }
-          setIsCartOpen(true);
-          setIsCartMinimized(false);
-        } else {
-          alert('This gift card is not redeemable.');
-        }
-      };
-      
+    // Check if user has enough points
+    const potentialCartTotal = cart.reduce((sum, item) => sum + item.points * (item.quantity || 1), 0) + card.points;
+    
+    if (potentialCartTotal > pointBalance) {
+      alert(`Insufficient points. Your current balance is ${pointBalance} pts.`);
+      return;
+    }
 
-      const handleRemoveFromCart = (cardId) => {
-        setCart(cart.map(item => 
-          item.id === cardId
-            ? { ...item, quantity: (item.quantity || 1) - 1 }
-            : item
-        ).filter(item => item.id !== cardId || item.quantity > 0));
-      };
-      
-      const cartItemCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-      
-    // Cart component
-    const Cart = () => (
-      <div className={`cart-sidebar ${isCartMinimized ? 'minimized' : ''}`}
-          style={{ right: isCartOpen ? '0' : '-400px' }}>
-<div className="cart-header">
-  {!isCartMinimized && <h2>Your Cart ({cartItemCount})</h2>}
-  <div>
-            <button className="cart-button" onClick={() => setIsCartMinimized(!isCartMinimized)}>
-              {isCartMinimized ? '↔️' : '⬅️'}
-            </button>
-            <button className="cart-button" onClick={() => setIsCartOpen(false)}>×</button>
-          </div>
-        </div>
+    const existingCardIndex = cart.findIndex(item => item.id === card.id);
+    if (existingCardIndex !== -1) {
+      const updatedCart = [...cart];
+      updatedCart[existingCardIndex].quantity += 1;
+      setCart(updatedCart);
+    } else {
+      setCart([...cart, { ...card, quantity: 1 }]);
+    }
+    setIsCartOpen(true);
+    setIsCartMinimized(false);
+  };
 
+  const handleRemoveFromCart = (cardId) => {
+    const updatedCart = cart.map(item => 
+      item.id === cardId
+        ? { ...item, quantity: (item.quantity || 1) - 1 }
+        : item
+    ).filter(item => item.quantity > 0);
+
+    setCart(updatedCart);
+  };
+
+  const cartItemCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  
+  const filteredGiftCards = giftCards
+    .filter((card) => (category === "All" ? true : card.category === category))
+    .filter((card) => card.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((card) => (redeemableOnly ? card.redeemable : true))
+    .sort((a, b) => (sortOrder === "Low" ? a.points - b.points : b.points - a.points));
+
+  // Cart Component
+  const Cart = () => (
+    <div 
+      className={`cart-sidebar ${isCartMinimized ? 'minimized' : ''}`}
+      style={{ right: isCartOpen ? '0' : '-400px' }}
+    >
+      <div className="cart-header">
         {!isCartMinimized && (
           <>
-            {cart.length === 0 ? (
-              <p>Your cart is empty</p>
-            ) : (
-              <>
-                {cart.map((item) => (
-                  <div key={item.id} className="cart-item">
-                    <img src={item.image} alt={item.name} className="cart-item-image" />
-                    <div className="cart-item-details">
-                      <h4>{item.name} x{item.quantity}</h4>
-                      <p>{item.points * item.quantity} pts</p>
-                    </div>
-                    <button onClick={() => handleRemoveFromCart(item.id)}>Remove</button>
-                    {item.quantity > 1}
-                  </div>
-                ))}
-
-
-                <div className="cart-total">
-                  <h3>Total: {cartTotal} pts</h3>
-                  <Link to="/checkout">
-                    <button className="checkout-button">Proceed to Checkout ({cart.reduce((sum, item) => sum + item.quantity, 0)} items)</button>
-                  </Link>
-                </div>
-
-              </>
-            )}
+            <h2>Your Cart ({cartItemCount})</h2>
+            <p>Available Points: {pointBalance} pts</p>
           </>
         )}
-
-        {isCartMinimized && (
-          <div className="minimized-cart-content">
-            <p className="vertical-text">Cart ({cart.length})</p>
-            <p className="vertical-text">{cartTotal} pts</p>
-          </div>
-        )}
+        <div>
+          <button 
+            className="cart-button" 
+            onClick={() => setIsCartMinimized(!isCartMinimized)}
+          >
+            {isCartMinimized ? '↔️' : '⬅️'}
+          </button>
+          <button 
+            className="cart-button" 
+            onClick={() => setIsCartOpen(false)}
+          >
+            ×
+          </button>
+        </div>
       </div>
-    );
 
-    return (
-      <div className="rewards-container">
+      {!isCartMinimized && (
+        <>
+          {cart.length === 0 ? (
+            <p>Your cart is empty</p>
+          ) : (
+            <>
+              {cart.map((item) => (
+                <div key={item.id} className="cart-item">
+                  <img 
+                    src={item.image} 
+                    alt={item.name} 
+                    className="cart-item-image" 
+                  />
+                  <div className="cart-item-details">
+                    <h4>{item.name} x{item.quantity}</h4>
+                    <p>{item.points * item.quantity} pts</p>
+                  </div>
+                  <button onClick={() => handleRemoveFromCart(item.id)}>
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <div className="cart-total">
+                <h3>Total: {cartTotal} pts</h3>
+                <Link to="/checkout">
+                  <button 
+                    className="checkout-button"
+                    disabled={cartTotal > pointBalance}
+                  >
+                    Proceed to Checkout ({cart.reduce((sum, item) => sum + item.quantity, 0)} items)
+                  </button>
+                </Link>
+              </div>
+            </>
+          )}
+        </>
+      )}
+
+      {isCartMinimized && (
+        <div className="minimized-cart-content">
+          <p className="vertical-text">Cart ({cart.length})</p>
+          <p className="vertical-text">{cartTotal} pts</p>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="rewards-container">
+
+      {/* Main Layout for Filters and Gift Cards */}
+      <div className="rewards-content">
+        {/* Filters Sidebar */}
         <div className="filters-sidebar">
           <h2>Filters</h2>
-          
+
+          {/* Search Filter */}
           <div className="filter-group">
             <label>
               Search:
@@ -151,6 +190,7 @@
             </label>
           </div>
 
+          {/* Category Filter */}
           <div className="filter-group">
             <label>
               Category:
@@ -171,6 +211,7 @@
             </label>
           </div>
 
+          {/* Sort Order Filter */}
           <div className="filter-group">
             <label>
               Sort by Points:
@@ -185,6 +226,7 @@
             </label>
           </div>
 
+          {/* Redeemable Only Checkbox */}
           <div className="filter-group">
             <label>
               <input
@@ -197,21 +239,35 @@
           </div>
         </div>
 
-        <div className="gift-cards-grid">
-  {filteredGiftCards.map((card) => (
-    <div key={card.id} className="gift-card">
-      <img src={card.image} alt={card.name} className="gift-card-image" />
-      <h3>{card.name}</h3>
-      <p>{card.points} pts</p>
-      <button onClick={() => handleAddToCart(card)}>Add to Cart</button>
-    </div>
-  ))}
+        {/* Point Balance Display */}
+<div className="point-balance-display">
+  <p>Current Points: {pointBalance} pts</p>
 </div>
 
 
-        <Cart />
-      </div>
-    );
-  };
+        </div>
+                {/* Gift Cards Grid */}
+                <div className="gift-cards-grid">
+          {filteredGiftCards.map((card) => (
+            <div key={card.id} className="gift-card">
+              <img src={card.image} alt={card.name} className="gift-card-image" />
+              <h3>{card.name}</h3>
+              <p>{card.points} pts</p>
+              <button 
+                onClick={() => handleAddToCart(card)}
+                disabled={card.points > pointBalance}
+              >
+                Add to Cart
+              </button>
+            </div>
+          ))}
 
-  export default Rewards;
+        {/* Cart Component */}
+        <Cart />
+      </div> {/* End of rewards-content */}
+      
+    </div> // End of rewards-container
+  );
+};
+
+export default Rewards;

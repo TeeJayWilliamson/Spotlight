@@ -8,14 +8,15 @@ import Users from './components/Users';
 import Badges from './components/Badges';
 import Rewards from './components/Rewards';
 import Scorecard from './components/Scorecard';
-import Checkout from './components/Checkout';  // Import the Checkout component
+import Checkout from './components/Checkout'; // Import the Checkout component
+import { UserProvider } from './UserContext'; // Import UserProvider
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState('');
-  const [cart, setCart] = useState([]);  // Add cart state
+  const [cart, setCart] = useState([]); // Add cart state
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -35,20 +36,22 @@ function App() {
   };
 
   return (
-    <Router>
-      <Header isAuthenticated={isAuthenticated} username={username} handleLogout={handleLogout} />
-      <Routes>
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login setAuth={setIsAuthenticated} setUsername={setUsername} />} />
-        <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
-        <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/login" />} />
-        <Route path="/badges" element={isAuthenticated ? <Badges /> : <Navigate to="/login" />} />
-        <Route path="/rewards" element={isAuthenticated ? <Rewards cart={cart} setCart={setCart} /> : <Navigate to="/login" />} />
-        <Route path="/scorecard" element={isAuthenticated ? <Scorecard /> : <Navigate to="/login" />} />
-        <Route path="/checkout" element={isAuthenticated ? <Checkout cart={cart} setCart={setCart} /> : <Navigate to="/login" />} />
-        <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Header isAuthenticated={isAuthenticated} username={username} handleLogout={handleLogout} />
+        <Routes>
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login setAuth={setIsAuthenticated} setUsername={setUsername} />} />
+          <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
+          <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/users" element={isAuthenticated ? <Users /> : <Navigate to="/login" />} />
+          <Route path="/badges" element={isAuthenticated ? <Badges /> : <Navigate to="/login" />} />
+          <Route path="/rewards" element={isAuthenticated ? <Rewards cart={cart} setCart={setCart} /> : <Navigate to="/login" />} />
+          <Route path="/scorecard" element={isAuthenticated ? <Scorecard /> : <Navigate to="/login" />} />
+          <Route path="/checkout" element={isAuthenticated ? <Checkout cart={cart} setCart={setCart} /> : <Navigate to="/login" />} />
+          <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 

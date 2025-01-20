@@ -1,24 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext'; // Import UserContext
+import axios from 'axios';
 
 const Checkout = ({ cart = [], setCart }) => {
   const navigate = useNavigate();
+  const { pointBalance, setPointBalance } = useContext(UserContext); // Use UserContext
   const [isProcessing, setIsProcessing] = useState(false);
-  const userPoints = 1000;
 
   const cartTotal = cart.reduce((sum, item) => sum + item.points * (item.quantity || 1), 0);
   const cartItemCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-  const canCheckout = userPoints >= cartTotal;
+  const canCheckout = pointBalance >= cartTotal;
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
+    if (!canCheckout) return; // Prevent checkout if insufficient points
+
     setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
+    try {
+      // Use full API URL
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/redeem-points`, {
+        username: localStorage.getItem('username'),
+        pointsToDeduct: cartTotal,
+      });
+
+      // Update the point balance in context
+      setPointBalance(response.data.newBalance);
+
+      // Clear the cart
       setCart([]);
       alert('Checkout successful! Your gift cards have been redeemed.');
       navigate('/rewards');
-    }, 2000);
+    } catch (error) {
+      alert(error.response?.data?.message || 'Redemption failed. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
   };
+
 
   if (!cart || cart.length === 0) {
     return (
@@ -48,9 +66,9 @@ const Checkout = ({ cart = [], setCart }) => {
       
       <div style={{ marginBottom: '20px' }}>
         <h2>Your Points</h2>
-        <p>Available Points: {userPoints}</p>
-        <p>Total Cost: {cartTotal}</p>
-        <p>Remaining Points: {userPoints - cartTotal}</p>
+        <p>Available Points: {pointBalance}</p>
+        <p>Total Cost: {cartTotal} pts</p>
+        <p>Remaining Points: {pointBalance - cartTotal} pts</p>
       </div>
 
       <div style={{ marginBottom: '20px' }}>
