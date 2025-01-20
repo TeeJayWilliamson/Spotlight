@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './Login.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext'; // Import UserContext
 
 function Login({ setAuth, setUsername }) {
   const [username, setLocalUsername] = useState('');
@@ -9,6 +10,14 @@ function Login({ setAuth, setUsername }) {
   const [error, setError] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  // Destructure context setters
+  const { 
+    setUser, 
+    setPointBalance, 
+    setRecognizeNowBalance, 
+    setIsManagement 
+  } = useContext(UserContext);
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
@@ -24,24 +33,32 @@ function Login({ setAuth, setUsername }) {
       // Log response data for debugging
       console.log('Login response:', response.data);
 
-      // Assuming response contains { token, userId }
-      const { token, userId } = response.data;
+      // Maintain existing localStorage logic
+      const { token } = response.data;
 
-      // Store both token and userId in localStorage
       localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId); // Store userId
+      localStorage.setItem('userId', response.data.userId || ''); // Maintain existing userId storage
       localStorage.setItem('username', username);
 
       if (keepLoggedIn) {
         localStorage.setItem('keepLoggedIn', 'true');
       }
 
+      // Keep existing authentication method
       setAuth(true);
       setUsername(username);
 
+      // Additionally update UserContext
+      if (response.data.user) {
+        setUser(response.data.user);
+        setPointBalance(response.data.user.currentPointBalance || 0);
+        setRecognizeNowBalance(response.data.user.recognizeNowBalance || 0);
+        setIsManagement(response.data.user.isManagement || false);
+      }
+
       navigate('/home');
     } catch (err) {
-      console.error('Login error:', err); // Log full error for debugging
+      console.error('Login error:', err);
       setError('Invalid username or password');
     }
   };
@@ -67,7 +84,8 @@ function Login({ setAuth, setUsername }) {
           <div className="additional-options">
             <a href="#" className="forgot-details">Forgot your details?</a>
             <label>
-              <input className="keep-logged-in"
+              <input 
+                className="keep-logged-in"
                 type="checkbox"
                 checked={keepLoggedIn}
                 onChange={(e) => setKeepLoggedIn(e.target.checked)}
@@ -79,7 +97,6 @@ function Login({ setAuth, setUsername }) {
         </form>
       </div>
       <div className="login-image">
-        {/* Add your image or logo here */}
         <img src={require('../img/ttc1.png')} alt="Logo or background" />
       </div>
     </div>

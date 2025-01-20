@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
   recognizeNowBalance: { type: Number, default: 0 },
   badgesGiven: { type: Number, default: 0 },
   rewardsRedeemed: { type: Number, default: 0 },
+  isManagement: { type: Boolean, default: false }, // Add this line
   emblemsReceived: [
     { from: String, reason: String, date: { type: Date, default: Date.now } }
   ],

@@ -134,15 +134,9 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Check if the username and password match the test credentials
-    if (username === TEST_USERNAME && password === TEST_PASSWORD) {
-      // Generate JWT token for the hardcoded test user
-      const token = jwt.sign({ userId: 'testUserId' }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      return res.json({ token });
-    }
-
-    // If not a match, check the database
+    // If it's a test user, fetch from database instead of hardcoding
     const user = await User.findOne({ username });
+    
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -155,12 +149,26 @@ app.post('/login', async (req, res) => {
 
     // Generate JWT token for the database user
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    
+    // Return actual user details from database
+    res.json({ 
+      token, 
+      user: {
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        isManagement: user.isManagement || false,
+        recognizeNowBalance: user.recognizeNowBalance || 0,
+        currentPointBalance: user.currentPointBalance || 0,
+        profileImage: user.profileImage
+      }
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 app.get('/verify-token', (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
@@ -174,19 +182,33 @@ app.get('/verify-token', (req, res) => {
   }
 });
 
-// Get user info endpoint
 app.get('/user/:username', async (req, res) => {
-  const { username } = req.params;
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username: req.params.username });
+
+    console.log('Backend User Lookup:', {
+      username: user.username,
+      isManagement: user.isManagement,
+      recognizeNowBalance: user.recognizeNowBalance,
+      currentPointBalance: user.currentPointBalance
+    });
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.json(user);
-  } catch (err) {
+
+    res.json({
+      ...user.toObject(), // Spread entire user object
+      currentPointBalance: user.currentPointBalance || 0,
+      recognizeNowBalance: user.recognizeNowBalance || 0,
+      isManagement: user.isManagement || false
+    });
+  } catch (error) {
+    console.error('User Retrieval Error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // Get all users endpoint
 app.get('/users', async (req, res) => {
@@ -233,19 +255,20 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// Get user points
-app.get('/user-points/:username', async (req, res) => {
-  const { username } = req.params;
-  try {
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+  // Get user points
+  app.get('/user-points', async (req, res) => {
+    try {
+      const user = await User.findOne({ username: req.user.username });
+      res.json({
+        currentPointBalance: user.currentPointBalance,
+        recognizeNowBalance: user.recognizeNowBalance,
+        isManagement: user.isManagement
+      });
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching user points' });
     }
-    res.json({ currentPointBalance: user.currentPointBalance });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+  });
+  
 
 // Award points
 app.post('/award-points', async (req, res) => {

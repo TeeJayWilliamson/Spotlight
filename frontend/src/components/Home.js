@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react'; // Add useContext
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../UserContext'; // Import UserContext
+import { UserContext } from '../UserContext';
 import '../App.css';
 import './Home.css';
 
@@ -17,7 +17,15 @@ function Home() {
   const [expandedComments, setExpandedComments] = useState({});
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
   const navigate = useNavigate();
-  const { pointBalance, setPointBalance } = useContext(UserContext);
+
+  const { 
+    user, 
+    pointBalance, 
+    setPointBalance, 
+    isManagement, 
+    recognizeNowBalance 
+  } = useContext(UserContext);
+  
 
   const presetComments = [
     "Great work! Keep it up! 👏",
@@ -258,6 +266,10 @@ function Home() {
     }
   };
 
+  console.log('isManagement:', isManagement);
+  console.log('recognizeNowBalance:', recognizeNowBalance);
+  
+
   return (
     <div className="home-container">
       <div className="left-pane">
@@ -279,6 +291,15 @@ function Home() {
           <p className="large-number">{pointBalance || 0}</p>
         </div>
         <div className="divider"></div>
+
+        {/* Conditionally render for managers */}
+        {isManagement && (
+          <div className="recognize-now-balance">
+            <p className="label">Recognize Now Balance:</p>
+            <p className="large-number">{recognizeNowBalance || 0}</p>
+          </div>
+      )}
+        
       </div>
 
       <div className="center-pane">
