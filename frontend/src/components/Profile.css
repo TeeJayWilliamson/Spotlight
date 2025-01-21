@@ -1,5 +1,5 @@
 /* Profile.css */
-.profile-container, .badges-container, .rewards-container {
+.profile-container, .badges-container, .rewards-container, .kpi-container, .scorecard-container {
   width: 80%;
   margin: 20px auto;
   padding: 20px;

@@ -9,6 +9,7 @@ import Badges from './components/Badges';
 import Rewards from './components/Rewards';
 import Scorecard from './components/Scorecard';
 import Checkout from './components/Checkout'; // Import the Checkout component
+import Kpi from './components/Kpi'; // Adjust the path if needed
 import { UserProvider } from './UserContext'; // Import UserProvider
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -48,7 +49,9 @@ function App() {
           <Route path="/rewards" element={isAuthenticated ? <Rewards cart={cart} setCart={setCart} /> : <Navigate to="/login" />} />
           <Route path="/scorecard" element={isAuthenticated ? <Scorecard /> : <Navigate to="/login" />} />
           <Route path="/checkout" element={isAuthenticated ? <Checkout cart={cart} setCart={setCart} /> : <Navigate to="/login" />} />
+          <Route path="/kpi" element={isAuthenticated ? <Kpi /> : <Navigate to="/login" />} />
           <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+
         </Routes>
       </Router>
     </UserProvider>
