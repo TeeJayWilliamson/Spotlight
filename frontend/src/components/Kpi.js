@@ -5,80 +5,122 @@ import './Profile.css';
 const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 function Kpi() {
-  const [formData, setFormData] = useState({
-    title: '',
-    field1: '',
-    field2: '',
-    field3: '',
-  });
+  const [entries, setEntries] = useState([{ title: '', field1: '', field2: '', field3: '' }]);
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleChange = (index, field, value) => {
+    const newEntries = [...entries];
+    newEntries[index] = { ...newEntries[index], [field]: value };
+    setEntries(newEntries);
   };
 
-  const handleSubmit = (e) => {
+  const addRow = () => {
+    setEntries([...entries, { title: '', field1: '', field2: '', field3: '' }]);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post(`${apiUrl}/kpi`, formData)
-      .then((response) => {
-        setMessage('Data submitted successfully!');
-        setFormData({ title: '', field1: '', field2: '', field3: '' }); // Reset form
-      })
-      .catch((error) => {
-        console.error('Error submitting KPI data:', error);
-        setMessage('Failed to submit data');
-      });
+    setIsLoading(true);
+
+    try {
+      await Promise.all(
+        entries.map(entry => 
+          axios.post(`${apiUrl}/kpi`, entry)
+        )
+      );
+      setMessage('Data submitted successfully!');
+      setEntries([{ title: '', field1: '', field2: '', field3: '' }]);
+    } catch (error) {
+      console.error('Error submitting KPI data:', error);
+      setMessage('Failed to submit data');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="kpi-container">
       <h2>KPI Dashboard</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title:</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Field 1</th>
+                <th>Field 2</th>
+                <th>Field 3</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entries.map((entry, index) => (
+                <tr key={index}>
+                  <td>
+                    <input
+                      type="text"
+                      value={entry.title}
+                      onChange={(e) => handleChange(index, 'title', e.target.value)}
+                      placeholder="Title"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={entry.field1}
+                      onChange={(e) => handleChange(index, 'field1', e.target.value)}
+                      placeholder="Field 1"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={entry.field2}
+                      onChange={(e) => handleChange(index, 'field2', e.target.value)}
+                      placeholder="Field 2"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={entry.field3}
+                      onChange={(e) => handleChange(index, 'field3', e.target.value)}
+                      placeholder="Field 3"
+                      required
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <div>
-          <label>Field 1:</label>
-          <input
-            type="text"
-            name="field1"
-            value={formData.field1}
-            onChange={handleChange}
-            required
-          />
+        
+        <div className="button-container">
+          <button 
+            type="button" 
+            onClick={addRow}
+            className="add-button"
+          >
+            Add Row
+          </button>
+          <button 
+            type="submit"
+            disabled={isLoading}
+            className="submit-button"
+          >
+            {isLoading ? 'Submitting...' : 'Submit All'}
+          </button>
         </div>
-        <div>
-          <label>Field 2:</label>
-          <input
-            type="text"
-            name="field2"
-            value={formData.field2}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Field 3:</label>
-          <input
-            type="text"
-            name="field3"
-            value={formData.field3}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">Submit</button>
       </form>
-      {message && <p className="message">{message}</p>}
+      
+      {message && (
+        <div className={`message ${message.includes('success') ? 'success' : 'error'}`}>
+          {message}
+        </div>
+      )}
     </div>
   );
 }

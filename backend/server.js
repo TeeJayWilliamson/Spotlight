@@ -11,7 +11,7 @@ const helmet = require('helmet');
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
-
+const kpiRoutes = require('./routes/kpi');
 const User = require('./models/user');
 const authRoutes = require('./routes/auth');
 const postsRoutes = require('./routes/posts');
@@ -56,6 +56,7 @@ app.use(bodyParser.json());
 
 // Routes should come after middleware
 app.use('/api', pointTransactions);
+app.use('/', kpiRoutes);
 
 
 
@@ -369,6 +370,9 @@ app.post('/redeem-points', async (req, res) => {
     res.status(500).json({ message: 'Server error during redemption' });
   }
 });
+
+
+
 
 
 
