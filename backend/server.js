@@ -1,4 +1,5 @@
 require('dotenv').config(); // Ensure dotenv is loaded at the top
+const pointTransactions = require('./routes/pointTransactions');
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -25,15 +26,13 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Middleware
-app.use(express.json());
-app.use(bodyParser.json());
-
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:5000',
   'https://spotlight-ttc-30e93233aa0e.herokuapp.com'
 ];
 
+// Apply CORS configuration first
 app.use(cors({
   origin: function(origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
@@ -42,9 +41,25 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
+
+app.options('*', cors());
+
+// Then apply other middleware
+app.use(express.json());
+app.use(bodyParser.json());
+
+// Routes should come after middleware
+app.use('/api', pointTransactions);
+
+
+
+
 
 app.use(helmet.contentSecurityPolicy({
   directives: {
@@ -70,6 +85,7 @@ mongoose.connect(dbURI, {})
 // Routes
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
+app.use('/api', pointTransactions);  // Add this line here
 
 // File upload endpoint
 app.post('/upload', upload.single('file'), async (req, res) => {
@@ -268,6 +284,28 @@ app.listen(port, () => {
       res.status(500).json({ message: 'Error fetching user points' });
     }
   });
+
+  app.post('/point-transfer', async (req, res) => {
+    try {
+      console.log('Request Body:', req.body);
+  
+      // Simulate point transfer logic
+      const pointsTransferred = await transferPoints(req.body);
+      console.log('Points Transferred:', pointsTransferred);
+  
+      // Simulate recognition logic
+      const recognitionAdded = await addRecognition(req.body);
+      console.log('Recognition Added:', recognitionAdded);
+  
+      // Send success response
+      res.status(201).json({ success: true, pointsTransferred, recognitionAdded });
+    } catch (error) {
+      console.error('Error during point transfer or recognition:', error);
+      res.status(500).json({ success: false, message: 'Server error', error });
+    }
+  });
+  
+  
   
 
 // Award points
@@ -331,4 +369,6 @@ app.post('/redeem-points', async (req, res) => {
     res.status(500).json({ message: 'Server error during redemption' });
   }
 });
+
+
 

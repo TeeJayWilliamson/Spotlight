@@ -101,13 +101,13 @@ function Users() {
               <br />
               <p><strong>Point Balance:</strong> {selectedUser.currentPointBalance}</p>
               <p><strong>Spotlight Now Balance:</strong> {selectedUser.recognizeNowBalance}</p>
-              <p><strong>Badges Given:</strong> {selectedUser.badgesGiven}</p>
+              <p><strong>Emblems Given:</strong> {selectedUser.badgesGiven}</p>
               <p><strong>Rewards Redeemed:</strong> {selectedUser.rewardsRedeemed}</p>
               <p><strong>Joined:</strong> {new Date(selectedUser.joinedDate).toLocaleDateString()}</p>
               <p><strong>Accomplishments:</strong> {selectedUser.accomplishments || "No accomplishments yet"}</p>
 
               <div className="badges">
-                <h4>Badges Earned:</h4>
+                <h4>Emblems Earned:</h4>
                 <ul>
                   {(selectedUser.badges || []).map((badge, index) => (
                     <li key={index}>{badge}</li>

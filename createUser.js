@@ -5,39 +5,58 @@ mongoose.connect('mongodb+srv://trevorjwilliamson:DPKiDCeTtjikih65@ttccluster.u6
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-
   .then(() => {
-    // Update the schema to include isManagement
-    const User = mongoose.model('User', {
+    console.log('Connected to MongoDB');
+
+    // Full schema
+    const UserSchema = new mongoose.Schema({
       username: { type: String, required: true, unique: true },
       password: { type: String, required: true },
       name: { type: String, required: true },
-      email: { type: String, required: true },
-      isManagement: { type: Boolean, default: false }, // New field
+      email: { type: String, required: true, unique: true },
+      profileImage: { type: String, default: null },
+      currentPointBalance: { type: Number, default: 0 },
+      recognizeNowBalance: { type: Number, default: 0 },
+      badgesGiven: { type: Number, default: 0 },
+      rewardsRedeemed: { type: Number, default: 0 },
+      isManagement: { type: Boolean, default: false },
+      emblemsReceived: [
+        { from: String, reason: String, date: { type: Date, default: Date.now } }
+      ],
+      joinedDate: { type: Date, default: Date.now },
     });
 
+    const User = mongoose.model('User', UserSchema, 'users');
+
     const createUser = async () => {
-      const username = '71500';
+      const username = 'badge number';
       const password = 'password'; // Plaintext password
-      const name = 'Kenneth Dias';
-      const email = 'kenneth.dias@ttc.ca';
-      const isManagement = true; // Assign management status
+      const name = 'First and Last Name';
+      const email = 'Employee Email';
+      const isManagement = false;
 
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Save the user
+      // Create and save the new user
       const newUser = new User({
         username,
         password: hashedPassword,
         name,
         email,
-        isManagement, // Include the management status
+        profileImage: null,
+        currentPointBalance: 0,
+        recognizeNowBalance: 0,
+        badgesGiven: 0,
+        rewardsRedeemed: 0,
+        isManagement,
+        emblemsReceived: [],
+        joinedDate: new Date(),
       });
 
       try {
         await newUser.save();
-        console.log('User created');
+        console.log('User created successfully');
       } catch (err) {
         console.error('Error creating user:', err.message);
       } finally {

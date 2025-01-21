@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Lightbox from './Lightbox';
+import { UserContext } from '../UserContext';
 import './Profile.css';
 import './Badges.css';
 import '../App.css';
-import { useContext } from 'react';
-import { UserContext } from '../UserContext'; // Adjust path as necessary
-
 
 const presetMessages = [
   "Thank you for your outstanding contribution to the team!",
@@ -136,49 +134,43 @@ function Badges() {
       return;
     }
 
-    if (badgeType === 'Recognize Now Recognition') {
-      if (!pointValue) {
-        alert('Please enter a point value for Recognize Now recognition');
+    if (badgeType === 'Point Recognition') {
+      if (!pointValue || pointValue <= 0) {
+        alert('Please enter a valid point value for point recognition');
         return;
       }
 
-      try {
-        const response = await axios.post(`${apiUrl}/send-recognize-now`, {
-          senderId: currentUser._id,
-          recipientIds: selectedUsers.map(user => user._id),
-          points: parseInt(pointValue),
-          message: message,
-          emblem: {
-            title: selectedEmblem.title,
-            image: selectedEmblem.image,
-          }
-        });
-
-        // Update recognizeNowBalance from context
-        setRecognizeNowBalance(prev => prev - (pointValue * selectedUsers.length));
-        
-        // Reset form
-        setSelectedEmblem(null);
-        setSelectedUsers([]);
-        setMessage('');
-        setIsPrivate(false);
-        setBadgeType('Free Recognition');
-        setPointValue('');
-
-        alert('Recognize Now recognition sent successfully!');
-        navigate('/home');
-      } catch (error) {
-        console.error('Error sending Recognize Now recognition:', error);
-        alert(error.response?.data?.message || 'Failed to send recognition. Please try again.');
+      const pointsToSend = parseInt(pointValue) * selectedUsers.length;
+      if (pointsToSend > recognizeNowBalance) {
+        alert(`Insufficient RecognizeNow balance. You need ${pointsToSend} points but have ${recognizeNowBalance}`);
+        return;
       }
-      return;
     }
 
-  
-    // Existing Point/Free Recognition logic remains the same
     setSending(true);
+    const token = localStorage.getItem('token');
 
     try {
+      if (badgeType === 'Point Recognition') {
+        // Handle point transfer
+        const pointTransferResponse = await axios.post(
+          `${apiUrl}/api/point-transfer`,
+          {
+            senderUsername: currentUser.username,
+            recipients: selectedUsers.map(user => user.username),
+            pointAmount: parseInt(pointValue)
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+
+        if (pointTransferResponse.data.newSenderBalance !== undefined) {
+          setRecognizeNowBalance(pointTransferResponse.data.newSenderBalance);
+        }
+      }
+
+      // Create recognition post
       const newPost = {
         name: currentUser.name,
         emblem: {
@@ -192,10 +184,16 @@ function Badges() {
         pointValue: badgeType === 'Point Recognition' ? parseInt(pointValue) : null,
       };
 
-      const postsUrl = new URL('posts', apiUrl);
-      await axios.post(postsUrl.toString(), newPost);
+      await axios.post(
+        `${apiUrl}/posts`,
+        newPost,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      
 
-      // Reset form after sending
+      // Reset form
       setSelectedEmblem(null);
       setSelectedUsers([]);
       setMessage('');
@@ -207,12 +205,23 @@ function Badges() {
       navigate('/home');
     } catch (error) {
       console.error('Error sending recognition:', error);
-      alert('Failed to send recognition. Please try again.');
+      alert(error.response?.data?.message || 'Failed to send recognition. Please try again.');
     } finally {
       setSending(false);
     }
-  }, [selectedEmblem, selectedUsers, message, isPrivate, badgeType, currentUser, apiUrl, navigate, pointValue]);
-  
+  }, [
+    selectedEmblem,
+    selectedUsers,
+    message,
+    isPrivate,
+    badgeType,
+    pointValue,
+    currentUser,
+    apiUrl,
+    navigate,
+    recognizeNowBalance,
+    setRecognizeNowBalance
+  ]);
 
   const handleEmblemSelect = useCallback((emblem) => {
     setSelectedEmblem(emblem);
@@ -288,66 +297,67 @@ function Badges() {
           handleMessageChange={handleMessageChange}
           isManagement={currentUser?.isManagement}
         />
-<div className="flex items-center space-x-6 mt-4">
-  <button
-    onClick={handleSend}
-    disabled={sending}
-    className="button"
-  >
-    {sending ? 'Sending...' : 'Send'}
-  </button>
 
-  {currentUser?.isManagement && (
-    <div className="flex items-center space-x-6 ml-6">
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
-          <input
-            type="radio"
-            id="freeRecognition"
-            name="recognitionType"
-            value="Free Recognition"
-            checked={badgeType === 'Free Recognition'}
-            onChange={(e) => {
-              setBadgeType(e.target.value);
-              setPointValue('');
-            }}
-          />
-          <label htmlFor="freeRecognition">Free Recognition</label>
+        <div className="flex items-center space-x-6 mt-4">
+          <button
+            onClick={handleSend}
+            disabled={sending}
+            className="button"
+          >
+            {sending ? 'Sending...' : 'Send'}
+          </button>
+
+          {currentUser?.isManagement && (
+            <div className="flex items-center space-x-6 ml-6">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="freeRecognition"
+                    name="recognitionType"
+                    value="Free Recognition"
+                    checked={badgeType === 'Free Recognition'}
+                    onChange={(e) => {
+                      setBadgeType(e.target.value);
+                      setPointValue('');
+                    }}
+                  />
+                  <label htmlFor="freeRecognition">Free Recognition</label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="pointRecognition"
+                    name="recognitionType"
+                    value="Point Recognition"
+                    checked={badgeType === 'Point Recognition'}
+                    onChange={(e) => setBadgeType(e.target.value)}
+                  />
+                  <label htmlFor="pointRecognition">Point Recognition</label>
+                </div>
+
+                {badgeType === 'Point Recognition' && (
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      value={pointValue}
+                      onChange={handlePointValueChange}
+                      placeholder="Points"
+                      className="w-20 px-2 py-1 border rounded"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
-
-        <div className="flex items-center space-x-2">
-          <input
-            type="radio"
-            id="pointRecognition"
-            name="recognitionType"
-            value="Point Recognition"
-            checked={badgeType === 'Point Recognition'}
-            onChange={(e) => setBadgeType(e.target.value)}
-          />
-          <label htmlFor="pointRecognition">Point Recognition</label>
-        </div>
-
-        {badgeType === 'Point Recognition' && (
-          <div className="flex items-center space-x-2">
-            <input
-              type="text"
-              value={pointValue}
-              onChange={handlePointValueChange}
-              placeholder="Points"
-              className="w-20 px-2 py-1 border rounded"
-            />
-          </div>
-        )}
-      </div>
-    </div>
-  )}
-</div>
       </div>
 
       <div className="right-pane">
-      <div className="recognize-now-balance">
-      <p className="label">Remaining Points this Month</p>
-        <p className="large-number">{pointBalance}</p>
+        <div className="recognize-now-balance">
+          <p className="label">Remaining Points this Month</p>
+          <p className="large-number">{pointBalance}</p>
         </div>
         <div className="divider" />
         <label className="flex items-center space-x-2">
