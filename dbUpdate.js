@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const MONGO_URI =
-  "mongodb+srv://trevorjwilliamson:DPKiDCeTtjikih65@ttccluster.u6ybt.mongodb.net/spotlightTTC?retryWrites=true&w=majority";
+  "get uri from ENV";
 
 // Connect to MongoDB
 const connectDB = async () => {

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-mongoose.connect('mongodb+srv://trevorjwilliamson:DPKiDCeTtjikih65@ttccluster.u6ybt.mongodb.net/spotlightTTC?retryWrites=true&w=majority', {
+mongoose.connect('Get URI from env', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
