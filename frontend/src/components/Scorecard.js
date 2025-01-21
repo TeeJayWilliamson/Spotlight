@@ -29,22 +29,11 @@ function Scorecard() {
 
   return (
     <div className="rewards-container">
-      <h2>Scorecard</h2>
-      <div className="divider"></div>
-      {error && <p className="error-message">{error}</p>}
-      {Array.isArray(scorecard) && scorecard.length > 0 ? (
-        <ul>
-          {scorecard.map((item) => (
-            <li key={item.id}>
-              <span>{item.name}</span>
-              {/* Additional scorecard info could be added here */}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No scorecard data available</p>
-      )}
+      <h2>Scorecard</h2>  
+      <div className="divider"></div> 
     </div>
+    
+    
   );
 }
 

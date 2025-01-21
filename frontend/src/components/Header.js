@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'boxicons/css/boxicons.min.css';
 import './Header.css';
@@ -9,7 +9,9 @@ function Header({ handleLogout }) {
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isManagement, setIsManagement] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate(); // Use navigate hook
   const isLoginPage = location.pathname === '/login';
 
   const apiUrl =
@@ -27,6 +29,7 @@ function Header({ handleLogout }) {
           setName(response.data.name);
           setProfileImage(response.data.profileImage);
           setIsAuthenticated(true);
+          setIsManagement(response.data.isManagement || false); // Set isManagement flag
         })
         .catch((error) => {
           console.error('Error fetching user info:', error);
@@ -36,6 +39,7 @@ function Header({ handleLogout }) {
       setName('');
       setProfileImage('');
       setIsAuthenticated(false);
+      setIsManagement(false);
     }
   }, [apiUrl, location.pathname]);
 
@@ -44,7 +48,9 @@ function Header({ handleLogout }) {
     setName('');
     setProfileImage('');
     setIsAuthenticated(false);
+    setIsManagement(false);
     localStorage.removeItem('username');
+    navigate('/login'); // Navigate to the login page after logging out
   };
 
   return (
@@ -92,8 +98,7 @@ function Header({ handleLogout }) {
                     <span>Rewards</span>
                   </Link>
                 </li>
-                  {/* Added the Cart Option */}
-                  <li className="navbar-item">
+                <li className="navbar-item">
                   <Link to="/checkout" className="navbar-link">
                     <i className="bx bxs-cart-alt bx-sm"></i>
                     <span>Cart</span>
@@ -105,7 +110,14 @@ function Header({ handleLogout }) {
                     <span>Scorecard</span>
                   </Link>
                 </li>
-
+                {isManagement && ( // Conditionally render KPI item
+                  <li className="navbar-item">
+                    <Link to="/kpi" className="navbar-link">
+                      <i className="bx bxs-chart bx-sm"></i>
+                      <span>KPI</span>
+                    </Link>
+                  </li>
+                )}
               </>
             )}
           </ul>
