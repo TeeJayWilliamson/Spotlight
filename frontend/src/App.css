@@ -219,13 +219,15 @@ header .users-link span {
 }
 
 .balance-info,
-.recognize-info {
+.recognize-info,
+.recognize-now-balance {
   margin-top: 20px;
   margin-left: 15px;
 }
 
 .balance-info .label,
-.recognize-info .label {
+.recognize-info .label,
+.recognize-now-balance .label {
   font-size: 16px;
   color: #621E8B;
 }
@@ -408,7 +410,7 @@ header .users-link span {
   color: white;
   cursor: pointer;
   font-size: 18px;
-  margin-bottom: 15%;
+  margin-bottom: 25%;
 }
 
 .logout-button:hover {

@@ -5,6 +5,9 @@ import Lightbox from './Lightbox';
 import './Profile.css';
 import './Badges.css';
 import '../App.css';
+import { useContext } from 'react';
+import { UserContext } from '../UserContext'; // Adjust path as necessary
+
 
 const presetMessages = [
   "Thank you for your outstanding contribution to the team!",
@@ -56,11 +59,10 @@ const MessageInput = ({ message, handleMessageChange, isManagement }) => {
 };
 
 function Badges() {
-  const [currentUser, setCurrentUser] = useState('');
+  const { recognizeNowBalance, setRecognizeNowBalance, pointBalance, setPointBalance, user } = useContext(UserContext);
+  const [currentUser, setCurrentUser] = useState(user);
   const [badgeType, setBadgeType] = useState('Free Recognition');
   const [message, setMessage] = useState('');
-  const [pointBalance, setPointBalance] = useState(1000);
-  const [recognizeNow, setRecognizeNow] = useState(5000);
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -134,11 +136,46 @@ function Badges() {
       return;
     }
 
-    if (badgeType === 'Point Recognition' && !pointValue) {
-      alert('Please enter a point value for point recognition');
+    if (badgeType === 'Recognize Now Recognition') {
+      if (!pointValue) {
+        alert('Please enter a point value for Recognize Now recognition');
+        return;
+      }
+
+      try {
+        const response = await axios.post(`${apiUrl}/send-recognize-now`, {
+          senderId: currentUser._id,
+          recipientIds: selectedUsers.map(user => user._id),
+          points: parseInt(pointValue),
+          message: message,
+          emblem: {
+            title: selectedEmblem.title,
+            image: selectedEmblem.image,
+          }
+        });
+
+        // Update recognizeNowBalance from context
+        setRecognizeNowBalance(prev => prev - (pointValue * selectedUsers.length));
+        
+        // Reset form
+        setSelectedEmblem(null);
+        setSelectedUsers([]);
+        setMessage('');
+        setIsPrivate(false);
+        setBadgeType('Free Recognition');
+        setPointValue('');
+
+        alert('Recognize Now recognition sent successfully!');
+        navigate('/home');
+      } catch (error) {
+        console.error('Error sending Recognize Now recognition:', error);
+        alert(error.response?.data?.message || 'Failed to send recognition. Please try again.');
+      }
       return;
     }
 
+  
+    // Existing Point/Free Recognition logic remains the same
     setSending(true);
 
     try {
@@ -158,6 +195,7 @@ function Badges() {
       const postsUrl = new URL('posts', apiUrl);
       await axios.post(postsUrl.toString(), newPost);
 
+      // Reset form after sending
       setSelectedEmblem(null);
       setSelectedUsers([]);
       setMessage('');
@@ -174,6 +212,7 @@ function Badges() {
       setSending(false);
     }
   }, [selectedEmblem, selectedUsers, message, isPrivate, badgeType, currentUser, apiUrl, navigate, pointValue]);
+  
 
   const handleEmblemSelect = useCallback((emblem) => {
     setSelectedEmblem(emblem);
@@ -249,9 +288,6 @@ function Badges() {
           handleMessageChange={handleMessageChange}
           isManagement={currentUser?.isManagement}
         />
-
-
-
 <div className="flex items-center space-x-6 mt-4">
   <button
     onClick={handleSend}
@@ -306,18 +342,13 @@ function Badges() {
     </div>
   )}
 </div>
-
-
-
-
-
-
-
       </div>
 
       <div className="right-pane">
-        <h3>Remaining Points this Month</h3>
-        <p>{pointBalance}</p>
+      <div className="recognize-now-balance">
+      <p className="label">Remaining Points this Month</p>
+        <p className="large-number">{pointBalance}</p>
+        </div>
         <div className="divider" />
         <label className="flex items-center space-x-2">
           <input

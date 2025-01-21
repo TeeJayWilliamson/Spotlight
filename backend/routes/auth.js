@@ -105,4 +105,70 @@ router.get('/profile', authMiddleware, async (req, res) => {
   }
 });
 
+router.post('/send-recognize-now', async (req, res) => {
+  const { 
+    senderId, 
+    recipientIds, 
+    points, 
+    message, 
+    emblem 
+  } = req.body;
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    // Find sender
+    const sender = await User.findById(senderId).session(session);
+    if (!sender) {
+      throw new Error('Sender not found');
+    }
+
+    // Validate sender has enough RecognizeNow points
+    const totalPointsToDeduct = points * recipientIds.length;
+    if (sender.recognizeNowBalance < totalPointsToDeduct) {
+      throw new Error('Insufficient RecognizeNow points');
+    }
+
+    // Deduct points from sender
+    sender.recognizeNowBalance -= totalPointsToDeduct;
+    await sender.save({ session });
+
+    // Add points to recipients
+    const recipients = await User.find({ _id: { $in: recipientIds } }).session(session);
+    if (recipients.length === 0) {
+      throw new Error('No valid recipients found');
+    }
+
+    await User.updateMany(
+      { _id: { $in: recipientIds } },
+      { $inc: { currentPointBalance: points } },
+      { session }
+    );
+
+    // Create recognition post/log
+    await RecognitionPost.create([{
+      sender: sender.name,
+      recipients: recipientIds,
+      points,
+      message,
+      emblem,
+      date: new Date()
+    }], { session });
+
+    await session.commitTransaction();
+    
+    res.status(200).json({ message: 'Points transferred successfully' });
+  } catch (error) {
+    await session.abortTransaction();
+    console.error('Error in /send-recognize-now:', error);
+    res.status(400).json({ error: error.message });
+  } finally {
+    session.endSession();
+  }
+});
+
+
+
 module.exports = router;
