@@ -25,7 +25,7 @@ const updateUsers = async () => {
       { field: "profileImage", value: null },
       { field: "currentPointBalance", value: 0 },
       { field: "recognizeNowBalance", value: 0 },
-      { field: "badgesGiven", value: 0 },
+      { field: "emblemsSent", value: 0 },
       { field: "rewardsRedeemed", value: 0 },
       { field: "isManagement", value: false },
       { field: "emblemsReceived", value: [] },

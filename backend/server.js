@@ -15,6 +15,7 @@ const kpiRoutes = require('./routes/kpi');
 const User = require('./models/user');
 const authRoutes = require('./routes/auth');
 const postsRoutes = require('./routes/posts');
+const emblemRoutes = require('./routes/emblems'); // Import the new route
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -86,7 +87,9 @@ mongoose.connect(dbURI, {})
 // Routes
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
-app.use('/api', pointTransactions);  // Add this line here
+app.use('/api', pointTransactions);  
+app.use('/emblems', emblemRoutes); 
+
 
 // File upload endpoint
 app.post('/upload', upload.single('file'), async (req, res) => {
@@ -198,6 +201,48 @@ app.get('/verify-token', (req, res) => {
     res.json({ valid: false });
   }
 });
+
+app.get('/top-recognizers', async (req, res) => {
+  try {
+    const topRecognizers = await Recognition.aggregate([
+      {
+        $group: {
+          _id: '$recognizerId',
+          totalEmblemsSent: { $sum: '$emblemsSent' }
+        }
+      },
+      {
+        $sort: { totalEmblemsSent: -1 }
+      },
+      {
+        $limit: 10
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'userDetails'
+        }
+      },
+      {
+        $unwind: '$userDetails'
+      },
+      {
+        $project: {
+          name: { $concat: ['$userDetails.firstName', ' ', '$userDetails.lastName'] },
+          emblemsSent: '$totalEmblemsSent'
+        }
+      }
+    ]);
+
+    res.json(topRecognizers);
+  } catch (error) {
+    console.error('Error fetching top recognizers:', error); // Log the error
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 
 app.get('/user/:username', async (req, res) => {
   try {

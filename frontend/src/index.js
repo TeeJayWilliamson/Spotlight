@@ -10,3 +10,5 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+<div id="root"></div>

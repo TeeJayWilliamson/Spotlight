@@ -18,8 +18,7 @@ function Home() {
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
   const navigate = useNavigate();
 
-  const { 
-    user, 
+  const {  
     pointBalance, 
     setPointBalance, 
     isManagement, 

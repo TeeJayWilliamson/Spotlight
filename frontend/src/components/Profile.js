@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { UserContext } from '../UserContext';
 import '../App.css';
 import './Profile.css';
 
@@ -10,6 +11,13 @@ function Profile() {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+    const { 
+      user, 
+      pointBalance, 
+      setPointBalance, 
+      isManagement, 
+      recognizeNowBalance 
+    } = useContext(UserContext);
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -96,20 +104,26 @@ function Profile() {
             <p><strong>Email:</strong> {userInfo.email}</p>
             <br />
             <p><strong>Point Balance:</strong> {userInfo.currentPointBalance}</p>
-            <p><strong>Spotlight Now Balance:</strong> {userInfo.recognizeNowBalance}</p>
-            <p><strong>Badges Given:</strong> {userInfo.badgesGiven}</p>
+            {isManagement && (
+              <p><strong>Recognize Now Balance:</strong> {userInfo.recognizeNowBalance}</p>
+                    )}
+            <p><strong>Emblems Given:</strong> {userInfo.emblemsSent}</p>
             <p><strong>Rewards Redeemed:</strong> {userInfo.rewardsRedeemed}</p>
             <p><strong>Joined:</strong> {new Date(userInfo.joinedDate).toLocaleDateString()}</p>
             <p><strong>Accomplishments:</strong> {userInfo.accomplishments || "No accomplishments yet"}</p>
 
             <div className="badges">
-              <h4>Badges Earned:</h4>
-              <ul>
-                {(userInfo.badges || []).map((badge, index) => (
-                  <li key={index}>{badge}</li>
-                ))}
-              </ul>
-            </div>
+  <h4>Emblems Earned:</h4>
+  <ul>
+    {(userInfo.badges || []).map((badge, index) => (
+      <li key={index} className="badge-item">
+        <img src={badge.imageUrl} alt={badge.name} className="badge-image" />
+        <span>{badge.name}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
           </div>
 
           <div className="profile-image-section">

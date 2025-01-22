@@ -354,27 +354,29 @@ function Badges() {
         </div>
       </div>
 
-      <div className="right-pane">
-        <div className="recognize-now-balance">
-          <p className="label">Remaining Points this Month</p>
-          <p className="large-number">{pointBalance}</p>
-        </div>
-        <div className="divider" />
-        <label className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            checked={isPrivate}
-            onChange={() => setIsPrivate(!isPrivate)}
-          />
-          <span>Private</span>
-        </label>
-        <div className="divider" />
-        <div className="tips-section">
-          <h3>Tips:</h3>
-          <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
-        </div>
-      </div>
+<div className="right-pane">
+  {currentUser?.isManagement && (
+    <div className="recognize-now-balance">
+      <p className="label">Remaining Points this Month</p>
+      <p className="large-number">{recognizeNowBalance}</p>
     </div>
+  )}
+  <div className="divider" />
+  <label className="flex items-center space-x-2">
+    <input
+      type="checkbox"
+      checked={isPrivate}
+      onChange={() => setIsPrivate(!isPrivate)}
+    />
+    <span>Private</span>
+  </label>
+  <div className="divider" />
+  <div className="tips-section">
+    <h3>Tips:</h3>
+    <p>Be specific, be genuine, be concise, be personal, and be timely.</p>
+  </div>
+</div>
+</div>
   );
 }
 

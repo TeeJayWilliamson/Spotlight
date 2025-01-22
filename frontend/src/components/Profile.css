@@ -42,6 +42,18 @@
   margin-top: 20px;
 }
 
+.badge-item {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.badge-image {
+  width: 30px;  /* Adjust size as needed */
+  height: 30px;
+  margin-right: 10px;
+}
+
 .badges ul {
   list-style-type: none;
   padding-left: 0;

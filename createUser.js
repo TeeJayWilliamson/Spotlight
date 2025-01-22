@@ -17,9 +17,9 @@ mongoose.connect('Get URI from env', {
       profileImage: { type: String, default: null },
       currentPointBalance: { type: Number, default: 0 },
       recognizeNowBalance: { type: Number, default: 0 },
-      badgesGiven: { type: Number, default: 0 },
       rewardsRedeemed: { type: Number, default: 0 },
       isManagement: { type: Boolean, default: false },
+      emblemsSent: { type: Number, default: 0 }, // Renamed from badgesGiven
       emblemsReceived: [
         { from: String, reason: String, date: { type: Date, default: Date.now } }
       ],

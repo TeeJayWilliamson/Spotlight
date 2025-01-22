@@ -8,11 +8,15 @@ const UserSchema = new mongoose.Schema({
   profileImage: { type: String, default: null }, // Add this line for profile image
   currentPointBalance: { type: Number, default: 0 },
   recognizeNowBalance: { type: Number, default: 0 },
-  badgesGiven: { type: Number, default: 0 },
   rewardsRedeemed: { type: Number, default: 0 },
   isManagement: { type: Boolean, default: false }, // Add this line
+  emblemsSent: { type: Number, default: 0 }, // Renamed from badgesGiven
   emblemsReceived: [
-    { from: String, reason: String, date: { type: Date, default: Date.now } }
+    {
+      from: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      reason: { type: String },
+      date: { type: Date, default: Date.now },
+    },
   ],
   joinedDate: { type: Date, default: Date.now }
 });
