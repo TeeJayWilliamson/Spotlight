@@ -72,7 +72,7 @@ function Badges() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app';
 
   useEffect(() => {
     if (location.state?.selectedUser) {

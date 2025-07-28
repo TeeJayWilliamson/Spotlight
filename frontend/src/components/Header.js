@@ -16,7 +16,7 @@ function Header({ handleLogout }) {
 
   const apiUrl =
     process.env.REACT_APP_API_URL ||
-    'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+    'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app';
 
   useEffect(() => {
     const username = localStorage.getItem('username');
