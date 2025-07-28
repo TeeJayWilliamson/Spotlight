@@ -1,5 +1,5 @@
 require('dotenv').config(); // Ensure dotenv is loaded at the top
-const pointTransactions = require('./routes/pointTransactions');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -11,11 +11,16 @@ const helmet = require('helmet');
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
+
+// Import routes
+const pointTransactions = require('./routes/pointTransactions');
 const kpiRoutes = require('./routes/kpi');
-const User = require('./models/user');
 const authRoutes = require('./routes/auth');
 const postsRoutes = require('./routes/posts');
-const emblemRoutes = require('./routes/emblems'); // Import the new route
+const emblemRoutes = require('./routes/emblems');
+
+// Import models
+const User = require('./models/user');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -30,15 +35,19 @@ cloudinary.config({
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5000',
-  'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app'
+  'https://spotlight-ttc.vercel.app'  // Removed trailing slash
 ];
 
 // Apply CORS configuration first
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log('CORS blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -49,11 +58,12 @@ app.use(cors({
   optionsSuccessStatus: 204
 }));
 
+// Handle preflight requests
 app.options('*', cors());
 
-// Then apply other middleware
-app.use(express.json());
-app.use(bodyParser.json());
+// Apply middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(bodyParser.json({ limit: '10mb' }));
 
 // Routes should come after middleware
 app.use('/api', pointTransactions);
@@ -63,14 +73,17 @@ app.use('/', kpiRoutes);
 
 
 
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    connectSrc: ["'self'", process.env.REACT_APP_API_URL || 'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app'],
-    styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-    fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-    scriptSrc: ["'self'", "'unsafe-inline'"],
-    imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'],
+// Apply helmet with proper CSP
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      connectSrc: ["'self'", "https://spotlight-ttc.vercel.app"],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'],
+    },
   },
 }));
 
@@ -78,11 +91,30 @@ app.use(helmet.contentSecurityPolicy({
 const dbURI = process.env.MONGO_URI;
 mongoose.connect(dbURI, {})
   .then(() => {
-    console.log('MongoDB connected');
+    console.log('MongoDB connected successfully');
   })
   .catch(err => {
     console.error('MongoDB connection error:', err);
   });
+
+
+// Authentication middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Access token required' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Invalid token' });
+    }
+    req.user = user;
+    next();
+  });
+};
 
 // Routes
 app.use('/auth', authRoutes);

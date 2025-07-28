@@ -8,7 +8,9 @@ export const UserProvider = ({ children }) => {
   const [pointBalance, setPointBalance] = useState(0);
   const [recognizeNowBalance, setRecognizeNowBalance] = useState(0);
   const [isManagement, setIsManagement] = useState(false);
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app';
+  
+  // Fix the API URL - should point to /api for your Vercel setup
+  const apiUrl = process.env.REACT_APP_API_URL || '/api';
 
   useEffect(() => {
     const fetchUserPoints = async () => {
@@ -16,10 +18,15 @@ export const UserProvider = ({ children }) => {
       const username = localStorage.getItem('username');
 
       console.log('Attempting to fetch user data with:', { token, username });
+      console.log('Using API URL:', apiUrl);
 
       if (token && username) {
         try {
-          const response = await axios.get(`${apiUrl}/user/${username}`, {
+          // Make sure the URL is correctly constructed
+          const requestUrl = `${apiUrl}/user/${username}`;
+          console.log('Making request to:', requestUrl);
+          
+          const response = await axios.get(requestUrl, {
             headers: { Authorization: `Bearer ${token}` }
           });
 
@@ -36,6 +43,7 @@ export const UserProvider = ({ children }) => {
           setUser(response.data);
         } catch (error) {
           console.error('Failed to fetch user points', error.response?.data || error.message);
+          console.error('Request URL was:', `${apiUrl}/user/${username}`);
           
           // Optional: Clear token if fetch fails
           if (error.response?.status === 401) {
@@ -47,9 +55,8 @@ export const UserProvider = ({ children }) => {
       }
     };
 
-    // Remove the !user condition to always try fetching on mount
     fetchUserPoints();
-  }, []); // Empty dependency array to run only on mount
+  }, [apiUrl]); // Add apiUrl as dependency
 
   return (
     <UserContext.Provider value={{ 
@@ -61,7 +68,7 @@ export const UserProvider = ({ children }) => {
       setRecognizeNowBalance,
       isManagement,
       setIsManagement,
-      apiUrl  // Optional: include apiUrl in context if needed elsewhere
+      apiUrl
     }}>
       {children}
     </UserContext.Provider>
