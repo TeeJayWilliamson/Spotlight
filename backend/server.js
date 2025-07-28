@@ -18,6 +18,20 @@ const emblemRoutes = require('./routes/emblems'); // Import the new route
 const cors = require('cors');
 
 const app = express();
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://spotlight-d907a9a2d80e.herokuapp.com');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 const port = process.env.PORT || 5000;
 
 // Configure Cloudinary

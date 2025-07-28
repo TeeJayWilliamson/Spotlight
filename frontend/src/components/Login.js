@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from 'react';
 import './Login.css';
 import axios from 'axios';
@@ -10,6 +11,7 @@ function Login({ setAuth, setUsername }) {
   const [error, setError] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   
   const { 
@@ -21,46 +23,92 @@ function Login({ setAuth, setUsername }) {
 
   const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
+  // Debug function to test server connectivity
+  const testServerConnection = async () => {
+    try {
+      console.log('Testing server connection to:', apiUrl);
+      const response = await fetch(`${apiUrl}/users`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      console.log('Server test response status:', response.status);
+      console.log('Server test response headers:', [...response.headers.entries()]);
+    } catch (error) {
+      console.error('Server connection test failed:', error);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError('');
+    setIsLoading(true);
+
+    // Test server connection first
+    await testServerConnection();
 
     try {
-      // Use the original login endpoint that expects username/password
-      const response = await axios.post(`${apiUrl}/login`, {
-        username,
-        password,
+      console.log('Attempting login with:', { username, apiUrl });
+      
+      // Try with fetch first to get better error information
+      const response = await fetch(`${apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
       });
 
-      const { token } = response.data;
+      console.log('Login response status:', response.status);
+      console.log('Login response headers:', [...response.headers.entries()]);
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Login failed with response:', errorData);
+        throw new Error(`HTTP ${response.status}: ${errorData}`);
+      }
+
+      const data = await response.json();
+      console.log('Login success data:', data);
+
+      const { token } = data;
       
       // Store token and username
       localStorage.setItem('token', token);
-      localStorage.setItem('userId', response.data.userId || '');
+      localStorage.setItem('userId', data.userId || '');
       localStorage.setItem('username', username);
 
       if (keepLoggedIn) {
         localStorage.setItem('keepLoggedIn', 'true');
       }
 
-      // Use the user data from the login response (your original server.js returns user object)
-      if (response.data.user) {
-        setUser(response.data.user);
-        setPointBalance(response.data.user.currentPointBalance || 0);
-        setRecognizeNowBalance(response.data.user.recognizeNowBalance || 0);
-        setIsManagement(response.data.user.isManagement || false);
+      // Use the user data from the login response
+      if (data.user) {
+        setUser(data.user);
+        setPointBalance(data.user.currentPointBalance || 0);
+        setRecognizeNowBalance(data.user.recognizeNowBalance || 0);
+        setIsManagement(data.user.isManagement || false);
       }
 
       setShowTerms(true);
     } catch (err) {
-      console.error('Login error:', err);
-      if (err.response && err.response.data && err.response.data.msg) {
-        setError(err.response.data.msg);
-      } else if (err.response && err.response.data && err.response.data.errors) {
-        setError(err.response.data.errors[0].msg);
+      console.error('Login error details:', err);
+      
+      // Check if it's a CORS error
+      if (err.message.includes('CORS') || err.message.includes('Network Error')) {
+        setError('Server connection failed. Please check if the server is running and CORS is configured correctly.');
+      } else if (err.message.includes('401') || err.message.includes('400')) {
+        setError('Invalid username or password');
       } else {
-        setError('Login failed. Please check your credentials and try again.');
+        setError(`Login failed: ${err.message}`);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -75,6 +123,9 @@ function Login({ setAuth, setUsername }) {
     <div className="login-page">
       <div className="login-box">
         <h2>Login</h2>
+        <div style={{ marginBottom: '10px', fontSize: '12px', color: '#666' }}>
+          Server: {apiUrl}
+        </div>
         <form onSubmit={handleLogin}>
           <input
             type="text"
@@ -82,6 +133,7 @@ function Login({ setAuth, setUsername }) {
             value={username}
             onChange={(e) => setLocalUsername(e.target.value)}
             required
+            disabled={isLoading}
           />
           <input
             type="password"
@@ -89,6 +141,7 @@ function Login({ setAuth, setUsername }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={isLoading}
           />
           {error && <p className="error">{error}</p>}
           <div className="additional-options">
@@ -99,12 +152,29 @@ function Login({ setAuth, setUsername }) {
                 type="checkbox"
                 checked={keepLoggedIn}
                 onChange={(e) => setKeepLoggedIn(e.target.checked)}
+                disabled={isLoading}
               />
               <span>Keep me logged in</span>
             </label>
           </div>
-          <button type="submit">Login</button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
+        
+        {/* Debug button */}
+        <button 
+          onClick={testServerConnection} 
+          style={{ 
+            marginTop: '10px', 
+            backgroundColor: '#f0f0f0', 
+            border: '1px solid #ccc',
+            padding: '5px 10px',
+            fontSize: '12px'
+          }}
+        >
+          Test Server Connection
+        </button>
       </div>
       <div className="login-image">
         <img src={require('../img/ttc1.png')} alt="Logo or background" />
