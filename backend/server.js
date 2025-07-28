@@ -119,7 +119,7 @@ const authenticateToken = (req, res, next) => {
 // Routes
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
-app.use('/api', pointTransactions);  
+app.use('/api', pointTransactions);  // maybe remove
 app.use('/emblems', emblemRoutes); 
 
 
