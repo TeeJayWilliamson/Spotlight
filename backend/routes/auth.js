@@ -6,7 +6,7 @@ const { check, validationResult } = require('express-validator');
 const authMiddleware = require('../middleware/auth');
 const User = require('../models/user'); // Adjust the path as needed
 
-// @route   POST auth/login
+// @route   POST /api/auth/login
 // @desc    Login user
 // @access  Public
 router.post('/login', [
@@ -53,7 +53,7 @@ router.post('/login', [
   }
 });
 
-// @route   POST auth/create-user
+// @route   POST /api/auth/create-user
 // @desc    Create a new user (Admin only)
 // @access  Private
 router.post('/create-user', [
@@ -92,7 +92,7 @@ router.post('/create-user', [
   }
 });
 
-// @route   GET auth/profile
+// @route   GET /api/auth/profile
 // @desc    Get user profile
 // @access  Private
 router.get('/profile', authMiddleware, async (req, res) => {

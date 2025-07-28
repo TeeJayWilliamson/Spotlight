@@ -1,107 +1,69 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-const UserContext = createContext();
-
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within UserProvider');
-  }
-  return context;
-};
+export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Extract balances and isManagement from user object for convenience
-  const pointBalance = user?.currentPointBalance || 0;
-  const recognizeNowBalance = user?.recognizeNowBalance || 0;
-  const isManagement = user?.isManagement || false;
-
-  const API_URL =
-    process.env.NODE_ENV === 'production'
-      ? process.env.REACT_APP_API_URL || 'https://spotlight-d907a9a2d80e.herokuapp.com'
-      : 'http://localhost:5000';
+  const [pointBalance, setPointBalance] = useState(0);
+  const [recognizeNowBalance, setRecognizeNowBalance] = useState(0);
+  const [isManagement, setIsManagement] = useState(false);
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+    const fetchUserPoints = async () => {
+      const token = localStorage.getItem('token');
+      const username = localStorage.getItem('username');
 
-    if (storedToken && storedUser) {
-      try {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser));
-        verifyToken(storedToken);
-      } catch (error) {
-        console.error('Error parsing stored user data:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+      console.log('Attempting to fetch user data with:', { token, username });
+
+      if (token && username) {
+        try {
+          const response = await axios.get(`${apiUrl}/user/${username}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          console.group('User Data Fetch');
+          console.log('Full API Response:', response.data);
+          console.log('Is Management:', response.data.isManagement);
+          console.log('Recognize Now Balance:', response.data.recognizeNowBalance);
+          console.log('Current Point Balance:', response.data.currentPointBalance);
+          console.groupEnd();
+
+          setPointBalance(response.data.currentPointBalance || 0);
+          setRecognizeNowBalance(response.data.recognizeNowBalance || 0);
+          setIsManagement(response.data.isManagement || false);
+          setUser(response.data);
+        } catch (error) {
+          console.error('Failed to fetch user points', error.response?.data || error.message);
+          
+          // Optional: Clear token if fetch fails
+          if (error.response?.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            setUser(null);
+          }
+        }
       }
-    }
-    setLoading(false);
-  }, []);
+    };
 
-  const verifyToken = async (tokenToVerify) => {
-    try {
-      const response = await axios.get(`${API_URL}/verify-token`, {
-        headers: { Authorization: `Bearer ${tokenToVerify}` },
-      });
-
-      if (response.data.user) {
-        setUser(response.data.user);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-      }
-    } catch (error) {
-      console.error('Token verification failed:', error);
-      logout();
-    }
-  };
-
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-  };
-
-  // Optionally add a function to refresh user data from server
-  const refreshUserData = async () => {
-    if (!token || !user?.username) return;
-    try {
-      const response = await axios.get(`${API_URL}/user/${user.username}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUser(response.data);
-      localStorage.setItem('user', JSON.stringify(response.data));
-    } catch (error) {
-      console.error('Failed to refresh user data:', error);
-      if (error.response?.status === 401) logout();
-    }
-  };
+    // Remove the !user condition to always try fetching on mount
+    fetchUserPoints();
+  }, []); // Empty dependency array to run only on mount
 
   return (
-    <UserContext.Provider
-      value={{
-        user,
-        setUser,
-        token,
-        setToken,
-        loading,
-        logout,
-        pointBalance,
-        recognizeNowBalance,
-        isManagement,
-        refreshUserData,
-        API_URL,
-      }}
-    >
+    <UserContext.Provider value={{ 
+      user, 
+      setUser, 
+      pointBalance, 
+      setPointBalance,
+      recognizeNowBalance,
+      setRecognizeNowBalance,
+      isManagement,
+      setIsManagement,
+      apiUrl  // Optional: include apiUrl in context if needed elsewhere
+    }}>
       {children}
     </UserContext.Provider>
   );
 };
-
-export { UserContext };
-

@@ -19,24 +19,13 @@ function Login({ setAuth, setUsername }) {
     setIsManagement 
   } = useContext(UserContext);
 
-  // Fix: Use consistent API URL pattern with UserContext
-  const apiUrl = process.env.REACT_APP_API_URL || '/';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      // Fix: Construct the URL correctly - no need for replace() method
-      const loginUrl = `${apiUrl}/login`;
-      console.log('Attempting login to:', loginUrl);
-
-      if (!username.trim() || !password.trim()) {
-  setError('Please enter both username and password');
-  return;
-}
-
-
-      const response = await axios.post(loginUrl, {
+      const response = await axios.post(`${apiUrl.replace(/\/$/, '')}/login`, {
         username,
         password,
       });
@@ -60,7 +49,6 @@ function Login({ setAuth, setUsername }) {
       setShowTerms(true);
     } catch (err) {
       console.error('Login error:', err);
-      console.error('Login request failed for URL:', `${apiUrl}/login`);
       setError('Invalid username or password');
     }
   };
@@ -77,13 +65,12 @@ function Login({ setAuth, setUsername }) {
       <div className="login-box">
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
-      <input
-        value={username}
-        onChange={(e) => {
-          setUsername(e.target.value);
-          setLocalUsername(e.target.value);
-        }}
-      />
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setLocalUsername(e.target.value)}
+          />
           <input
             type="password"
             placeholder="Password"
@@ -137,6 +124,7 @@ function Login({ setAuth, setUsername }) {
     </div>
   </div>
 )}
+
 
     </div>
   );

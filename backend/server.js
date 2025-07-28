@@ -1,5 +1,5 @@
 require('dotenv').config(); // Ensure dotenv is loaded at the top
-
+const pointTransactions = require('./routes/pointTransactions');
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -11,22 +11,14 @@ const helmet = require('helmet');
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
-
-// Import routes
-const pointTransactions = require('./routes/pointTransactions');
 const kpiRoutes = require('./routes/kpi');
+const User = require('./models/user');
 const authRoutes = require('./routes/auth');
 const postsRoutes = require('./routes/posts');
-const emblemRoutes = require('./routes/emblems');
-
-// Import models
-const User = require('./models/user');
+const emblemRoutes = require('./routes/emblems'); // Import the new route
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-})
+const port = process.env.PORT || 5000;
 
 // Configure Cloudinary
 cloudinary.config({
@@ -38,19 +30,15 @@ cloudinary.config({
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5000',
-  'https://spotlight-d907a9a2d80e.herokuapp.com'  // Removed trailing slash
+  'https://spotlight-ttc-30e93233aa0e.herokuapp.com'
 ];
 
 // Apply CORS configuration first
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      console.log('CORS blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -61,12 +49,11 @@ app.use(cors({
   optionsSuccessStatus: 204
 }));
 
-// Handle preflight requests
 app.options('*', cors());
 
-// Apply middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(bodyParser.json({ limit: '10mb' }));
+// Then apply other middleware
+app.use(express.json());
+app.use(bodyParser.json());
 
 // Routes should come after middleware
 app.use('/api', pointTransactions);
@@ -76,17 +63,14 @@ app.use('/', kpiRoutes);
 
 
 
-// Apply helmet with proper CSP
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      connectSrc: ["'self'", "https://spotlight-d907a9a2d80e.herokuapp.com"],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'],
-    },
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    connectSrc: ["'self'", process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com'],
+    styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+    fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+    scriptSrc: ["'self'", "'unsafe-inline'"],
+    imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'],
   },
 }));
 
@@ -94,35 +78,16 @@ app.use(helmet({
 const dbURI = process.env.MONGO_URI;
 mongoose.connect(dbURI, {})
   .then(() => {
-    console.log('MongoDB connected successfully');
+    console.log('MongoDB connected');
   })
   .catch(err => {
     console.error('MongoDB connection error:', err);
   });
 
-
-// Authentication middleware
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ message: 'Access token required' });
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Invalid token' });
-    }
-    req.user = user;
-    next();
-  });
-};
-
 // Routes
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
-app.use('/api', pointTransactions);  // maybe remove
+app.use('/api', pointTransactions);  
 app.use('/emblems', emblemRoutes); 
 
 
@@ -186,39 +151,29 @@ const TEST_USERNAME = 'testUser';
 const TEST_PASSWORD = 'testPassword123';
 
 app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json({ message: 'Username and password are required' });
-    }
-
-    console.log('Login attempt:', { username, password: '***' });
-
+    // If it's a test user, fetch from database instead of hardcoding
     const user = await User.findOne({ username });
-
+    
     if (!user) {
-      console.log('User not found:', username);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
-      console.log('Invalid password for user:', username);
+    // Compare the password with the stored hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign(
-      { userId: user._id, username: user.username },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' } // or '24h' depending on your needs
-    );
-
-    res.json({
-      message: 'Login successful',
-      token,
+    // Generate JWT token for the database user
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    
+    // Return actual user details from database
+    res.json({ 
+      token, 
       user: {
-        id: user._id,
         username: user.username,
         name: user.name,
         email: user.email,
@@ -228,17 +183,14 @@ app.post('/login', async (req, res) => {
         profileImage: user.profileImage
       }
     });
-
-  } catch (error) {
-    console.error('Login error:', error);
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
 
-
-
-app.get('verify-token', (req, res) => {
+app.get('/verify-token', (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.json({ valid: false });
 
@@ -250,7 +202,7 @@ app.get('verify-token', (req, res) => {
   }
 });
 
-app.get('top-recognizers', async (req, res) => {
+app.get('/top-recognizers', async (req, res) => {
   try {
     const topRecognizers = await Recognition.aggregate([
       {
@@ -292,7 +244,7 @@ app.get('top-recognizers', async (req, res) => {
 });
 
 
-app.get('user/:username', async (req, res) => {
+app.get('/user/:username', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username });
 
@@ -321,7 +273,7 @@ app.get('user/:username', async (req, res) => {
 
 
 // Get all users endpoint
-app.get('users', async (req, res) => {
+app.get('/users', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -366,7 +318,7 @@ app.listen(port, () => {
 });
 
   // Get user points
-  app.get('user-points', async (req, res) => {
+  app.get('/user-points', async (req, res) => {
     try {
       const user = await User.findOne({ username: req.user.username });
       res.json({
@@ -425,7 +377,7 @@ app.post('/award-points', async (req, res) => {
   }
 });
 
-app.get('user/:id', async (req, res) => {
+app.get('/user/:id', async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
   if (!user) {

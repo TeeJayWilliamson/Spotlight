@@ -72,7 +72,7 @@ function Badges() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-d907a9a2d80e.herokuapp.com';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
 
   useEffect(() => {
     if (location.state?.selectedUser) {
@@ -154,7 +154,7 @@ function Badges() {
       if (badgeType === 'Point Recognition') {
         // Handle point transfer
         const pointTransferResponse = await axios.post(
-          `${apiUrl}point-transfer`,
+          `${apiUrl}/api/point-transfer`,
           {
             senderUsername: currentUser.username,
             recipients: selectedUsers.map(user => user.username),

@@ -15,7 +15,7 @@ function Home() {
   const [profileImage, setProfileImage] = useState('');
   const [activeCommentPost, setActiveCommentPost] = useState(null);
   const [expandedComments, setExpandedComments] = useState({});
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
   const navigate = useNavigate();
 
   const {  

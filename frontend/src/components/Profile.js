@@ -10,7 +10,7 @@ function Profile() {
   const [imageFile, setImageFile] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
     const { 
       user, 
       pointBalance, 

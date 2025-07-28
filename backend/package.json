@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "start": "node server.js",  
-    "start-backend": "node server.js"
-  },
+"scripts": {
+  "start": "node server.js",  
+  "start-backend": "node server.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -18,9 +18,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.1",
     "react-scripts": "^5.0.1"
-  },
-  "engines": {
-    "node": "18.x"
   },
   "description": ""
 }
