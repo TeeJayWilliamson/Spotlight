@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 
 function Login({ setAuth, setUsername }) {
-  const [email, setEmail] = useState(''); // Changed from username to email
+  const [username, setLocalUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
@@ -26,39 +26,29 @@ function Login({ setAuth, setUsername }) {
     setError(''); // Clear previous errors
 
     try {
-      // Use the correct auth route that matches your backend
-      const response = await axios.post(`${apiUrl}/auth/login`, {
-        email, // Your backend expects email, not username
+      // Use the original login endpoint that expects username/password
+      const response = await axios.post(`${apiUrl}/login`, {
+        username,
         password,
       });
 
-      const { token, userId } = response.data;
+      const { token } = response.data;
       
-      // Store token and userId
+      // Store token and username
       localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId);
-      localStorage.setItem('email', email); // Store email instead of username
+      localStorage.setItem('userId', response.data.userId || '');
+      localStorage.setItem('username', username);
 
       if (keepLoggedIn) {
         localStorage.setItem('keepLoggedIn', 'true');
       }
 
-      // Get user profile after successful login
-      try {
-        const profileResponse = await axios.get(`${apiUrl}/auth/profile`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        const userData = profileResponse.data;
-        setUser(userData);
-        setPointBalance(userData.currentPointBalance || 0);
-        setRecognizeNowBalance(userData.recognizeNowBalance || 0);
-        setIsManagement(userData.isManagement || false);
-      } catch (profileError) {
-        console.warn('Could not fetch user profile:', profileError);
-        // Continue with login even if profile fetch fails
+      // Use the user data from the login response (your original server.js returns user object)
+      if (response.data.user) {
+        setUser(response.data.user);
+        setPointBalance(response.data.user.currentPointBalance || 0);
+        setRecognizeNowBalance(response.data.user.recognizeNowBalance || 0);
+        setIsManagement(response.data.user.isManagement || false);
       }
 
       setShowTerms(true);
@@ -76,7 +66,7 @@ function Login({ setAuth, setUsername }) {
 
   const handleAgree = () => {
     setAuth(true);
-    setUsername(email); // Pass email as username for compatibility
+    setUsername(username);
     setShowTerms(false);
     navigate('/home');
   };
@@ -87,10 +77,10 @@ function Login({ setAuth, setUsername }) {
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setLocalUsername(e.target.value)}
             required
           />
           <input

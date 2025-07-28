@@ -87,8 +87,8 @@ mongoose.connect(dbURI, {})
     console.error('MongoDB connection error:', err);
   });
 
-// Routes - IMPORTANT: Use /api prefix for auth routes to match frontend
-app.use('/api/auth', authRoutes); // Changed from '/auth' to '/api/auth'
+// Routes - Keep your original route structure
+app.use('/auth', authRoutes); // Keep as '/auth' not '/api/auth'
 app.use('/posts', postsRoutes);
 app.use('/api', pointTransactions);  
 app.use('/emblems', emblemRoutes); 
