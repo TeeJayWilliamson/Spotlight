@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user'); // Adjust the path to your User model if necessary
 
-// POST /api/emblems/send
+// POST emblems/send
 router.post('/send', async (req, res) => {
   const { senderId, recipientId, reason } = req.body;
 
