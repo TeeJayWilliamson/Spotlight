@@ -183,26 +183,26 @@ const TEST_USERNAME = 'testUser';
 const TEST_PASSWORD = 'testPassword123';
 
 app.post('/login', async (req, res) => {
+  console.log('Login attempt:', req.body);
   const { username, password } = req.body;
 
   try {
-    // If it's a test user, fetch from database instead of hardcoding
     const user = await User.findOne({ username });
-    
+    console.log('User found:', user);
+
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Compare the password with the stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Password match:', isMatch);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token for the database user
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    
-    // Return actual user details from database
+    console.log('Token generated');
+
     res.json({ 
       token, 
       user: {
@@ -216,10 +216,11 @@ app.post('/login', async (req, res) => {
       }
     });
   } catch (err) {
-    console.error(err);
+    console.error('Login error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 
 app.get('verify-token', (req, res) => {
