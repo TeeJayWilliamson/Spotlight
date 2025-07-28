@@ -124,7 +124,7 @@ app.use('/emblems', emblemRoutes);
 
 
 // File upload endpoint
-app.post('upload', upload.single('file'), async (req, res) => {
+app.post('/upload', upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
@@ -154,7 +154,7 @@ app.post('upload', upload.single('file'), async (req, res) => {
 });
 
 // Update profile image endpoint
-app.post('updateProfileImage', async (req, res) => {
+app.post('/updateProfileImage', async (req, res) => {
   const { username, profileImage } = req.body;
   
   try {
@@ -182,7 +182,7 @@ app.post('updateProfileImage', async (req, res) => {
 const TEST_USERNAME = 'testUser';
 const TEST_PASSWORD = 'testPassword123';
 
-app.post('login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -315,7 +315,7 @@ app.get('users', async (req, res) => {
 });
 
 // Send emblem endpoint
-app.post('send-emblem', async (req, res) => {
+app.post('/send-emblem', async (req, res) => {
   const { fromUsername, toUsername, reason } = req.body;
   try {
     const fromUser = await User.findOne({ username: fromUsername });
@@ -363,7 +363,7 @@ app.listen(port, () => {
     }
   });
 
-  app.post('point-transfer', async (req, res) => {
+  app.post('/point-transfer', async (req, res) => {
     try {
       console.log('Request Body:', req.body);
   
@@ -387,7 +387,7 @@ app.listen(port, () => {
   
 
 // Award points
-app.post('award-points', async (req, res) => {
+app.post('/award-points', async (req, res) => {
   const { username, points } = req.body;
   try {
     const user = await User.findOneAndUpdate(
@@ -418,7 +418,7 @@ app.get('user/:id', async (req, res) => {
   res.json(user);
 });
 
-app.post('redeem-points', async (req, res) => {
+app.post('/redeem-points', async (req, res) => {
   const { username, pointsToDeduct } = req.body;
   
   try {
