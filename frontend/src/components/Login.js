@@ -25,7 +25,7 @@ function Login({ setAuth, setUsername }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${apiUrl.replace(/\/$/, '')}/login`, {
+      const response = await axios.post(`${apiUrl.replace(/\/$/, '')}/api/login`, {
         username,
         password,
       });

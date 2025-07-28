@@ -30,7 +30,7 @@ cloudinary.config({
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5000',
-  'https://spotlight-ttc-30e93233aa0e.herokuapp.com'
+  'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app'
 ];
 
 // Apply CORS configuration first
@@ -66,7 +66,7 @@ app.use('/', kpiRoutes);
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
-    connectSrc: ["'self'", process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com'],
+    connectSrc: ["'self'", process.env.REACT_APP_API_URL || 'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app'],
     styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
     fontSrc: ["'self'", 'https://fonts.gstatic.com'],
     scriptSrc: ["'self'", "'unsafe-inline'"],
@@ -92,7 +92,7 @@ app.use('/emblems', emblemRoutes);
 
 
 // File upload endpoint
-app.post('/upload', upload.single('file'), async (req, res) => {
+app.post('/api/upload', upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
@@ -122,7 +122,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 });
 
 // Update profile image endpoint
-app.post('/updateProfileImage', async (req, res) => {
+app.post('/api/updateProfileImage', async (req, res) => {
   const { username, profileImage } = req.body;
   
   try {
@@ -150,7 +150,7 @@ app.post('/updateProfileImage', async (req, res) => {
 const TEST_USERNAME = 'testUser';
 const TEST_PASSWORD = 'testPassword123';
 
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -190,7 +190,7 @@ app.post('/login', async (req, res) => {
 });
 
 
-app.get('/verify-token', (req, res) => {
+app.get('/api/verify-token', (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.json({ valid: false });
 
@@ -202,7 +202,7 @@ app.get('/verify-token', (req, res) => {
   }
 });
 
-app.get('/top-recognizers', async (req, res) => {
+app.get('/api/top-recognizers', async (req, res) => {
   try {
     const topRecognizers = await Recognition.aggregate([
       {
@@ -244,7 +244,7 @@ app.get('/top-recognizers', async (req, res) => {
 });
 
 
-app.get('/user/:username', async (req, res) => {
+app.get('/api/user/:username', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username });
 
@@ -273,7 +273,7 @@ app.get('/user/:username', async (req, res) => {
 
 
 // Get all users endpoint
-app.get('/users', async (req, res) => {
+app.get('/api/users', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -283,7 +283,7 @@ app.get('/users', async (req, res) => {
 });
 
 // Send emblem endpoint
-app.post('/send-emblem', async (req, res) => {
+app.post('/api/send-emblem', async (req, res) => {
   const { fromUsername, toUsername, reason } = req.body;
   try {
     const fromUser = await User.findOne({ username: fromUsername });
@@ -318,7 +318,7 @@ app.listen(port, () => {
 });
 
   // Get user points
-  app.get('/user-points', async (req, res) => {
+  app.get('/api/user-points', async (req, res) => {
     try {
       const user = await User.findOne({ username: req.user.username });
       res.json({
@@ -331,7 +331,7 @@ app.listen(port, () => {
     }
   });
 
-  app.post('/point-transfer', async (req, res) => {
+  app.post('/api/point-transfer', async (req, res) => {
     try {
       console.log('Request Body:', req.body);
   
@@ -355,7 +355,7 @@ app.listen(port, () => {
   
 
 // Award points
-app.post('/award-points', async (req, res) => {
+app.post('/api/award-points', async (req, res) => {
   const { username, points } = req.body;
   try {
     const user = await User.findOneAndUpdate(
@@ -377,7 +377,7 @@ app.post('/award-points', async (req, res) => {
   }
 });
 
-app.get('/user/:id', async (req, res) => {
+app.get('/api/user/:id', async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
   if (!user) {
@@ -386,7 +386,7 @@ app.get('/user/:id', async (req, res) => {
   res.json(user);
 });
 
-app.post('/redeem-points', async (req, res) => {
+app.post('/api/redeem-points', async (req, res) => {
   const { username, pointsToDeduct } = req.body;
   
   try {
