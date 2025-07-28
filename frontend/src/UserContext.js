@@ -10,7 +10,7 @@ export const UserProvider = ({ children }) => {
   const [isManagement, setIsManagement] = useState(false);
   
   // Fix the API URL - should point to /api for your Vercel setup
-  const apiUrl = process.env.REACT_APP_API_URL || '/api';
+  const apiUrl = process.env.REACT_APP_API_URL || '/api'; // maybe remove.
 
   useEffect(() => {
     const fetchUserPoints = async () => {
