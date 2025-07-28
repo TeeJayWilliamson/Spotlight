@@ -20,7 +20,7 @@ function Login({ setAuth, setUsername }) {
   } = useContext(UserContext);
 
   // Fix: Use consistent API URL pattern with UserContext
-  const apiUrl = process.env.REACT_APP_API_URL || '/api';
+  const apiUrl = process.env.REACT_APP_API_URL || '/';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -75,7 +75,7 @@ function Login({ setAuth, setUsername }) {
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) => setLocalUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)} 
           />
           <input
             type="password"
