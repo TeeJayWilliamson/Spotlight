@@ -30,7 +30,7 @@ cloudinary.config({
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5000',
-  'https://spotlight-ttc-30e93233aa0e.herokuapp.com'
+  'https://spotlight-d907a9a2d80e.herokuapp.com'
 ];
 
 // Apply CORS configuration first
