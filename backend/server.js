@@ -23,7 +23,10 @@ const emblemRoutes = require('./routes/emblems');
 const User = require('./models/user');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+})
 
 // Configure Cloudinary
 cloudinary.config({
@@ -183,29 +186,39 @@ const TEST_USERNAME = 'testUser';
 const TEST_PASSWORD = 'testPassword123';
 
 app.post('/login', async (req, res) => {
-  console.log('Login attempt:', req.body);
-  const { username, password } = req.body;
-
   try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Username and password are required' });
+    }
+
+    console.log('Login attempt:', { username, password: '***' });
+
     const user = await User.findOne({ username });
-    console.log('User found:', user);
 
     if (!user) {
+      console.log('User not found:', username);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    console.log('Password match:', isMatch);
-    if (!isMatch) {
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      console.log('Invalid password for user:', username);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log('Token generated');
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' } // or '24h' depending on your needs
+    );
 
-    res.json({ 
-      token, 
+    res.json({
+      message: 'Login successful',
+      token,
       user: {
+        id: user._id,
         username: user.username,
         name: user.name,
         email: user.email,
@@ -215,11 +228,13 @@ app.post('/login', async (req, res) => {
         profileImage: user.profileImage
       }
     });
-  } catch (err) {
-    console.error('Login error:', err);
+
+  } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 
 

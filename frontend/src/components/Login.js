@@ -30,6 +30,12 @@ function Login({ setAuth, setUsername }) {
       const loginUrl = `${apiUrl}/login`;
       console.log('Attempting login to:', loginUrl);
 
+      if (!username.trim() || !password.trim()) {
+  setError('Please enter both username and password');
+  return;
+}
+
+
       const response = await axios.post(loginUrl, {
         username,
         password,
@@ -71,12 +77,13 @@ function Login({ setAuth, setUsername }) {
       <div className="login-box">
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setLocalUsername(e.target.value)}
-          />
+      <input
+        value={username}
+        onChange={(e) => {
+          setUsername(e.target.value);
+          setLocalUsername(e.target.value);
+        }}
+      />
           <input
             type="password"
             placeholder="Password"
