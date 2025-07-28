@@ -19,7 +19,7 @@ function Login({ setAuth, setUsername }) {
     setIsManagement 
   } = useContext(UserContext);
 
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-fq6lakcb2-teejaywilliamsons-projects.vercel.app';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc.vercel.app/'; //updated
 
   const handleLogin = async (e) => {
     e.preventDefault();
