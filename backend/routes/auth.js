@@ -3,8 +3,10 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
+const mongoose = require('mongoose'); // Add this import
 const authMiddleware = require('../middleware/auth');
 const User = require('../models/user'); // Adjust the path as needed
+const RecognitionPost = require('../models/recognitionPost'); // Add this import if the model exists
 
 // @route   POST /api/auth/login
 // @desc    Login user
@@ -105,6 +107,9 @@ router.get('/profile', authMiddleware, async (req, res) => {
   }
 });
 
+// @route   POST /api/auth/send-recognize-now
+// @desc    Send RecognizeNow points
+// @access  Private
 router.post('/send-recognize-now', async (req, res) => {
   const { 
     senderId, 
@@ -147,15 +152,17 @@ router.post('/send-recognize-now', async (req, res) => {
       { session }
     );
 
-    // Create recognition post/log
-    await RecognitionPost.create([{
-      sender: sender.name,
-      recipients: recipientIds,
-      points,
-      message,
-      emblem,
-      date: new Date()
-    }], { session });
+    // Create recognition post/log (only if RecognitionPost model exists)
+    if (RecognitionPost) {
+      await RecognitionPost.create([{
+        sender: sender.name,
+        recipients: recipientIds,
+        points,
+        message,
+        emblem,
+        date: new Date()
+      }], { session });
+    }
 
     await session.commitTransaction();
     
@@ -168,7 +175,5 @@ router.post('/send-recognize-now', async (req, res) => {
     session.endSession();
   }
 });
-
-
 
 module.exports = router;
