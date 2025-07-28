@@ -4,7 +4,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const helmet = require('helmet');
@@ -27,16 +26,18 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+const cors = require('cors');
+
+// Define allowed origins
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:5000',
-  'https://spotlight-d907a9a2d80e.herokuapp.com'
+  'https://spotlight-d907a9a2d80e.herokuapp.com',
+  'http://localhost:3000'
 ];
 
-// Apply CORS configuration first
+// Apply CORS
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -48,6 +49,7 @@ app.use(cors({
   preflightContinue: false,
   optionsSuccessStatus: 204
 }));
+
 
 app.options('*', cors());
 
