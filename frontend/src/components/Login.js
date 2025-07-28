@@ -75,7 +75,7 @@ function Login({ setAuth, setUsername }) {
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)} 
+            onChange={(e) => setLocalUsername(e.target.value)}
           />
           <input
             type="password"
