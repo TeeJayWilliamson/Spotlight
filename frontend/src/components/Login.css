@@ -68,6 +68,7 @@ body {
 .additional-options .forgot-details {
   color: #621E8B;
   text-decoration: none;
+  background-color: white;
 }
 
 .additional-options .forgot-details:hover {
