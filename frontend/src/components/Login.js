@@ -180,12 +180,13 @@ function Login({ setAuth, setUsername }) {
           }}
         >
           Test Server Connection
-        </button>
+      {/*
+      </button>
       </div>
       <div className="login-image">
         <img src={require('../img/ttc1.png')} alt="Logo or background" />
       </div>
-
+        */}
       {showTerms && (
         <div className="terms-modal-overlay">
           <div className="terms-modal">
