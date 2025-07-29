@@ -19,6 +19,51 @@ const cors = require('cors');
 
 const app = express();
 
+const port = process.env.PORT || 5000;
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Define allowed origins - UPDATED TO MATCH YOUR DOMAINS
+const allowedOrigins = [
+  'https://spotlight-d907a9a2d80e.herokuapp.com',  // Your frontend domain
+  'https://spotlight-ttc-30e93233aa0e.herokuapp.com', // Your backend domain (for self-requests)
+  'http://localhost:3000',  // Local development
+  'https://localhost:3000'  // Local development with HTTPS
+];
+
+// CORS configuration - MUST come before other middleware
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, or same-origin requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      console.log('CORS allowed for origin:', origin);
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      console.log('Allowed origins:', allowedOrigins);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 200
+}));
+
+// Handle preflight requests for all routes - IMPORTANT: This must come after CORS setup
+app.options('*', cors());
+
+// REMOVE the manual CORS headers since we're using the cors middleware
+// The following block should be REMOVED or commented out:
+/*
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'https://spotlight-d907a9a2d80e.herokuapp.com');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -31,45 +76,7 @@ app.use((req, res, next) => {
     next();
   }
 });
-
-const port = process.env.PORT || 5000;
-
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
-// Define allowed origins
-const allowedOrigins = [
-  'https://spotlight-d907a9a2d80e.herokuapp.com',
-  'http://localhost:3000',
-  'https://localhost:3000' // Add https version just in case
-];
-
-// CORS configuration - MUST come before other middleware
-app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log('CORS blocked origin:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: true,
-  preflightContinue: false,
-  optionsSuccessStatus: 200 // Changed from 204 to 200 for better compatibility
-}));
-
-// Handle preflight requests for all routes
-app.options('*', cors());
+*/
 
 // Body parsing middleware MUST come after CORS
 app.use(express.json({ limit: '10mb' }));
@@ -81,7 +88,10 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com'],
+      connectSrc: ["'self'", 
+        'https://spotlight-d907a9a2d80e.herokuapp.com',
+        'https://spotlight-ttc-30e93233aa0e.herokuapp.com'
+      ],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       scriptSrc: ["'self'", "'unsafe-inline'"],
@@ -422,6 +432,7 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+  console.log('Allowed CORS origins:', allowedOrigins);
 });
   // Get user points
   app.get('/user-points', async (req, res) => {

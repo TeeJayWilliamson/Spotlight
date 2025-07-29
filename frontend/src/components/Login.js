@@ -1,4 +1,3 @@
-
 import React, { useState, useContext } from 'react';
 import './Login.css';
 import axios from 'axios';
@@ -21,7 +20,8 @@ function Login({ setAuth, setUsername }) {
     setIsManagement 
   } = useContext(UserContext);
 
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+  // FIXED: Use the correct API URL or default to same origin
+  const apiUrl = process.env.REACT_APP_API_URL || window.location.origin;
 
   // Debug function to test server connectivity
   const testServerConnection = async () => {
@@ -31,7 +31,8 @@ function Login({ setAuth, setUsername }) {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
+        credentials: 'include' // Include credentials for same-origin requests
       });
       console.log('Server test response status:', response.status);
       console.log('Server test response headers:', [...response.headers.entries()]);
@@ -51,13 +52,16 @@ function Login({ setAuth, setUsername }) {
     try {
       console.log('Attempting login with:', { username, apiUrl });
       
-      // Try with fetch first to get better error information
-      const response = await fetch(`${apiUrl}/login`, {
+      // Use same-origin requests when possible
+      const loginUrl = apiUrl === window.location.origin ? '/login' : `${apiUrl}/login`;
+      
+      const response = await fetch(loginUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
+        credentials: 'include', // Important for same-origin requests
         body: JSON.stringify({
           username,
           password,
