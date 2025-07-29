@@ -3,10 +3,10 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const mongoose = require('mongoose'); // Add this import
+const mongoose = require('mongoose');
 const authMiddleware = require('../middleware/auth');
-const User = require('../models/user'); // Adjust the path as needed
-const RecognitionPost = require('../models/recognitionPost'); // Add this import if the model exists
+const User = require('../models/user');
+const Recognition = require('../models/recognition'); // Fixed import - using correct filename
 
 // @route   POST /api/auth/login
 // @desc    Login user
@@ -152,17 +152,15 @@ router.post('/send-recognize-now', async (req, res) => {
       { session }
     );
 
-    // Create recognition post/log (only if RecognitionPost model exists)
-    if (RecognitionPost) {
-      await RecognitionPost.create([{
-        sender: sender.name,
-        recipients: recipientIds,
-        points,
-        message,
-        emblem,
-        date: new Date()
-      }], { session });
-    }
+    // Create recognition post/log
+    await Recognition.create([{
+      sender: sender.name,
+      recipients: recipientIds,
+      points,
+      message,
+      emblem,
+      date: new Date()
+    }], { session });
 
     await session.commitTransaction();
     
