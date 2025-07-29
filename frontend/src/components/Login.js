@@ -20,7 +20,7 @@ function Login({ setAuth, setUsername }) {
     setIsManagement 
   } = useContext(UserContext);
 
-  // FIXED: Use the correct API URL or default to same origin
+  // Use environment variable or fallback to same origin (for production)
   const apiUrl = process.env.REACT_APP_API_URL || window.location.origin;
 
   // Debug function to test server connectivity
@@ -103,9 +103,11 @@ function Login({ setAuth, setUsername }) {
     } catch (err) {
       console.error('Login error details:', err);
       
-      // Check if it's a CORS error
-      if (err.message.includes('CORS') || err.message.includes('Network Error')) {
-        setError('Server connection failed. Please check if the server is running and CORS is configured correctly.');
+      // Better error handling for different scenarios
+      if (err.message.includes('ERR_CONNECTION_REFUSED')) {
+        setError('Cannot connect to server. Make sure the backend is running on localhost:5000 or update REACT_APP_API_URL in your .env file.');
+      } else if (err.message.includes('CORS') || err.message.includes('Network Error')) {
+        setError('Server connection failed. Please check CORS configuration.');
       } else if (err.message.includes('401') || err.message.includes('400')) {
         setError('Invalid username or password');
       } else {
