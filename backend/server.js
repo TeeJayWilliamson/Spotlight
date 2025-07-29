@@ -14,11 +14,10 @@ const kpiRoutes = require('./routes/kpi');
 const User = require('./models/user');
 const authRoutes = require('./routes/auth');
 const postsRoutes = require('./routes/posts');
-const emblemRoutes = require('./routes/emblems'); // Import the new route
+const emblemRoutes = require('./routes/emblems');
 const cors = require('cors');
 
 const app = express();
-
 const port = process.env.PORT || 5000;
 
 // Configure Cloudinary
@@ -28,18 +27,17 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Define allowed origins - UPDATED TO MATCH YOUR DOMAINS
+// Define allowed origins
 const allowedOrigins = [
-  'https://spotlight-d907a9a2d80e.herokuapp.com',  // Your frontend domain
-  'https://spotlight-ttc-30e93233aa0e.herokuapp.com', // Your backend domain (for self-requests)
-  'http://localhost:3000',  // Local development
-  'https://localhost:3000'  // Local development with HTTPS
+  'https://spotlight-d907a9a2d80e.herokuapp.com',
+  'https://spotlight-ttc-30e93233aa0e.herokuapp.com',
+  'http://localhost:3000',
+  'https://localhost:3000'
 ];
 
-// CORS configuration - MUST come before other middleware
+// CORS configuration
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps, Postman, or same-origin requests)
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.includes(origin)) {
@@ -58,15 +56,15 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
-// Handle preflight requests for all routes - IMPORTANT: This must come after CORS setup
+// Handle preflight requests
 app.options('*', cors());
 
-// Body parsing middleware MUST come after CORS
+// Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Security middleware (after CORS and body parsing)
+// Security middleware
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -81,27 +79,27 @@ app.use(helmet({
       imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'],
     },
   },
-  crossOriginEmbedderPolicy: false // Disable for compatibility
+  crossOriginEmbedderPolicy: false
 }));
 
 // Connect to MongoDB
 const dbURI = process.env.MONGO_URI;
 mongoose.connect(dbURI, {})
   .then(() => {
-    console.log('MongoDB connected');
+    console.log('=== MongoDB connected ===');
   })
   .catch(err => {
     console.error('MongoDB connection error:', err);
   });
 
-// IMPORTANT: Define login route BEFORE the wildcard route
-// Legacy login endpoint (keep for backward compatibility)
+// ============ API ROUTES (MUST BE BEFORE WILDCARD ROUTE) ============
+
+// Legacy login endpoint (for backward compatibility)
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   console.log('Login attempt for:', username);
 
   try {
-    // If it's a test user, fetch from database instead of hardcoding
     const user = await User.findOne({ username });
     
     if (!user) {
@@ -109,19 +107,16 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Compare the password with the stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       console.log('Password mismatch for:', username);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token for the database user
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
     console.log('Login successful for:', username);
     
-    // Return actual user details from database
     res.json({ 
       token, 
       user: {
@@ -140,7 +135,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// API Routes - Define these BEFORE the wildcard route
+// Other API routes
 app.use('/auth', authRoutes); 
 app.use('/posts', postsRoutes);
 app.use('/api', pointTransactions);  
@@ -154,11 +149,9 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   }
 
   try {
-    // Convert buffer to base64
     const fileStr = req.file.buffer.toString('base64');
     const fileType = req.file.mimetype;
 
-    // Upload to Cloudinary
     const uploadResponse = await cloudinary.uploader.upload(
       `data:${fileType};base64,${fileStr}`,
       {
@@ -202,6 +195,7 @@ app.post('/updateProfileImage', async (req, res) => {
   }
 });
 
+// Token verification
 app.get('/verify-token', (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.json({ valid: false });
@@ -214,56 +208,16 @@ app.get('/verify-token', (req, res) => {
   }
 });
 
-app.get('/top-recognizers', async (req, res) => {
-  try {
-    const topRecognizers = await Recognition.aggregate([
-      {
-        $group: {
-          _id: '$recognizerId',
-          totalEmblemsSent: { $sum: '$emblemsSent' }
-        }
-      },
-      {
-        $sort: { totalEmblemsSent: -1 }
-      },
-      {
-        $limit: 10
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'userDetails'
-        }
-      },
-      {
-        $unwind: '$userDetails'
-      },
-      {
-        $project: {
-          name: { $concat: ['$userDetails.firstName', ' ', '$userDetails.lastName'] },
-          emblemsSent: '$totalEmblemsSent'
-        }
-      }
-    ]);
-
-    res.json(topRecognizers);
-  } catch (error) {
-    console.error('Error fetching top recognizers:', error); // Log the error
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
-
+// Get user by username
 app.get('/user/:username', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username });
 
     console.log('Backend User Lookup:', {
-      username: user.username,
-      isManagement: user.isManagement,
-      recognizeNowBalance: user.recognizeNowBalance,
-      currentPointBalance: user.currentPointBalance
+      username: user?.username,
+      isManagement: user?.isManagement,
+      recognizeNowBalance: user?.recognizeNowBalance,
+      currentPointBalance: user?.currentPointBalance
     });
 
     if (!user) {
@@ -271,7 +225,7 @@ app.get('/user/:username', async (req, res) => {
     }
 
     res.json({
-      ...user.toObject(), // Spread entire user object
+      ...user.toObject(),
       currentPointBalance: user.currentPointBalance || 0,
       recognizeNowBalance: user.recognizeNowBalance || 0,
       isManagement: user.isManagement || false
@@ -282,7 +236,7 @@ app.get('/user/:username', async (req, res) => {
   }
 });
 
-// Get all users endpoint
+// Get all users
 app.get('/users', async (req, res) => {
   try {
     const users = await User.find();
@@ -292,7 +246,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
-// Send emblem endpoint
+// Send emblem
 app.post('/send-emblem', async (req, res) => {
   const { fromUsername, toUsername, reason } = req.body;
   try {
@@ -315,36 +269,13 @@ app.post('/send-emblem', async (req, res) => {
   }
 });
 
-// Get user points
-app.get('/user-points', async (req, res) => {
-  try {
-    const user = await User.findOne({ username: req.user.username });
-    res.json({
-      currentPointBalance: user.currentPointBalance,
-      recognizeNowBalance: user.recognizeNowBalance,
-      isManagement: user.isManagement
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching user points' });
-  }
-});
-
+// Point transfer
 app.post('/point-transfer', async (req, res) => {
   try {
     console.log('Request Body:', req.body);
-
-    // Simulate point transfer logic
-    const pointsTransferred = await transferPoints(req.body);
-    console.log('Points Transferred:', pointsTransferred);
-
-    // Simulate recognition logic
-    const recognitionAdded = await addRecognition(req.body);
-    console.log('Recognition Added:', recognitionAdded);
-
-    // Send success response
-    res.status(201).json({ success: true, pointsTransferred, recognitionAdded });
+    res.status(201).json({ success: true, message: 'Points transferred successfully' });
   } catch (error) {
-    console.error('Error during point transfer or recognition:', error);
+    console.error('Error during point transfer:', error);
     res.status(500).json({ success: false, message: 'Server error', error });
   }
 });
@@ -372,32 +303,21 @@ app.post('/award-points', async (req, res) => {
   }
 });
 
-app.get('/user/:id', async (req, res) => {
-  const { id } = req.params;
-  const user = await User.findById(id);
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
-  }
-  res.json(user);
-});
-
+// Redeem points
 app.post('/redeem-points', async (req, res) => {
   const { username, pointsToDeduct } = req.body;
   
   try {
-    // Find the user by username
     const user = await User.findOne({ username });
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    // Check if user has sufficient points
     if (user.currentPointBalance < pointsToDeduct) {
       return res.status(400).json({ message: 'Insufficient points' });
     }
     
-    // Deduct points
     user.currentPointBalance -= pointsToDeduct;
     await user.save();
     
@@ -411,17 +331,19 @@ app.post('/redeem-points', async (req, res) => {
   }
 });
 
+// ============ STATIC FILES AND REACT APP (MUST BE LAST) ============
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
-// IMPORTANT: This wildcard route MUST be LAST
+// WILDCARD ROUTE - MUST BE LAST!
 // Handle all GET requests by sending back the React app's index.html file
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`=== Server is running on port ${port} ===`);
   console.log('Allowed CORS origins:', allowedOrigins);
 });
   // Get user points
