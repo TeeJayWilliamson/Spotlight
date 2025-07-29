@@ -61,23 +61,6 @@ app.use(cors({
 // Handle preflight requests for all routes - IMPORTANT: This must come after CORS setup
 app.options('*', cors());
 
-// REMOVE the manual CORS headers since we're using the cors middleware
-// The following block should be REMOVED or commented out:
-/*
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://spotlight-d907a9a2d80e.herokuapp.com');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
-*/
-
 // Body parsing middleware MUST come after CORS
 app.use(express.json({ limit: '10mb' }));
 app.use(bodyParser.json({ limit: '10mb' }));
@@ -111,8 +94,54 @@ mongoose.connect(dbURI, {})
     console.error('MongoDB connection error:', err);
   });
 
-// Routes - Keep your original route structure
-app.use('/auth', authRoutes); // Keep as '/auth' not '/api/auth'
+// IMPORTANT: Define login route BEFORE the wildcard route
+// Legacy login endpoint (keep for backward compatibility)
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  console.log('Login attempt for:', username);
+
+  try {
+    // If it's a test user, fetch from database instead of hardcoding
+    const user = await User.findOne({ username });
+    
+    if (!user) {
+      console.log('User not found:', username);
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Compare the password with the stored hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      console.log('Password mismatch for:', username);
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate JWT token for the database user
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    
+    console.log('Login successful for:', username);
+    
+    // Return actual user details from database
+    res.json({ 
+      token, 
+      user: {
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        isManagement: user.isManagement || false,
+        recognizeNowBalance: user.recognizeNowBalance || 0,
+        currentPointBalance: user.currentPointBalance || 0,
+        profileImage: user.profileImage
+      }
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// API Routes - Define these BEFORE the wildcard route
+app.use('/auth', authRoutes); 
 app.use('/posts', postsRoutes);
 app.use('/api', pointTransactions);  
 app.use('/emblems', emblemRoutes); 
@@ -170,46 +199,6 @@ app.post('/updateProfileImage', async (req, res) => {
   } catch (error) {
     console.error('Error updating profile image:', error);
     res.status(500).json({ message: 'Error updating profile image' });
-  }
-});
-
-// Legacy login endpoint (keep for backward compatibility)
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    // If it's a test user, fetch from database instead of hardcoding
-    const user = await User.findOne({ username });
-    
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Compare the password with the stored hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Generate JWT token for the database user
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    
-    // Return actual user details from database
-    res.json({ 
-      token, 
-      user: {
-        username: user.username,
-        name: user.name,
-        email: user.email,
-        isManagement: user.isManagement || false,
-        recognizeNowBalance: user.recognizeNowBalance || 0,
-        currentPointBalance: user.currentPointBalance || 0,
-        profileImage: user.profileImage
-      }
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -425,6 +414,7 @@ app.post('/redeem-points', async (req, res) => {
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
+// IMPORTANT: This wildcard route MUST be LAST
 // Handle all GET requests by sending back the React app's index.html file
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
