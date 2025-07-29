@@ -1,13 +1,11 @@
 import React, { useState, useContext } from 'react';
 import './Login.css';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 
 function Login({ setAuth, setUsername }) {
   const [username, setLocalUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,31 +21,9 @@ function Login({ setAuth, setUsername }) {
   // Use environment variable or fallback to same origin (for production)
   const apiUrl = process.env.REACT_APP_API_URL || window.location.origin;
 
-  // Debug function to test server connectivity
-  const testServerConnection = async () => {
-    try {
-      console.log('Testing server connection to:', apiUrl);
-      const response = await fetch(`${apiUrl}/users`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include' // Include credentials for same-origin requests
-      });
-      console.log('Server test response status:', response.status);
-      console.log('Server test response headers:', [...response.headers.entries()]);
-    } catch (error) {
-      console.error('Server connection test failed:', error);
-    }
-  };
-
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
     setIsLoading(true);
-
-    // Test server connection first
-    await testServerConnection();
 
     try {
       console.log('Attempting login with:', { username, apiUrl });
@@ -69,12 +45,11 @@ function Login({ setAuth, setUsername }) {
       });
 
       console.log('Login response status:', response.status);
-      console.log('Login response headers:', [...response.headers.entries()]);
 
       if (!response.ok) {
         const errorData = await response.text();
         console.error('Login failed with response:', errorData);
-        throw new Error(`HTTP ${response.status}: ${errorData}`);
+        throw new Error(`Login failed`);
       }
 
       const data = await response.json();
@@ -102,17 +77,7 @@ function Login({ setAuth, setUsername }) {
       setShowTerms(true);
     } catch (err) {
       console.error('Login error details:', err);
-      
-      // Better error handling for different scenarios
-      if (err.message.includes('ERR_CONNECTION_REFUSED')) {
-        setError('Cannot connect to server. Make sure the backend is running on localhost:5000 or update REACT_APP_API_URL in your .env file.');
-      } else if (err.message.includes('CORS') || err.message.includes('Network Error')) {
-        setError('Server connection failed. Please check CORS configuration.');
-      } else if (err.message.includes('401') || err.message.includes('400')) {
-        setError('Invalid username or password');
-      } else {
-        setError(`Login failed: ${err.message}`);
-      }
+      // Don't show error to user - just log it
     } finally {
       setIsLoading(false);
     }
@@ -129,9 +94,6 @@ function Login({ setAuth, setUsername }) {
     <div className="login-page">
       <div className="login-box">
         <h2>Login</h2>
-        <div style={{ marginBottom: '10px', fontSize: '12px', color: '#666' }}>
-          Server: {apiUrl}
-        </div>
         <form onSubmit={handleLogin}>
           <input
             type="text"
@@ -149,9 +111,8 @@ function Login({ setAuth, setUsername }) {
             required
             disabled={isLoading}
           />
-          {error && <p className="error">{error}</p>}
           <div className="additional-options">
-            <a href="#" className="forgot-details">Forgot your details?</a>
+            <button type="button" className="forgot-details">Forgot your details?</button>
             <label>
               <input 
                 className="keep-logged-in"
@@ -167,26 +128,11 @@ function Login({ setAuth, setUsername }) {
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-        
-        {/* Debug button */}
-        <button 
-          onClick={testServerConnection} 
-          style={{ 
-            marginTop: '10px', 
-            backgroundColor: '#f0f0f0', 
-            border: '1px solid #ccc',
-            padding: '5px 10px',
-            fontSize: '12px'
-          }}
-        >
-          Test Server Connection
-      {/*
-      </button>
       </div>
       <div className="login-image">
         <img src={require('../img/ttc1.png')} alt="Logo or background" />
       </div>
-        */}
+
       {showTerms && (
         <div className="terms-modal-overlay">
           <div className="terms-modal">
