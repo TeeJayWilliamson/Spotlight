@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-mongoose.connect('Get URI from env', {
+mongoose.connect('mongodb+srv://trevorjwilliamson:Teejay123@ttccluster.u6ybt.mongodb.net/spotlightTTC?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then(() => {
+
+.then(() => {
     console.log('Connected to MongoDB');
 
     // Full schema
