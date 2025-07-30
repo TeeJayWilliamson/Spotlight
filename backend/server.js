@@ -77,10 +77,17 @@ app.use(helmet({
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'],
+
+      // ⬇️ ADD THIS
+      frameSrc: ["'self'", "https://docs.google.com"],
+
+      // Optional: if you load embedded content (e.g. images/charts)
+      frameAncestors: ["'self'"], // prevents others from embedding your app
     },
   },
   crossOriginEmbedderPolicy: false
 }));
+
 
 // Connect to MongoDB
 const dbURI = process.env.MONGO_URI;
