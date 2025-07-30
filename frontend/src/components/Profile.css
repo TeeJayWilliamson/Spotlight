@@ -454,21 +454,20 @@ input {
 }
 
 .iframe-container {
+  width: 100%;
+  height: 600px;       /* Fixed height */
+  overflow: hidden;    /* Hide scrollbars in container */
   position: relative;
-  width: 100%;       /* full width of parent container */
-  height: 0;
-  padding-bottom: 75%; /* Adjust aspect ratio here, 75% = 4:3 ratio */
-  overflow: hidden;
 }
 
 .iframe-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   border: 0;
+  transform: scale(1);         /* Default scale */
+  transform-origin: top left; /* So scaling stays aligned */
 }
+
 
 
 /* Keep all your existing media queries and add this one */
