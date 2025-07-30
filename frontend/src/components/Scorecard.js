@@ -72,7 +72,7 @@ function Scorecard() {
       <h2>Scorecard</h2>
       
       <button className="toggle-button" onClick={toggleView}>
-        Switch to {viewMode === 'api' ? 'Google Sheet View' : 'Backend Table View'}
+        Switch to {viewMode === 'api' ? 'Current KPIs' : 'Backend Table View'}
       </button>
 
       {viewMode === 'google' ? (
