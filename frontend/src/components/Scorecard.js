@@ -8,7 +8,7 @@ function Scorecard() {
   const [scorecard, setScorecard] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('api'); // 'api' or 'google'
+  const [viewMode, setViewMode] = useState('google'); // 'api' or 'google'
 
   useEffect(() => {
     const fetchData = async () => {
