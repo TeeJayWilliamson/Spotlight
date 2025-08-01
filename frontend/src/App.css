@@ -254,11 +254,6 @@ header .users-link span {
   background-color: #721099;
 }
 
-.newsfeed {
-  background-color: #ecf0f1;
-  padding: 15px;
-  border-radius: 5px;
-}
 
 .top-recognized {
   background-color: white;
@@ -494,44 +489,52 @@ header .users-link span {
 }
 
 /* Home Page Layout */
+/* Layout Containers */
+
 .home-container {
   display: flex;
-  padding: 20px;
-  height: calc(100vh - 100px); /* Adjust for header or any other fixed elements */
+  height: calc(100vh - 80px); /* assuming ~80px header height */
+  overflow: hidden;
 }
 
 /* Left Pane */
 .left-pane {
-  width: 250px; /* Keep fixed width */
+  width: 250px;
   padding: 20px;
   background-color: #f5f5f5;
   border-right: 1px solid #ddd;
+  overflow-y: auto;
 }
 
 /* Center Pane (Newsfeed area) */
 .center-pane {
-  flex-grow: 1; /* Allow the center pane to grow and take up available space */
+  flex-grow: 1;
   padding: 20px;
   background-color: #ecf0f1;
+  overflow: hidden; /* prevent scroll overflow outside center */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Newsfeed Content */
+.newsfeed {
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: #ecf0f1;
+  padding: 15px;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 /* Right Pane */
 .right-pane {
-  width: 250px; /* Keep fixed width */
+  width: 250px;
   padding: 20px;
-  padding-bottom: 20%;
   background-color: #f5f5f5;
   border-left: 1px solid #ddd;
+  overflow-y: auto;
 }
 
-/* Newsfeed Styling */
-.newsfeed {
-  background-color: #ecf0f1;
-  padding: 15px;
-  border-radius: 5px;
-  height: 100%; /* Ensure it takes full space in the center pane */
-  overflow-y: auto; /* Make sure content scrolls within the newsfeed */
-}
 
 /* Other existing styles for left, right, and center panes */
 .left-pane .user-info, .right-pane .top-recognized {
@@ -570,11 +573,6 @@ body {
 .right-pane {
   flex: 0.3; /* Adjust width to desired percentage */
   padding: 20px;
-}
-
-/* Newsfeed Styling */
-.newsfeed {
-  background-color: #ecf0f1;
 }
 
 .news-item {
