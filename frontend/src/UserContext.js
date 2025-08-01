@@ -8,7 +8,7 @@ export const UserProvider = ({ children }) => {
   const [pointBalance, setPointBalance] = useState(0);
   const [recognizeNowBalance, setRecognizeNowBalance] = useState(0);
   const [isManagement, setIsManagement] = useState(false);
-  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-ttc-30e93233aa0e.herokuapp.com';
+  const apiUrl = process.env.REACT_APP_API_URL || 'https://spotlight-d907a9a2d80e.herokuapp.com';
 
   useEffect(() => {
     const fetchUserPoints = async () => {
